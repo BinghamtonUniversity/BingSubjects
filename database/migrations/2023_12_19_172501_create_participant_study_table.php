@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('study_data', function (Blueprint $table) {
-            $table->id();
+        Schema::create('participant_study', function (Blueprint $table) {
+            $table->unsignedBigInteger('participant_id');
             $table->unsignedBigInteger('study_id');
-            //Uncomment once studies table is updated with id
+            $table->foreign('participant_id')->references('id')->on('participants');
+            //Uncomment once studies is updated with id
             //$table->foreign('study_id')->references('id')->on('studies');
-            $table->string('type');
-            $table->string('description');
+            $table->string('opt_out_data_sharing');
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('study_data');
+        Schema::dropIfExists('participant_study');
     }
 };
