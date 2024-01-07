@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('study_data', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('study_id');
-            //Uncomment once studies table is updated with id
-            //$table->foreign('study_id')->references('id')->on('studies');
+            $table->foreign('study_id')->references('id')->on('studies');
             $table->string('type');
             $table->string('description');
         });

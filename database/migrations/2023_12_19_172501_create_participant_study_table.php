@@ -15,9 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('participant_id');
             $table->unsignedBigInteger('study_id');
             $table->foreign('participant_id')->references('id')->on('participants');
-            //Uncomment once studies is updated with id
-            //$table->foreign('study_id')->references('id')->on('studies');
-            $table->string('opt_out_data_sharing');
+            $table->foreign('study_id')->references('id')->on('studies');
         });
     }
 
