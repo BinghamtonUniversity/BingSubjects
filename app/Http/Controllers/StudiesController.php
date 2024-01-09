@@ -2,11 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Study;
 use Illuminate\Http\Request;
 
 class StudiesController extends Controller
 {
     public function get_studies(Request $request) {
-        return [];
+        return Study::with('pi')->get();
+    }
+    public function get_study(Request $request, Study $study) {
+        return $study;
+    }
+
+
+    public function create_study(Request $request) {
+        $study = new Study($request->all());
+        // Hard coding these values for now until we have authentication and users set up properly.
+        $study->created_by = 1;
+        $study->updated_by = 1;
+        $study->save();
+        return $study;
+    }
+
+    public function delete_study(Request $request, Study $study) {
+        $study->delete();
+        return 1;
+    }
+
+    public function update_study(Request $request, Study $study) {
+        $study->updated_by = 1;
+        $study->update($request->all());
+        return $study;
     }
 }

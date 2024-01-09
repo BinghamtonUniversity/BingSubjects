@@ -85,7 +85,7 @@ window.ajax.delete = function(url,data,callback_success,callback_error) {
 }
 
 gform.prototype.options.autoFocus = false;
-gform.types['identity']= _.extend({}, gform.types['combobox'], {
+gform.types['user']= _.extend({}, gform.types['combobox'], {
 
     toString: function(name,display){
       if(!display){
@@ -106,20 +106,20 @@ gform.types['identity']= _.extend({}, gform.types['combobox'], {
     defaults:
         {
             strict:true,
-            search:"/api/identities/search/{{search}}{{value}}",
+            search:"/api/users/search/{{search}}{{value}}",
             format:
                 {
-                    title:'{{{label}}}{{^label}}Identity{{/label}} <span class="text-success pull-right">{{value}}</span>',
+                    title:'{{{label}}}{{^label}}User{{/label}} <span class="text-success pull-right">{{value}}</span>',
                     label:"{{first_name}}{{#last_name}} {{last_name}}{{/last_name}}",
                     value:function(item){
                         return item.id;
                     },
-                    display:'{{first_name}} {{last_name}}<div style="color:#aaa">{{default_username}}</div><div style="color:#aaa">{{unique_id}}</div>'
+                    display:'{{first_name}} {{last_name}}<div style="color:#aaa">{{email}}</div><div style="color:#aaa">{{id}}</div>'
                 }
         }
   })
 
-// // Automatically cancel unfinished ajax requests 
+// // Automatically cancel unfinished ajax requests
 // // when the user navigates elsewhere.
 // (function($) {
 //     var xhrPool = [];

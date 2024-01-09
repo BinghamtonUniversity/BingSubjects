@@ -1,8 +1,9 @@
 ajax.get('/api/participants',function(data) {
     data = data.reverse();
-    gdg = new GrapheneDataGrid({el:'#adminDataGrid',
-    name: 'groups',
-    search: false,columns: false,upload:false,download:false,title:'Groups',
+    gdg = new GrapheneDataGrid(
+        {el:'#adminDataGrid',
+    name: 'participants',
+    search: false,columns: false,upload:false,download:false,title:'participants',
     entries:[],
     sortBy: 'order',
     actions:actions,
@@ -79,7 +80,7 @@ ajax.get('/api/participants',function(data) {
             "label": "Phone Number",
         }
 
-    ], 
+    ],
     data: data
     }).on("model:edited",function(grid_event) {
         ajax.put('/api/participants/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {

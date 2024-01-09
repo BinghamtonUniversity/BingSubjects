@@ -31,5 +31,16 @@ class DatabaseSeeder extends Seeder
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
+
+        \App\Models\Study::create([
+            'pi_user_id' => $default_user->id,
+            'title' => 'Test Study',
+            'description' => 'Good test',
+            'location' => 'BU',
+            'start_date' => '2024-01-01',
+            'end_date' => '2024-01-01',
+            'created_by' => $default_user->id,
+            'updated_by' => $default_user->id
+        ]);
     }
 }

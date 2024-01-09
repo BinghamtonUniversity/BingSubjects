@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ParticipantsController;
 use App\Http\Controllers\StudiesController;
+use App\Http\Controllers\UsersController;
+
 
 
 /*
@@ -23,6 +25,9 @@ Route::get('/participants', [AdminController::class, 'participants']);
 Route::get('/studies', [AdminController::class, 'studies']);
 
 Route::group(['prefix' => 'api'], function () {
+    // Users Routes
+    Route::get('/users/search/{value}', [UsersController::class,'search']);
+
     // Participant Routes
     Route::get('/participants', [ParticipantsController::class,'get_participants']);
     Route::get('/participants/{participant}',[ParticipantsController::class,'get_participant']);
@@ -32,4 +37,8 @@ Route::group(['prefix' => 'api'], function () {
 
     // Study Routes
     Route::get('/studies', [StudiesController::class,'get_studies']);
+    Route::get('/studies/{study}',[StudiesController::class,'get_study']);
+    Route::post('/studies', [StudiesController::class,'create_study']);
+    Route::put('/studies/{study}', [StudiesController::class,'update_study']);
+    Route::delete('/studies/{study}', [StudiesController::class,'delete_study']);
 });

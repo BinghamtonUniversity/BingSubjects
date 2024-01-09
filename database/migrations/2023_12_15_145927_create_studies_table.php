@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('studies', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('pi_user_id')->index();
+            $table->text('title');
+            $table->text('location');
+            $table->text('description')->nullable()->default(null);
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->unsignedBigInteger('created_by')->index();
+            $table->unsignedBigInteger('updated_by')->index();
+            $table->foreign('pi_user_id')->references('id')->on('users');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }
