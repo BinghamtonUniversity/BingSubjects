@@ -20,6 +20,26 @@ ajax.get('/api/studies',function(data) {
             "name": "title",
             "label": "Title",
             "type":"text",
+        },
+        {
+            "name": "location",
+            "label": "Location",
+            "type":"text",
+        },
+        {
+            "name": "description",
+            "label": "Description",
+            "type":"text",
+        },
+        {
+            "name": "start_date",
+            "label": "Start Date",
+            "type":"date",
+        },
+        {
+            "name": "end_date",
+            "label": "End Date",
+            "type":"date",
         }
 
     ],
