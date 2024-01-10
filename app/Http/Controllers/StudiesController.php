@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 class StudiesController extends Controller
 {
     public function get_studies(Request $request) {
-        return Study::with('pi')->get();
+        return Study::get();
     }
     public function get_study(Request $request, Study $study) {
-        return $study;
+        return $study->first();
     }
 
 
@@ -21,7 +21,7 @@ class StudiesController extends Controller
         $study->created_by = 1;
         $study->updated_by = 1;
         $study->save();
-        return $study;
+        return $study->first();
     }
 
     public function delete_study(Request $request, Study $study) {
