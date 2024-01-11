@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Study;
+use App\Models\StudyParticipant;
+use App\Models\Participant; // Is there a way to not include this?
 use Illuminate\Http\Request;
 
 class StudiesController extends Controller
@@ -33,5 +35,14 @@ class StudiesController extends Controller
         $study->updated_by = 1;
         $study->update($request->all());
         return $study;
+    }
+
+    public function add_study_participant(Request $request, Study $study, Participant $participant) {
+        $study_participant = new StudyParticipant();
+        $study_participant->participant_id = $participant->id;
+        $study_participant->study_id = $study->id;
+
+        $study_participant->save();
+        return $study_participant;
     }
 }

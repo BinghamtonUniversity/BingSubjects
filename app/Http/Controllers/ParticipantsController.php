@@ -11,7 +11,7 @@ class ParticipantsController extends Controller
         return Participant::all();
     }
 
-    public function get_participantt(Request $request, Participant $participant) {
+    public function get_participant(Request $request, Participant $participant) {
         return $participant;
     }
 

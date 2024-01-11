@@ -17,6 +17,6 @@ class Participant extends Model
     }
 
     public function studies() {
-        return $this->belongsToMany(Study::class,'study_participants');
+        return $this->belongsToMany(Study::class,'study_participants'); 
     }
 }

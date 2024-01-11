@@ -9,7 +9,7 @@ class StudyParticipant extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['study_id','participant_id']; // Not sure this is necessary
 
     public function study(){
         return $this->belongsTo(Study::class);
