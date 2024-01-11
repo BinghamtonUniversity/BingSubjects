@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Study;
+use App\Models\Participant;
 use App\Models\StudyParticipant;
-use App\Models\Participant; // Is there a way to not include this?
 use Illuminate\Http\Request;
 
 class StudiesController extends Controller
@@ -44,5 +44,10 @@ class StudiesController extends Controller
 
         $study_participant->save();
         return $study_participant;
+    }
+
+    public function delete_study_participant(Request $request, StudyParticipant $study_participant) {
+        $study_participant->delete();
+        return 1;
     }
 }

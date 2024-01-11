@@ -42,7 +42,6 @@ Route::group(['prefix' => 'api'], function () {
     Route::put('/studies/{study}', [StudiesController::class,'update_study']);
     Route::delete('/studies/{study}', [StudiesController::class,'delete_study']);
 
-
     Route::post('/studies/{study}/participants/{participant}', [StudiesController::class,'add_study_participant']);
-    //Route::delete('/studies/{study}/participants/{participant}', [StudiesController::class,'delete_study_participant']);
+    Route::delete('/studies/{study}/participants/{participant}', [StudiesController::class,'delete_study_participant']);
 });
