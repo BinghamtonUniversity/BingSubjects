@@ -16,7 +16,6 @@ class StudiesController extends Controller
         return $study->first();
     }
 
-
     public function create_study(Request $request) {
         $study = new Study($request->all());
         // Hard coding these values for now until we have authentication and users set up properly.

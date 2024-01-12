@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ParticipantsController;
 use App\Http\Controllers\StudiesController;
+use App\Http\Controllers\StudyDataController;
 use App\Http\Controllers\UsersController;
 
 
@@ -55,4 +56,17 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/participants/{participant}/studies/{study}', [ParticipantsController::class,'add_participant_study']);
     Route::delete('/participants/{participant}/studies/{study}', [ParticipantsController::class,'delete_participant_study']);
 
+    // Study Data Routes
+    // Get all study data entries
+    Route::get('/study-data', [StudyDataController::class,'get_study_data']);
+    
+    // // Get study data from study - Should this take place here or from the StudyController?
+    // Route::get('/study-data/{study}',[StudyDataController::class,'get_studys_data']);
+    
+    // Post study data directly to study
+    Route::post('/study-data/{study}', [StudyDataController::class,'create_study_data']);   
+
+    // // Determine if this request needs to come directly from a study
+    // Route::put('/study-data/{study-data}', [StudyDataController::class,'update_study_data']);
+    // Route::delete('/study-data/{study-data}', [StudyDataController::class,'delete_study_data']);
 });

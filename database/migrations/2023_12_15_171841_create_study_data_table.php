@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('study_id')->references('id')->on('studies');
             $table->string('type');
             $table->string('description');
+            $table->timestamps(); // error without, look into removing
         });
     }
 

@@ -13,7 +13,7 @@ class Study extends Model
     protected $casts = ['created_at'=>'date:Y-m-d','updated_at'=>'date:Y-m-d','start_date'=> 'date:Y-m-d','end_date'=>'date:Y-m-d'];
     protected $with = ['pi'];
 
-    public function study_participants(){
+    public function study_participants() {
         return $this->hasMany(StudyParticipant::class,'study_id');
     }
 
@@ -21,11 +21,15 @@ class Study extends Model
         return $this->belongsToMany(Participant::class,'study_participants');
     }
 
-    public function pi(){
+    public function pi() {
         return $this->belongsTo(User::class,'pi_user_id');
     }
 
-    public function permissions(){
+    public function permissions() {
         return $this->hasMany(StudyPermission::class,'study_permissions');
+    }
+
+    public function study_data() {
+        return $this->hasMany(StudyData::class,'study_data');
     }
 }
