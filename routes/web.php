@@ -23,6 +23,8 @@ use App\Http\Controllers\UsersController;
 Route::get('/', [AdminController::class, 'admin']);
 Route::get('/participants', [AdminController::class, 'participants']);
 Route::get('/studies', [AdminController::class, 'studies']);
+Route::get('/studies/{study}/participants', [AdminController::class, 'study_participants']);
+Route::get('/participants/{participant}/studies', [AdminController::class, 'participant_studies']);
 
 Route::group(['prefix' => 'api'], function () {
     // Users Routes
@@ -35,6 +37,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::put('/participants/{participant}', [ParticipantsController::class,'update_participant']);
     Route::delete('/participants/{participant}', [ParticipantsController::class,'delete_participant']);
 
+
     // Study Routes
     Route::get('/studies', [StudiesController::class,'get_studies']);
     Route::get('/studies/{study}',[StudiesController::class,'get_study']);
@@ -42,6 +45,14 @@ Route::group(['prefix' => 'api'], function () {
     Route::put('/studies/{study}', [StudiesController::class,'update_study']);
     Route::delete('/studies/{study}', [StudiesController::class,'delete_study']);
 
+    // Study Participant Routes
+    Route::get('/studies/{study}/participants', [StudiesController::class,'get_study_participant']);
+    Route::get('/participants/{participant}/studies', [ParticipantsController::class, 'get_participant_studies']);
+
     Route::post('/studies/{study}/participants/{participant}', [StudiesController::class,'add_study_participant']);
     Route::delete('/studies/{study}/participants/{participant}', [StudiesController::class,'delete_study_participant']);
+
+    Route::post('/participants/{participant}/studies/{study}', [ParticipantsController::class,'add_participant_study']);
+    Route::delete('/participants/{participant}/studies/{study}', [ParticipantsController::class,'delete_participant_study']);
+
 });

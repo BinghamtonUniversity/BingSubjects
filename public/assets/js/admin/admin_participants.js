@@ -98,5 +98,8 @@ ajax.get('/api/participants',function(data) {
         ajax.delete('/api/participants/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
             grid_event.model.undo();
         });
-    });
+    }).on('model:participant_studies',function(grid_event){
+        window.location = '/participants/'+grid_event.model.attributes.id+'/studies';
+        // console.log(grid_event.model.attributes.id)
+    });;
 });

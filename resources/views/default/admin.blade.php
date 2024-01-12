@@ -172,10 +172,7 @@
     <script src="/assets/js/admin/_framework.js"></script>
     <script src="/assets/js/admin/admin.js"></script>
     <script>
-        @if(isset($ids)) window.ids={!!json_encode($ids)!!}; @endif
-        if (typeof window.ids !== 'undefined' && Array.isArray(window.ids)) {
-            window.id = window.ids[window.ids.length-1]
-        }
+        @if(isset($id)) window.id={!!json_encode($id)!!}; @endif
         @if(isset($actions)) window.actions={!!json_encode($actions)!!}; @endif
         @if(isset($permissions))
             window.auth_user_perms = {!! json_encode($permissions) !!};

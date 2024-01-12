@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Study;
+use App\Models\StudyParticipant;
 use Illuminate\Http\Request;
 use App\Models\Participant;
 
@@ -35,4 +37,24 @@ class ParticipantsController extends Controller
         return 1;
     }
 
+    //START Study Participants Methods
+    public function get_participant_studies(Request $request, Participant $participant) {
+        return StudyParticipant::with('study')->get();
+    }
+
+    public function add_participant_study(Request $request, Participant $participant, Study $study){
+        $study_participant = new StudyParticipant();
+        $study_participant->participant_id = $participant->id;
+        $study_participant->study_id = $study->id;
+
+        $study_participant->save();
+        return StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->with('study')->first();
+    }
+
+    public function delete_participant_study(Request $request, Participant $participant, Study $study){
+        $study_participant = StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->first();
+        $study_participant->delete();
+        return 1;
+    }
+    //END Study Participants Methods
 }

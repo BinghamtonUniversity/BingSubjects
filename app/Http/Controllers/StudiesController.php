@@ -37,17 +37,24 @@ class StudiesController extends Controller
         return $study;
     }
 
+    //START Study Participants Methods
+    public function get_study_participant(Request $request, Study $study) {
+        return StudyParticipant::with('participant')->get();
+    }
+
     public function add_study_participant(Request $request, Study $study, Participant $participant) {
         $study_participant = new StudyParticipant();
         $study_participant->participant_id = $participant->id;
         $study_participant->study_id = $study->id;
 
         $study_participant->save();
-        return $study_participant;
+        return StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->with('study')->first();
     }
 
-    public function delete_study_participant(Request $request, StudyParticipant $study_participant) {
+    public function delete_study_participant(Request $request, Study $study, Participant $participant) {
+        $study_participant = StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->first();
         $study_participant->delete();
         return 1;
     }
+    //END Study Participants Methods
 }
