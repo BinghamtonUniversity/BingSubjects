@@ -26,6 +26,7 @@ Route::get('/participants', [AdminController::class, 'participants']);
 Route::get('/studies', [AdminController::class, 'studies']);
 Route::get('/studies/{study}/participants', [AdminController::class, 'study_participants']);
 Route::get('/participants/{participant}/studies', [AdminController::class, 'participant_studies']);
+Route::get('/data_types', [AdminController::class,'data_types']);
 
 Route::group(['prefix' => 'api'], function () {
     // Users Routes

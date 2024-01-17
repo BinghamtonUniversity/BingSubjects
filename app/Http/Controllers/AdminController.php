@@ -78,4 +78,17 @@ class AdminController extends Controller
             ]);
     }
 
+    public function data_types(Request $request){
+        $user_actions[] = ["name"=>"create","label"=>"New"];
+        $user_actions[] = ["name"=>"edit","label"=>"Update"];
+        $user_actions[] = ['name'=>'delete', "label"=>"Delete", 'min'=>1];
+        $user_actions[] = ['name'=>'data_type_studies', "label"=>"Data Type Studies", 'type'=>'primary'];
+        return view('default.admin',
+            ['page'=>'data_types',
+                'actions' => $user_actions,
+                'title'=>'Manage Data Types',
+                'help'=>'Use this page to manage data types.'
+            ]);
+    }
+
 }

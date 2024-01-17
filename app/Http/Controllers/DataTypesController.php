@@ -66,7 +66,7 @@ class DataTypesController extends Controller
     // }
 
 
-    
+
     // Look into moving this to template above
     public function get_data_types(Request $request) {
         return DataType::all();
@@ -93,7 +93,7 @@ class DataTypesController extends Controller
     public function update_data_type(Request $request, DataType $data_type) {
         $data_type->updated_by = 1;
         $data_type->update($request->all());
-        return 1;
+        return $data_type;
     }
 
 

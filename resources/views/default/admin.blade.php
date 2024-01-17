@@ -87,7 +87,8 @@
               </ul>
                 <li class=" visible-xs-block @if($page=="participants") active @endif"><a href="/participants"><i class="fa fa-user fa-fw"></i>&nbsp; Participants</a></li>
                 <li class="visible-xs-block @if($page=="studies") active @endif"><a href="/studies"><i class="fa fa-users fa-fw"></i>&nbsp; Studies</a></li>
-              <li class="visible-xs-block"><a href="https://github.com/BinghamtonUniversity/BingSubjects/wiki" target="_blank"><i class="fa fa-info fa-fw"></i>&nbsp; View Documentation</a></li>
+                 <li class="visible-xs-block @if($page=="data_types") active @endif"><a href="/data_types"><i class="fa fa-users fa-fw"></i>&nbsp; Data Types</a></li>
+                <li class="visible-xs-block"><a href="https://github.com/BinghamtonUniversity/BingSubjects/wiki" target="_blank"><i class="fa fa-info fa-fw"></i>&nbsp; View Documentation</a></li>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right visible-xs-block">
@@ -100,6 +101,7 @@
         <ul class="nav nav-sidebar">
             <li class="@if($page=="participants") active @endif"><a href="/participants"><i class="fa fa-user fa-fw"></i>&nbsp; Participants</a></li>
             <li class="@if($page=="studies") active @endif"><a href="/studies"><i class="fa fa-users fa-fw"></i>&nbsp; Studies</a></li>
+            <li class="@if($page=="data_types") active @endif"><a href="/data_types"><i class="fa fa-users fa-fw"></i>&nbsp; Data Types</a></li>
             <li><a href="https://github.com/BinghamtonUniversity/BingSubjects/wiki" target="_blank"><i class="fa fa-fw fa-info"></i>&nbsp; View Documentation</a></li>
         </ul>
     </div>
