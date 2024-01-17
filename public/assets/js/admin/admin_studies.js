@@ -60,8 +60,10 @@ ajax.get('/api/studies',function(data) {
         ajax.delete('/api/studies/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
             grid_event.model.undo();
         });
-    }).on('model:study_participants',function(grid_event){
+    }).on('model:study_participants',function(grid_event) {
         window.location = '/studies/'+grid_event.model.attributes.id+'/participants';
         // console.log(grid_event.model.attributes.id)
+    }).on('model:study_data_types',function(grid_event) {
+        window.location = '/studies/'+grid_event.model.attributes.id+'/data_types';
     });
 });
