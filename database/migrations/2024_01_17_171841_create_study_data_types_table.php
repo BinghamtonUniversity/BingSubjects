@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('study_data', function (Blueprint $table) {
+        Schema::create('study_data_types', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('study_id');
+            $table->unsignedBigInteger('data_type_id');
             $table->foreign('study_id')->references('id')->on('studies');
-            $table->string('type');
-            $table->string('description');
-            $table->timestamps(); // error without, look into removing
+            $table->foreign('data_type_id')->references('id')->on('data_types');
+            $table->unique(['study_id','data_type_id']);
+            $table->timestamps();
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('study_data');
+        Schema::dropIfExists('study_data_types');
     }
 };

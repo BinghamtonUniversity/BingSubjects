@@ -9,9 +9,13 @@ class StudyData extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['study_id','type', 'description'];
+    protected $fillable = ['data_type_id','study_id'];
 
     public function study() {
-        return $this->belongsTo(Study::class); // Many?
+        return $this->belongsTo(Study::class);
+    }
+
+    public function data_type() {
+        return $this->belongsTo(DataType::class);
     }
 }

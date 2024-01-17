@@ -29,7 +29,11 @@ class Study extends Model
         return $this->hasMany(StudyPermission::class,'study_permissions');
     }
 
-    public function study_data() {
-        return $this->hasMany(StudyData::class,'study_data');
+    public function study_data_types() {
+        return $this->hasMany(StudyDataType::class,'study_id'); //data_type_id
+    }
+
+    public function data_types() {
+        return $this->belongsToMany(DataType::class,'study_data_types');
     }
 }
