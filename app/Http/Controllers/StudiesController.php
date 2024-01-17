@@ -70,7 +70,7 @@ class StudiesController extends Controller
         $study_data_type->data_type_id = $data_type->id;
         $study_data_type->study_id = $study->id;
 
-        $study_participant->save();
+        $study_data_type->save();
         return StudyDataType::where('study_id',$study->id)->where('data_type_id',$data_type->id)->with('study')->first();
     }
 

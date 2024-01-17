@@ -57,19 +57,19 @@ Route::group(['prefix' => 'api'], function () {
     Route::delete('/participants/{participant}/studies/{study}', [ParticipantsController::class,'delete_participant_study']);
 
     // Data Type Routes
-    Route::get('/data-types', [DataTypesController::class,'get_data_types']);
-    Route::get('/data-types/{data-type}',[DataTypesController::class,'get_data_type']); // not found
-    Route::post('/data-types', [DataTypesController::class,'create_data_type']);
-    Route::put('/data-types/{data-type}', [DataTypesController::class,'update_data_type']); // not found
-    Route::delete('/data-types/{data-type}', [DataTypesController::class,'delete_data_type']); // not found
+    Route::get('/data_types', [DataTypesController::class,'get_data_types']);
+    Route::get('/data_types/{data_type}',[DataTypesController::class,'get_data_type']); // not found
+    Route::post('/data_types', [DataTypesController::class,'create_data_type']);
+    Route::put('/data_types/{data_type}', [DataTypesController::class,'update_data_type']); // not found
+    Route::delete('/data_types/{data_type}', [DataTypesController::class,'delete_data_type']); // not found
 
     // Study Data Type Routes
-    Route::get('/studies/{study}/data-types', [StudiesController::class,'get_study_data_type']);
-    Route::get('/data-types/{data-type}/studies', [DataTypesController::class, 'get_data_type_studies']);
+    Route::get('/studies/{study}/data_types', [StudiesController::class,'get_study_data_type']);
+    Route::get('/data_types/{data_type}/studies', [DataTypesController::class, 'get_data_type_studies']);
 
-    Route::post('/studies/{study}/data-types/{data-type}', [StudiesController::class,'add_study_data_type']);
-    Route::delete('/studies/{study}/data-types/{data-type}', [StudiesController::class,'delete_study_data_type']);
+    Route::post('/studies/{study}/data_types/{data_type}', [StudiesController::class,'add_study_data_type']);
+    Route::delete('/studies/{study}/data_types/{data_type}', [StudiesController::class,'delete_study_data_type']);
 
-    Route::post('/data-types/{data-type}/studies/{study}', [DataTypesController::class,'add_data_type_study']);
-    Route::delete('/data-types/{data-type}/studies/{study}', [DataTypesController::class,'delete_data_type_study']);
+    Route::post('/data_types/{data_type}/studies/{study}', [DataTypesController::class,'add_data_type_study']);
+    Route::delete('/data_types/{data_type}/studies/{study}', [DataTypesController::class,'delete_data_type_study']);
 });
