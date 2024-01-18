@@ -30,7 +30,7 @@ class Study extends Model
     }
 
     public function study_data_types() {
-        return $this->hasMany(StudyDataType::class,'study_id'); //data_type_id
+        return $this->hasMany(StudyDataType::class,'study_id');
     }
 
     public function data_types() {

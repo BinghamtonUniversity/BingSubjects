@@ -7,18 +7,18 @@ use App\Models\Participant;
 use App\Models\StudyParticipant;
 use App\Models\DataType;
 use App\Models\StudyDataType;
-use Illuminate\Http\Request;    // Could shorten include list with pivot controller
+use Illuminate\Http\Request;
 
 class StudiesController extends Controller
 {
-    public function get_studies(Request $request) { // index
+    public function get_studies(Request $request) {
         return Study::get();
     }
-    public function get_study(Request $request, Study $study) { // show
-        return $study->first();
+    public function get_study(Request $request, Study $study) {
+        return $study;
     }
 
-    public function create_study(Request $request) { // create/store
+    public function create_study(Request $request) {
         $study = new Study($request->all());
         // Hard coding these values for now until we have authentication and users set up properly.
         $study->created_by = 1;
@@ -27,18 +27,18 @@ class StudiesController extends Controller
         return $study->first();
     }
 
-    public function delete_study(Request $request, Study $study) { // destroy
+    public function delete_study(Request $request, Study $study) {
         $study->delete();
         return 1;
     }
 
-    public function update_study(Request $request, Study $study) { // edit/update
+    public function update_study(Request $request, Study $study) {
         $study->updated_by = 1;
         $study->update($request->all());
         return $study;
     }
 
-    //START Study Participants Methods  // Transfer to StudyParticipantsController
+    //START Study Participants Methods
     public function get_study_participant(Request $request, Study $study) {
         return StudyParticipant::with('participant')->get();
     }
@@ -60,7 +60,7 @@ class StudiesController extends Controller
     //END Study Participants Methods
 
 
-    //START Study Data Types Methods    // Transfer to StudyDataTypesController
+    //START Study Data Types Methods
     public function get_study_data_type(Request $request, Study $study) {
         return StudyDataType::with('data_type')->get();
     }

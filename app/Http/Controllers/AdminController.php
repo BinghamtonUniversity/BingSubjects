@@ -29,8 +29,8 @@ class AdminController extends Controller
     public function participants(Request $request) {
         $user_actions[] = ["name"=>"create","label"=>"New Participant"];
         $user_actions[] = ["name"=>"edit","label"=>"Update Participant"];
-        $user_actions[] = ["label"=>"Delete Participant",'name'=>'delete', 'min'=>1];
-        $user_actions[] = ["label"=>"Manage Participant's Studies",'name'=>'participant_studies', 'type'=>'primary'];
+        $user_actions[] = ["name"=>"delete","label"=>"Delete Participant","min"=>1];
+        $user_actions[] = ["name"=>"participant_studies","label"=>"Manage Participant's Studies","type"=>"primary"];
         return view('default.admin',
             ['page'=>'participants',
             'ids'=>[],
@@ -43,9 +43,9 @@ class AdminController extends Controller
     public function studies(Request $request) {
         $user_actions[] = ["name"=>"create","label"=>"New Study"];
         $user_actions[] = ["name"=>"edit","label"=>"Update Study"];
-        $user_actions[] = ["label"=>"Delete Study",'name'=>'delete', 'min'=>1];
-        $user_actions[] = ["label"=>"Manage Study's Participants",'name'=>'study_participants', 'type'=>'primary'];
-        $user_actions[] = ["label"=>"Manage Study's Data Types",'name'=>'study_data_types', 'type'=>'primary'];
+        $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1];
+        $user_actions[] = ["name"=>"study_participants","label"=>"Manage Study's Participants","type"=>"primary"];
+        $user_actions[] = ["name"=>"study_data_types","label"=>"Manage Study's Data Types","type"=>"primary"];
         return view('default.admin',
             ['page'=>'studies',
             'ids'=>[],
@@ -83,8 +83,8 @@ class AdminController extends Controller
     public function data_types(Request $request){
         $user_actions[] = ["name"=>"create","label"=>"New"];
         $user_actions[] = ["name"=>"edit","label"=>"Update"];
-        $user_actions[] = ['name'=>'delete', "label"=>"Delete", 'min'=>1];
-        $user_actions[] = ['name'=>'data_type_studies', "label"=>"Manage Data Type's Studies", 'type'=>'primary'];
+        $user_actions[] = ["name"=>"delete", "label"=>"Delete", "min"=>1];
+        $user_actions[] = ["name"=>"data_type_studies", "label"=>"Manage Data Type's Studies", "type"=>"primary"];
         return view('default.admin',
             ['page'=>'data_types',
                 'actions' => $user_actions,
