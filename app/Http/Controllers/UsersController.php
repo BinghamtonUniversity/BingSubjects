@@ -8,6 +8,27 @@ use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
+    public function get_users(Request $request){
+        return User::all();
+    }
+    public function get_user(Request $request, User $user){
+        return $user;
+    }
+
+    public function create_user(Request $request){
+        $user = new User($request->all());
+        $user->save();
+        return $user;
+    }
+    public function update_user(Request $request, User $user){
+        $user->update($request->all());
+        return $user;
+    }
+    public function delete_user(Request $request, User $user){
+        $user->delete();
+        return 1;
+    }
+
     public function search($search_string='') {
         $search_elements_parsed = preg_split('/[\s,]+/',strtolower($search_string));
         $search = []; $identities = []; $ids = collect();

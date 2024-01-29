@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -26,6 +27,22 @@ class AdminController extends Controller
         ]);
     }
 
+    public function users(Request $request, User $user=null){
+        $user_actions[] = ["name"=>"create","label"=>"Create User"];
+        $user_actions[] = ["name"=>"edit","label"=>"Update User"];
+        $user_actions[] = ["label"=>"Delete User",'name'=>'delete', 'min'=>1];
+
+        $auth_user_perms = Permission::where('user_id',1)->select('permission')->get()->pluck('permission')->toArray();
+
+        return view('default.admin',[
+            'page'=>'users',
+            'title'=>'Manage Users',
+            'actions' => $user_actions,
+            'permissions'=> $auth_user_perms,
+            'help'=>
+                'Use this page to create, search for, view, delete, and modify existing users.'
+        ]);
+    }
     public function participants(Request $request) {
         $user_actions[] = ["name"=>"create","label"=>"New Participant"];
         $user_actions[] = ["name"=>"edit","label"=>"Update Participant"];

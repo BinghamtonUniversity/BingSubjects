@@ -22,6 +22,7 @@ use App\Http\Controllers\UsersController;
 */
 
 Route::get('/', [AdminController::class, 'admin']);
+Route::get('/users/{user?}', [AdminController::class, 'users']);
 Route::get('/participants', [AdminController::class, 'participants']);
 Route::get('/studies', [AdminController::class, 'studies']);
 Route::get('/studies/{study}/participants', [AdminController::class, 'study_participants']);
@@ -33,6 +34,12 @@ Route::get('/data_types/{data_type}/studies', [AdminController::class,'data_type
 Route::group(['prefix' => 'api'], function () {
     // Users Routes
     Route::get('/users/search/{value}', [UsersController::class,'search']);
+    Route::get('/users', [UsersController::class,'get_users']);
+    Route::get('/users/{user}', [UsersController::class,'get_user']);
+    Route::post('/users', [UsersController::class,'create_user']);
+    Route::put('/users/{user}', [UsersController::class,'update_user']);
+    Route::delete('/users/{user}', [UsersController::class,'delete_user']);
+
 
     // Participant Routes
     Route::get('/participants', [ParticipantsController::class,'get_participants']);

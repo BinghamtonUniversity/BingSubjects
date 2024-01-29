@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->enum('permission',[
+                "view_studies",
+                "manage_studies",
+                "view_pis",
+                "manage_pis",
+                "view_permissions",
+                "manage_permissions",
+                "view_participants",
+                "manage_participants",
+                "super_user"
+            ]);
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
