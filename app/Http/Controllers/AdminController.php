@@ -27,19 +27,20 @@ class AdminController extends Controller
         ]);
     }
 
+
     public function users(Request $request, User $user=null) {
         // Simulate User 1
         $user = User::find(1);
 
-        $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        $user_actions[] = ["name"=>"create","label"=>"Create User"];
+        $user_actions[] = ["name"=>"edit","label"=>"Update User"];
+        $user_actions[] = ["label"=>"Delete User",'name'=>'delete', 'min'=>1];
+        $user_actions[] = [];
+        $user_actions[] = [];
+        $user_actions[] = ["label"=>"User Permissions",'name'=>'update_permissions', 'min'=>1, 'max'=>1];
 
-        // Actions for Users Page
-        $user_actions = [];
-        if ($user->can('manage_users','App\User')) {
-            $user_actions[] = ["name"=>"create","label"=>"Create User"];
-            $user_actions[] = ["name"=>"edit","label"=>"Update User"];
-            $user_actions[] = ["name"=>"delete","label"=>"Delete User","min"=>1];
-        }
+
+        $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
 
         return view('default.admin',[
             'page'=>'users',

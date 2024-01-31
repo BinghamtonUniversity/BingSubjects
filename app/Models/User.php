@@ -29,7 +29,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token','user_permissions'];
 
     /**
      * The attributes that should be cast.
@@ -37,9 +37,22 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = ['email_verified_at' => 'datetime', 'password' => 'hashed'];
-    protected $with = ['permissions'];
+    protected $appends = ['permissions'];
 
-    public function permissions() {
+//    public function permissions() {
+//        return $this->hasMany(Permission::class,'user_id');
+//    }
+
+    public function user_permissions(){
         return $this->hasMany(Permission::class,'user_id');
+    }
+
+    public function getPermissionsAttribute() {
+        $permissions = $this->user_permissions()->get();
+        $permissions_arr = [];
+        foreach($permissions as $permission) {
+            $permissions_arr[] = $permission->permission;
+        }
+        return $permissions_arr;
     }
 }

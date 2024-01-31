@@ -35,5 +35,78 @@ ajax.get('/api/users',function(data) {
                 grid_event.model.undo();
             });
         })
-
+        .on('model:update_permissions',function(grid_event){
+            // debugger
+            // console.log(grid_event.model.attributes.permissions)
+            gdg = new gform(
+                {
+                    name: 'permissions_form',
+                    title:'User Permissions',
+                    actions:[
+                        {
+                            "type": "save",
+                            "action": "save",
+                            "label": "Save"
+                        }
+                    ],
+                    fields:[
+                        {
+                            "type": "radio",
+                            "label": "Permissions",
+                            "name": "permissions",
+                            "multiple": true,
+                            "showColumn": true,
+                            "options": [
+                                {
+                                    "type": "optgroup",
+                                    "options": [
+                                        {
+                                            "label":"View Studies",
+                                            "value":"view_studies"
+                                        },
+                                        {
+                                            "label":"Manage Studies",
+                                            "value":"manage_studies"
+                                        },
+                                        {
+                                            "label":"View PIs",
+                                            "value":"view_pis",
+                                        },
+                                        {
+                                            "label":"Manage PIs",
+                                            "value":"manage_pis",
+                                        },
+                                        {
+                                            "label":"View Permissions",
+                                            "value":"view_permissions",
+                                        },
+                                        {
+                                            "label":"Manage Permissions",
+                                            "value":"manage_permissions",
+                                        },
+                                        {
+                                            "label":"View Participants",
+                                            "value":"view_participants",
+                                        },
+                                        {
+                                            "label":"Manage Participants",
+                                            "value":"manage_participants",
+                                        },
+                                        {
+                                            "label":"Super User",
+                                            "value":"super_user"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                // data: data.permissions
+                }).modal().on('save',function (perm_event){
+                    ajax.put('/api/users/'+grid_event.model.attributes.id+'/permissions',perm_event.form.get(),function(perm_data) {
+                        grid_event.model.attributes.permissions = perm_data
+                        perm_event.form.trigger('close')
+                    });
+                }).set({permissions:grid_event.model.attributes.permissions})
+        })
 });

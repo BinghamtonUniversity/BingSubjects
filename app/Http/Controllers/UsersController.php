@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Permission;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -85,5 +85,6 @@ class UsersController extends Controller
 
     public function get_permissions(Request $request, User $user) {
         return $user->permissions;
+        return $user->user_permissions;
     }
 }

@@ -34,6 +34,7 @@ Route::get('/data_types/{data_type}/studies', [AdminController::class,'data_type
 Route::group(['prefix' => 'api'], function () {
     // User Routes
     Route::get('/users/search/{value}', [UsersController::class,'search']);
+
     Route::get('/users', [UsersController::class,'get_users']);//->middleware('can:view_users,App\Models\User');
     Route::get('/users/{user}', [UsersController::class,'get_user']);//->middleware('can:view_users,App\Models\User');
     Route::post('/users', [UsersController::class,'create_user']);//->middleware('can:manage_users,App\Models\User');
@@ -42,6 +43,14 @@ Route::group(['prefix' => 'api'], function () {
     // User Permissions
     Route::put('/users/{user}/permissions',[UsersController::class,'set_permissions']);//->middleware('can:manage_permissions,App\Models\User');
     Route::get('/users/{user}/permissions',[UsersController::class,'get_permissions']);//->middleware('can:view_permissions,App\Models\User');
+
+    Route::get('/users', [UsersController::class,'get_users']);
+    Route::get('/users/{user}', [UsersController::class,'get_user']);
+    Route::post('/users', [UsersController::class,'create_user']);
+    Route::put('/users/{user}', [UsersController::class,'update_user']);
+    Route::put('/users/{user}/permissions', [UsersController::class,'set_permissions']);
+    Route::delete('/users/{user}', [UsersController::class,'delete_user']);
+
 
     // Participant Routes
     Route::get('/participants', [ParticipantsController::class,'get_participants']);
