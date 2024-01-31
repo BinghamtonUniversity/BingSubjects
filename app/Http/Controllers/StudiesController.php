@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Study;
 use App\Models\Participant;
 use App\Models\StudyParticipant;
 use App\Models\DataType;
 use App\Models\StudyDataType;
+use App\Models\StudyPermission;
 use Illuminate\Http\Request;
 
 class StudiesController extends Controller
@@ -80,4 +82,26 @@ class StudiesController extends Controller
         return 1;
     }
     //END Study Data Types Methods
+
+    // START Study Permissions Methods
+    public function set_study_permissions(Request $request, Study $study, User $user) {
+        $request->validate([
+            'study_permissions' => 'array',
+        ]);
+        StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->delete();
+        foreach($request->study_permissions as $study_permission) {
+            $study_permission = new StudyPermission([
+                'study_id' => $study->id,
+                'user_id' => $user->id,
+                'study_permission' => $study_permission
+            ]);
+            $study_permission->save();
+        }
+        return $request->study_permissions;
+    }
+
+    public function get_study_permissions(Request $request, Study $study) {
+        return $study->study_permission;
+    }
+    // END Study Permissions Methods
 }

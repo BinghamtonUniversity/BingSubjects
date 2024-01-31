@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('study_permissions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('study_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->enum('study_permission',[
+                "view_study",
+                "manage_study"
+            ]);
+            $table->foreign('study_id')->references('id')->on('studies');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

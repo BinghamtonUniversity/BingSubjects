@@ -27,12 +27,19 @@ class AdminController extends Controller
         ]);
     }
 
-    public function users(Request $request, User $user=null){
-        $user_actions[] = ["name"=>"create","label"=>"Create User"];
-        $user_actions[] = ["name"=>"edit","label"=>"Update User"];
-        $user_actions[] = ["label"=>"Delete User",'name'=>'delete', 'min'=>1];
+    public function users(Request $request, User $user=null) {
+        // Simulate User 1
+        $user = User::find(1);
 
-        $auth_user_perms = Permission::where('user_id',1)->select('permission')->get()->pluck('permission')->toArray();
+        $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+
+        // Actions for Users Page
+        $user_actions = [];
+        if ($user->can('manage_users','App\User')) {
+            $user_actions[] = ["name"=>"create","label"=>"Create User"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update User"];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete User","min"=>1];
+        }
 
         return view('default.admin',[
             'page'=>'users',
@@ -43,6 +50,7 @@ class AdminController extends Controller
                 'Use this page to create, search for, view, delete, and modify existing users.'
         ]);
     }
+
     public function participants(Request $request) {
         $user_actions[] = ["name"=>"create","label"=>"New Participant"];
         $user_actions[] = ["name"=>"edit","label"=>"Update Participant"];
@@ -57,16 +65,31 @@ class AdminController extends Controller
         ]);
     }
 
-    public function studies(Request $request) {
-        $user_actions[] = ["name"=>"create","label"=>"New Study"];
-        $user_actions[] = ["name"=>"edit","label"=>"Update Study"];
-        $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1];
-        $user_actions[] = ["name"=>"study_participants","label"=>"Manage Study's Participants","type"=>"primary"];
-        $user_actions[] = ["name"=>"study_data_types","label"=>"Manage Study's Data Types","type"=>"primary"];
+    public function studies(Request $request, Study $study) {
+        // Simulate User 1
+        $user = User::find(1);
+
+        $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+
+        // Actions for Studies Page
+        $user_actions = [];
+        if ($user->can('manage_studies','App\Study')) {
+            $user_actions[] = ["name"=>"create","label"=>"New Study"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Study"];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1];
+            $user_actions[] = ["name"=>"study_participants","label"=>"Manage Study's Participants","type"=>"primary"];
+            $user_actions[] = ["name"=>"study_data_types","label"=>"Manage Study's Data Types","type"=>"primary"];
+        }
+        if ($user->can('manage_study','App\Study')) {
+            $user_actions[] = ["name"=>"edit","label"=>"Update Study"];
+            $user_actions[] = ["name"=>"study_participants","label"=>"Manage Study's Participants","type"=>"primary"];
+            $user_actions[] = ["name"=>"study_data_types","label"=>"Manage Study's Data Types","type"=>"primary"];
+        }
         return view('default.admin',
             ['page'=>'studies',
             'ids'=>[],
             'actions' => $user_actions,
+            'permissions'=> $auth_user_perms,
             'title'=>'Manage Studies',
             'help'=>'Use this page to manage studies.'
         ]);

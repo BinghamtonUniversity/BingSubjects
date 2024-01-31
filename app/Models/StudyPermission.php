@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class StudyPermission extends Model
 {
-    use HasFactory;
+    protected $fillable = ['study_id','user_id','study_permission'];
+
+    public function study(){
+        return $this->belongsTo(Study::class,'study_id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

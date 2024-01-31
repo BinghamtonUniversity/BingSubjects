@@ -42,5 +42,23 @@ class DatabaseSeeder extends Seeder
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
+
+        // Start default user with view and manage users and permissions permissions
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'view_users'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'manage_users',
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'view_permissions'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'manage_permissions'
+        ]);
     }
 }

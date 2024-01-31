@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -65,5 +66,24 @@ class UsersController extends Controller
         }
 
         return $identities;
+    }
+
+    public function set_permissions(Request $request, User $user) {
+        $request->validate([
+            'permissions' => 'array',
+        ]);
+        Permission::where('user_id',$user->id)->delete();
+        foreach($request->permissions as $permission) {
+            $permission = new Permission([
+                'user_id' => $user->id,
+                'permission' => $permission
+            ]);
+            $permission->save();
+        }
+        return $request->permissions;
+    }
+
+    public function get_permissions(Request $request, User $user) {
+        return $user->permissions;
     }
 }
