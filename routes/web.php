@@ -25,6 +25,7 @@ Route::get('/', [AdminController::class, 'admin']);
 Route::get('/users/{user?}', [AdminController::class, 'users']);
 Route::get('/participants', [AdminController::class, 'participants']);
 Route::get('/studies', [AdminController::class, 'studies']);
+Route::get('/studies/{study}', [AdminController::class, 'study']);
 Route::get('/studies/{study}/participants', [AdminController::class, 'study_participants']);
 Route::get('/participants/{participant}/studies', [AdminController::class, 'participant_studies']);
 Route::get('/data_types', [AdminController::class,'data_types']);
@@ -44,14 +45,6 @@ Route::group(['prefix' => 'api'], function () {
     Route::put('/users/{user}/permissions',[UsersController::class,'set_permissions']);//->middleware('can:manage_permissions,App\Models\User');
     Route::get('/users/{user}/permissions',[UsersController::class,'get_permissions']);//->middleware('can:view_permissions,App\Models\User');
 
-    Route::get('/users', [UsersController::class,'get_users']);
-    Route::get('/users/{user}', [UsersController::class,'get_user']);
-    Route::post('/users', [UsersController::class,'create_user']);
-    Route::put('/users/{user}', [UsersController::class,'update_user']);
-    Route::put('/users/{user}/permissions', [UsersController::class,'set_permissions']);
-    Route::delete('/users/{user}', [UsersController::class,'delete_user']);
-
-
     // Participant Routes
     Route::get('/participants', [ParticipantsController::class,'get_participants']);
     Route::get('/participants/{participant}',[ParticipantsController::class,'get_participant']);
@@ -60,14 +53,14 @@ Route::group(['prefix' => 'api'], function () {
     Route::delete('/participants/{participant}', [ParticipantsController::class,'delete_participant']);
 
     // Study Routes
-    Route::get('/studies', [StudiesController::class,'get_studies']);
-    Route::get('/studies/{study}',[StudiesController::class,'get_study']);
-    Route::post('/studies', [StudiesController::class,'create_study']);
-    Route::put('/studies/{study}', [StudiesController::class,'update_study']);
-    Route::delete('/studies/{study}', [StudiesController::class,'delete_study']);
+    Route::get('/studies', [StudiesController::class,'get_studies'])->middleware('can:view_studies,App\Models\User');
+    Route::get('/studies/{study}',[StudiesController::class,'get_study']);//->middleware('can:view_study,App\Models\Study');
+    Route::post('/studies', [StudiesController::class,'create_study'])->middleware('can:manage_studies,App\Models\User');
+    Route::put('/studies/{study}', [StudiesController::class,'update_study'])->middleware('can:manage_study,App\Models\Study');
+    Route::delete('/studies/{study}', [StudiesController::class,'delete_study'])->middleware('can:manage_studies,App\Models\User'); // Can PIs delete their own studies?
     // Study Permissions
     Route::put('/studies/{study}/users/{user}/permissions',[StudiesController::class,'set_study_permissions']);
-    Route::get('/studies/{study}/users/{user}/dpermissions',[StudiesController::class,'get_study_permissions']);
+    Route::get('/studies/{study}/users/{user}/permissions',[StudiesController::class,'get_study_permissions']);
 
     // Study Participant Routes
     Route::get('/studies/{study}/participants', [StudiesController::class,'get_study_participant']);

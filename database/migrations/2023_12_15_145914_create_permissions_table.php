@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->enum('permission',[
-                "view_users",   // Replaced PIs with Users - LB
-                "manage_users", // Replaced PIs with Users - LB
+                "view_users",
+                "manage_users",
                 "view_permissions",
                 "manage_permissions",
                 "view_studies",
                 "manage_studies",
                 "view_participants",
                 "manage_participants",
-                "view_data_types",   // Added - LB
-                "manage_data_types", // Added - LB
+                "view_data_types",
+                "manage_data_types",
                 "super_user"
             ]);
             $table->foreign('user_id')->references('id')->on('users');
