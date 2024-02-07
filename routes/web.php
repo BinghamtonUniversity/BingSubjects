@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AdminController;
@@ -88,4 +89,14 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::post('/data_types/{data_type}/studies/{study}', [DataTypesController::class,'add_data_type_study']);
     Route::delete('/data_types/{data_type}/studies/{study}', [DataTypesController::class,'delete_data_type_study']);
+
+    /* Report Methods */
+    Route::get('/reports',[ReportController::class, 'get_all_reports']);
+    Route::get('/reports/{report}',[ReportController::class, 'get_report']);
+    Route::post('/reports',[ReportController::class, 'add_report']);
+    Route::put('/reports/{report}',[ReportController::class, 'update_report']);
+    Route::delete('/reports/{report}',[ReportController::class, 'delete_report']);
+    Route::get('/reports/tables', [ReportController::class, 'get_tables']);
+    Route::get('/reports/tables/columns', [ReportController::class, 'get_columns']);
+    Route::get('/reports/{report}/execute', [ReportController::class, 'execute']);
 });

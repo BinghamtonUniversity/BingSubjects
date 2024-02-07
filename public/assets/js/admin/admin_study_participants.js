@@ -10,7 +10,16 @@ ajax.get('/api/studies/'+id+'/participants',function(data) {
             count:20,
             schema:[
                 {name:"id",type:"hidden"},
-                {name:'participant_id', type:'user', label: "Participant", template:"{{attributes.participant.first_name}} {{attributes.participant.last_name}}"}
+                {name:'participant_id',
+                    type:"combobox",
+                    label: "Participant",
+                    options:"/api/participants",
+                    "format": {
+                        "label": "{{first_name}} {{last_name}}",
+                        "value": "{{id}}",
+                        "display": ""
+                    }
+                }
             ],
             data: data
         }).on("model:created",function(grid_event) {

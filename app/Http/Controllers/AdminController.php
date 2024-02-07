@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Report;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -197,5 +198,37 @@ class AdminController extends Controller
                 'title'=>'Manage Data Type Studies',
                 'help'=>'Use this page to manage studies with '.$data_type->type.'.'
             ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function reports(Request $request) {
+        $user = Auth::user();
+        return view('default.admin',['page'=>'reports','ids'=>[],'title'=>'Reports',
+            'actions' => [
+                ["name"=>"create","label"=>"Create New Report"],
+                '',
+                ["name"=>"edit","label"=>"Edit Description"],
+                ["label"=>"Configure Query","name"=>"configure_query","min"=>1,"max"=>1,"type"=>"default"],
+                ["label"=>"Run Report","name"=>"run_report","min"=>1,"max"=>1,"type"=>"warning"],
+                '',
+                ["name"=>"delete","label"=>"Delete Report"]
+            ],
+            'help'=>
+                'Build and Manage Reports'
+        ]);
+    }
+
+    /**
+
+     * @param Request $request
+     * @param Report $report
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function run_report(Request $request, Report $report) {
+        return view('default.admin',['page'=>'reports_execute','id'=>[$report->id],'title'=>$report->name,'help'=>$report->description
+        ]);
     }
 }

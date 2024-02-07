@@ -84,7 +84,6 @@ class UsersController extends Controller
     }
 
     public function get_permissions(Request $request, User $user) {
-        return $user->permissions;
         return $user->user_permissions;
     }
 }
