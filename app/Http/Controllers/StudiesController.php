@@ -41,8 +41,8 @@ class StudiesController extends Controller
     }
 
     //START Study Participants Methods
-    public function get_study_participant(Request $request, Study $study) {
-        return StudyParticipant::with('participant')->get();
+    public function get_study_participants(Request $request, Study $study) {
+        return StudyParticipant::where('study_id',$study->id)->with('participant')->get();
     }
 
     public function add_study_participant(Request $request, Study $study, Participant $participant) {
@@ -64,7 +64,7 @@ class StudiesController extends Controller
 
     //START Study Data Types Methods
     public function get_study_data_type(Request $request, Study $study) {
-        return StudyDataType::with('data_type')->get();
+        return StudyDataType::where('study_id',$study->id)->with('data_type')->get();
     }
 
     public function add_study_data_type(Request $request, Study $study, DataType $data_type) {

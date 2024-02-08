@@ -21,7 +21,8 @@ class UserPolicy
 
     // START User Permissions
     public function view_users(User $user) {
-        $permission = Permission::where('user_id',1);    //$user->id
+        $permission = Permission::where('user_id',1);
+        $study_permission = StudyPermission::where('user_id',1);
         return $permission->where(function ($q) {
             $q
                 ->orWhere('permission','view_users')
@@ -34,14 +35,14 @@ class UserPolicy
                 // ->orWhere('permission','manage_participants')
                 // ->orWhere('permission','view_data_types')
                 // ->orWhere('permission','manage_data_types')
-        })->first();
+        }) || $study_permission->where('study_permission','manage_study')->first();
     }
 
     public function view_permissions(User $user) {
         $permission = Permission::where('user_id',1);
         return $permission->where(function ($q) {
             $q
-                ->orWhere('permission','view_users')
+                // ->orWhere('permission','view_users')
                 // ->orWhere('permission','manage_users')
                 ->orWhere('permission','view_permissions')
                 ->orWhere('permission','manage_permissions');
@@ -63,16 +64,17 @@ class UserPolicy
                 // ->orWhere('permission','view_permissions')
                 // ->orWhere('permission','manage_permissions')
                 ->orWhere('permission','view_studies')
-                ->orWhere('permission','manage_studies')
-                ->orWhere('permission','view_participants')
-                ->orWhere('permission','manage_participants')
-                ->orWhere('permission','view_data_types')
-                ->orWhere('permission','manage_data_types');
+                ->orWhere('permission','manage_studies');
+                // ->orWhere('permission','view_participants')
+                // ->orWhere('permission','manage_participants')
+                // ->orWhere('permission','view_data_types')
+                // ->orWhere('permission','manage_data_types')
         })->first();
     }
 
     public function view_participants(User $user) {
         $permission = Permission::where('user_id',1);
+        $study_permission = StudyPermission::where('user_id',1);
         return $permission->where(function ($q) {
             $q
                 // ->orWhere('permission','view_users')
@@ -85,7 +87,7 @@ class UserPolicy
                 ->orWhere('permission','manage_participants');
                 // ->orWhere('permission','view_data_types')
                 // ->orWhere('permission','manage_data_types')
-        })->first();
+        }) || $study_permission->where('study_permission','manage_study')->orWhere('study_permission','view_study')->first();
     }
 
     public function view_data_types(User $user) {
@@ -98,7 +100,7 @@ class UserPolicy
                 // ->orWhere('permission','manage_permissions')
                 ->orWhere('permission','view_studies')
                 ->orWhere('permission','manage_studies')
-                ->orWhere('permission','view_participants')
+                // ->orWhere('permission','view_participants')
                 // ->orWhere('permission','manage_participants')
                 ->orWhere('permission','view_data_types')
                 ->orWhere('permission','manage_data_types');
@@ -155,7 +157,7 @@ class UserPolicy
                 // ->orWhere('permission','manage_participants')
                 // ->orWhere('permission','view_data_types')
                 // ->orWhere('permission','manage_data_types')
-        })->first();    // I don't need to add manage_study from the study permissions here, right?
+        })->first();
     }
 
     public function manage_participants(User $user) {

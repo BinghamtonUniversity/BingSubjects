@@ -39,7 +39,7 @@ class ParticipantsController extends Controller
 
     //START Study Participants Methods
     public function get_participant_studies(Request $request, Participant $participant) {
-        return StudyParticipant::with('study')->get();
+        return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();
     }
 
     public function add_participant_study(Request $request, Participant $participant, Study $study){

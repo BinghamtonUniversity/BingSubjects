@@ -1,4 +1,5 @@
 ajax.get('/api/users',function(data) {
+    console.log(auth_user_perms);
     // data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
@@ -35,20 +36,19 @@ ajax.get('/api/users',function(data) {
                 grid_event.model.undo();
             });
         })
-        .on('model:update_permissions',function(grid_event){
-            // debugger
-            // console.log(grid_event.model.attributes.permissions)
+        .on('model:user_permissions',function(grid_event){
+            if(auth_user_perms.includes('manage_permissions')) {
+                manage_actions = [{"type": "save", "label": "Save", "action": "save"}]; //type save
+                edit = true;
+            } else {
+                manage_actions = [];
+                edit = false;
+            }
             gdg = new gform(
                 {
                     name: 'permissions_form',
-                    title:'User Permissions',
-                    actions:[
-                        {
-                            "type": "save",
-                            "action": "save",
-                            "label": "Save"
-                        }
-                    ],
+                    title: 'User Permissions',
+                    actions: manage_actions,
                     fields:[
                         {
                             "type": "radio",
@@ -100,7 +100,10 @@ ajax.get('/api/users',function(data) {
                                 }
                             ]
                         }
-                    ],
+                    ].map(d=>{
+                        d.edit = edit
+                        return d;
+                    }),
                 // data: data.permissions
                 }).modal().on('save',function (perm_event){
                     ajax.put('/api/users/'+grid_event.model.attributes.id+'/permissions',perm_event.form.get(),function(perm_data) {

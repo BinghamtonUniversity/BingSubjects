@@ -47,6 +47,10 @@ class User extends Authenticatable
         return $this->hasMany(Permission::class,'user_id');
     }
 
+    public function study_permissions(){
+        return $this->hasMany(StudyPermission::class,'user_id');
+    }
+
     public function getPermissionsAttribute() {
         $permissions = $this->user_permissions()->get();
         $permissions_arr = [];

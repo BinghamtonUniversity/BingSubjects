@@ -11,7 +11,7 @@ class Study extends Model
 
     protected $fillable = ['pi_user_id','title','location','description','start_date','end_date','created_by','updated_by'];
     protected $casts = ['created_at'=>'date:Y-m-d','updated_at'=>'date:Y-m-d','start_date'=> 'date:Y-m-d','end_date'=>'date:Y-m-d'];
-    protected $with = ['pi','data_types'];
+    protected $with = ['pi','data_types','participants'];
 
     public function study_participants() {
         return $this->hasMany(StudyParticipant::class,'study_id');
@@ -25,8 +25,9 @@ class Study extends Model
         return $this->belongsTo(User::class,'pi_user_id');
     }
 
+    //study_permissions
     public function permissions() {
-        return $this->hasMany(StudyPermission::class,'study_permissions');
+        return $this->hasMany(StudyPermission::class,'study_permission');
     }
 
     public function study_data_types() {
