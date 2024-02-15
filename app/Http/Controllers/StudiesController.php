@@ -63,7 +63,7 @@ class StudiesController extends Controller
 
 
     //START Study Data Types Methods
-    public function get_study_data_type(Request $request, Study $study) {
+    public function get_study_data_types(Request $request, Study $study) {
         return StudyDataType::where('study_id',$study->id)->with('data_type')->get();
     }
 

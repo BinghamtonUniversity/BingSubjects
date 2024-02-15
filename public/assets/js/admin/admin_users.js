@@ -38,7 +38,7 @@ ajax.get('/api/users',function(data) {
         })
         .on('model:user_permissions',function(grid_event){
             if(auth_user_perms.includes('manage_permissions')) {
-                manage_actions = [{"type": "save", "label": "Save", "action": "save"}]; //type save
+                manage_actions = [{"type": "save", "label": "Save", "action": "save"}];
                 edit = true;
             } else {
                 manage_actions = [];

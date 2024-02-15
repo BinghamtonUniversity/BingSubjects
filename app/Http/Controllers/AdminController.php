@@ -33,7 +33,7 @@ class AdminController extends Controller
         // Simulate User 1
         $user = User::find(1);
 
-        /* Permissions for Users Page */
+        /* Permissions for User Permissions Options */
         $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
 
         /* Actions for Users Page */
@@ -61,13 +61,12 @@ class AdminController extends Controller
         // Simulate User 1
         $user = User::find(1);
 
-        /* Permissions for Participants Page */
-        //$auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        // May be able to pass auth_user_perms to check if manage button is clickable on selected item
 
         /* Actions for Participants Page */
         $user_actions = [];
         if ($user->can('manage_participants','App\User')) {
-            $user_actions[] = ["name"=>"create","label"=>"New Participant"];
+            $user_actions[] = ["name"=>"create","label"=>"Create Participant"];
             $user_actions[] = ["name"=>"edit","label"=>"Update Participant"];
             $user_actions[] = ["name"=>"delete","label"=>"Delete Participant","min"=>1];
         }
@@ -77,9 +76,37 @@ class AdminController extends Controller
             ['page'=>'participants',
             'ids'=>[],
             'actions' => $user_actions,
-            //'permissions'=> $auth_user_perms,
             'title'=>'Manage Participants',
             'help'=>'Use this page to manage participants.'
+        ]);
+    }
+
+    public function studies(Request $request, Study $study) {
+        // Simulate User 1
+        $user = User::find(1);
+
+        // May be able to pass auth_user_perms to check if manage button is clickable on selected item
+        // $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        // $auth_study_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
+        // $auth_user_perms = array_merge($auth_user_perms, $auth_study_perms);
+
+        /* Actions for Studies Page */
+        $user_actions = [];
+        if ($user->can('manage_studies','App\User')) {
+            $user_actions[] = ["name"=>"create","label"=>"Create Study"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Study"];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1];
+        }
+        // Add check if user can manage selected study (or any study before showing buttons to manage)
+        $user_actions[] = ["name"=>"study_participants","label"=>"Manage Study's Participants","type"=>"primary"];
+        $user_actions[] = ["name"=>"study_data_types","label"=>"Manage Study's Data Types","type"=>"primary"];
+
+        return view('default.admin',
+            ['page'=>'studies',
+            'ids'=>[],
+            'actions' => $user_actions,
+            'title'=>'Manage Studies',
+            'help'=>'Use this page to manage studies.'
         ]);
     }
 
@@ -88,10 +115,9 @@ class AdminController extends Controller
         $user = User::find(1);
 
         /* Study Permissions */
-        $auth_user_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
-        
-        //Should we be checking all user perms too - view/manage studies
-        //Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        $auth_study_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
+        $auth_user_perms = array_merge($auth_user_perms, $auth_study_perms);
 
         /* Actions for Study Page */
         $user_actions = [];
@@ -106,54 +132,21 @@ class AdminController extends Controller
         ]);
     }
 
-    public function studies(Request $request, Study $study) {
-        // Simulate User 1
-        $user = User::find(1);
-
-        /* Permissions for Studies Page */
-        //$auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
-
-        /* Actions for Studies Page */
-        $user_actions = [];
-        if ($user->can('manage_studies','App\User')) {
-            $user_actions[] = ["name"=>"create","label"=>"New Study"];
-            $user_actions[] = ["name"=>"edit","label"=>"Update Study"];
-            $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1];
-        }
-        // Can we control edit button visibility depending on which study is selected?
-        // if ($user->can('manage_study','App\User','App\Study')) {
-        //     $user_actions[] = ["name"=>"create","label"=>"New Study"];
-        //     $user_actions[] = ["name"=>"edit","label"=>"Update Study"];
-        //     $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1];
-        // }
-        $user_actions[] = ["name"=>"study_participants","label"=>"Manage Study's Participants","type"=>"primary"];
-        $user_actions[] = ["name"=>"study_data_types","label"=>"Manage Study's Data Types","type"=>"primary"];
-
-        return view('default.admin',
-            ['page'=>'studies',
-            'ids'=>[],
-            'actions' => $user_actions,
-            //'permissions'=> $auth_user_perms,
-            'title'=>'Manage Studies',
-            'help'=>'Use this page to manage studies.'
-        ]);
-    }
-
     public function study_participants(Request $request, Study $study) {
         // Simulate User 1
         $user = User::find(1);
 
         /* Permissions for Study's Participants Page */
-        $auth_user_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
-        //$auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
-
-        // How do I force 'view_participants' as a permission?
+        $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        $auth_study_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
+        $auth_user_perms = array_merge($auth_user_perms, $auth_study_perms);
 
         /* Actions for Study's Participants Page */
         $user_actions = [];
-        if ($user->can('manage_study',$study)) {
+        // Is there a better / preferred way of doing this?
+        if (in_array("manage_study", $auth_user_perms) || in_array("manage_studies", $auth_user_perms)) {
             $user_actions[] = ["name"=>"create","label"=>"Add Participant"];
-            $user_actions[] = ["name"=>"delete","label"=>"Delete Participant"];
+            $user_actions[] = ["name"=>"delete","label"=>"Remove Participant"];
         }
 
         return view('default.admin',
@@ -166,16 +159,19 @@ class AdminController extends Controller
             ]);
     }
 
-    public function participant_studies(Request $request, Participant $participant){  // Should Study $study be added?
+    public function participant_studies(Request $request, Participant $participant, Study $study) {
         // Simulate User 1
         $user = User::find(1);
 
+        // These permissions may not be needed since you only gain access to what you can manage
         /* Permissions for Participant's Studies Page */
-        //$auth_user_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
-        
+        // $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        // $auth_study_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
+        // $auth_user_perms = array_merge($auth_user_perms, $auth_study_perms);
+
         /* Actions for Participant's Studies Page */
-        $user_actions[] = ["name"=>"create","label"=>"Add Study"];
-        $user_actions[] = ["name"=>"delete","label"=>"Delete Study"];
+        $user_actions[] = ["name"=>"create","label"=>"Add to Study"];
+        $user_actions[] = ["name"=>"delete","label"=>"Remove from Study"];
         return view('default.admin',
             ['page'=>'participant_studies',
                 'id'=>$participant->id,
@@ -196,9 +192,9 @@ class AdminController extends Controller
         /* Actions for Data Types Page */
         $user_actions = [];
         if ($user->can('manage_data_types','App\User')) {
-            $user_actions[] = ["name"=>"create","label"=>"New"];
-            $user_actions[] = ["name"=>"edit","label"=>"Update"];
-            $user_actions[] = ["name"=>"delete", "label"=>"Delete", "min"=>1];
+            $user_actions[] = ["name"=>"create","label"=>"Create Data Type"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
+            $user_actions[] = ["name"=>"delete", "label"=>"Delete Data Type", "min"=>1];
         }
         $user_actions[] = ["name"=>"data_type_studies", "label"=>"Manage Data Type's Studies", "type"=>"primary"];
         
@@ -216,16 +212,18 @@ class AdminController extends Controller
         $user = User::find(1);
 
         /* Permissions for Study's Data Types Page */
-
+        //$auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+        $auth_user_perms = StudyPermission::where('study_id',$study->id)->where('user_id',$user->id)->select('study_permission')->get()->pluck('study_permission')->toArray();
+        //$auth_user_perms = array_merge($auth_user_perms, $auth_study_perms);
 
         /* Actions for Study's Data Types Page */
         $user_actions[] = ["name"=>"create","label"=>"Add Data Type"];
-        $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type"];
+        $user_actions[] = ["name"=>"delete","label"=>"Remove Data Type"];
         return view('default.admin',
             ['page'=>'study_data_types',
                 'id'=>$study->id,
                 'actions' => $user_actions,
-                //'permissions'=> $auth_user_perms,
+                'permissions'=> $auth_user_perms,
                 'title'=>'Manage Study\'s Data Types',
                 'help'=>'Use this page to manage data types for '.$study->title.'.'
             ]);
@@ -239,8 +237,8 @@ class AdminController extends Controller
 
 
         /* Actions for Data Type's Studies Page */
-        $user_actions[] = ["name"=>"create","label"=>"Add Study"];
-        $user_actions[] = ["name"=>"delete","label"=>"Delete Study"];
+        $user_actions[] = ["name"=>"create","label"=>"Add to Study"];
+        $user_actions[] = ["name"=>"delete","label"=>"Remove from Study"];
         return view('default.admin',
             ['page'=>'data_type_studies',
                 'id'=>$data_type->id,

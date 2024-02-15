@@ -19,20 +19,7 @@ study_template = `
             Study Info
         </h3></div>
         <div class="panel-body study-info"></div>
-        </div>
-
-        <!-- Study Permissions -->
-        <div class="panel panel-default">
-        <div class="panel-heading"><h3 class="panel-title">
-            {{#auth_user_perms}}
-                {{#if . == "manage_study"}}
-                    <a class="btn btn-primary btn-xs pull-right" data-toggle="collapse" href=".study-permissions">Manage Study Permissions</a>
-                {{/if}}
-            {{/auth_user_perms}}
-            Study Permissions
-        </h3></div>
-        <div class="panel-body study-permissions panel-collapse collapse"></div>
-        </div>
+        </div>        
         <!-- End Column 1 -->
     </div>
     <div class='col-sm-6'> 
@@ -109,7 +96,7 @@ study_participants_template = `
 gform.options = {autoFocus:false};
 study_form_attributes = [
     {type:"hidden", name:"id", label: 'id'},
-    {type:"user", name:"pi_user_id", label: 'PI User'}, // edit:false},
+    {type:"user", name:"pi_user_id", label: 'PI User'},
     {type:"text", name:"title", label:"Title", required:true},
     {type:"text", name:"location", label:"Location", required:true},
     {type:"text", name:"description", label:"Description", required:true},
@@ -126,7 +113,7 @@ var load_study = function(study_id) {
     ajax.get('/api/studies/'+study_id,function(data) {
         study_data = data;
         data.auth_user_perms = auth_user_perms;
-        // console.log("data:",data);
+
         $('#adminDataGrid').html(Ractive({
             template:study_template,
             partials: {

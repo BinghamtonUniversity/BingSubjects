@@ -1,4 +1,5 @@
 ajax.get('/api/studies/'+id+'/data_types',function(data) {
+    console.log(auth_user_perms);
     data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
@@ -23,12 +24,10 @@ ajax.get('/api/studies/'+id+'/data_types',function(data) {
                     }
                 }
                 
-                
                 //{name:'data_type_id', type:'user', label: "Data Type", template:"{{attributes.data_type.type}} {{attributes.data_type.description}}"}
             ],
             data: data
         }).on("model:created",function(grid_event) {
-            // console.log(grid_event.model.attributes)
         ajax.post('/api/studies/'+id+'/data_types/'+grid_event.model.attributes.data_type_id, {},function(data) {
             grid_event.model.update(data)
         },function(data) {
