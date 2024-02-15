@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->default('');
             $table->longText('description')->nullable()->default(null);
             $table->json('report')->nullable()->default(null);
+            $table->json('permissions')->nullable();
             $table->unsignedBigInteger('owner_user_id')->nullable()->default(null);
             $table->timestamps();
             $table->foreign('owner_user_id')->references('id')->on('users');
