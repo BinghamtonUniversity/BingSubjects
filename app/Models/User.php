@@ -39,16 +39,40 @@ class User extends Authenticatable
     protected $casts = ['email_verified_at' => 'datetime', 'password' => 'hashed'];
     protected $appends = ['permissions'];
 
-//    public function permissions() {
-//        return $this->hasMany(Permission::class,'user_id');
-//    }
+    public function studies() {
+        return $this->belongsToMany(Study::class,'study_viewers')->orderBy('order');
+    }
 
-    public function user_permissions(){
+    public function user_permissions() {
         return $this->hasMany(Permission::class,'user_id');
     }
 
-    public function study_permissions(){
+    public function study_permissions() {
         return $this->hasMany(StudyPermission::class,'user_id');
+    }
+
+    public function is_study_manager($study_id=null) {
+        if (is_null($study_id)){
+            return (bool)StudyPermission::where('user_id',1)
+                ->whereIn('study_permission',['manage_study'])
+                ->first();
+        }
+        return (bool)StudyPermission::where('user_id',1)
+            ->where('study_id',$study_id)
+            ->whereIn('study_permission',['manage_study'])
+            ->first();
+    }
+
+    public function is_study_viewer($study_id=null) {
+        if (is_null($study_id)){
+            return (bool)StudyPermission::where('user_id',1)
+                ->whereIn('study_permission',['view_study'])
+                ->first();
+        }
+        return (bool)StudyPermission::where('user_id',1)
+            ->where('study_id',$study_id)
+            ->whereIn('study_permission',['view_study'])
+            ->first();
     }
 
     public function getPermissionsAttribute() {

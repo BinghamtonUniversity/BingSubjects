@@ -1,47 +1,67 @@
 ajax.get('/api/studies',function(data) {
+    
+    // Is this needed?
+    /* Determine if user should view only permitted study's PIs or access full users list for management */
+    // if(auth_user_perms.includes('manage_study') || auth_user_perms.includes('manage_studies') || 
+    //     auth_user_perms.includes('view_users') || auth_user_perms.includes('manage_users')) {
+    //     var options = "/api/users";
+    //     var format = {
+    //         label:"{{first_name}} {{last_name}}",
+    //         value:"{{id}}",
+    //         display:"{{first_name}} {{last_name}}" +
+    //             '<div style="color:#aaa">{{email}}</div>'
+    //     }
+    // }
+
     data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
-            name: 'studies',
-            search: false,columns: false,upload:false,download:false,title:'studies',
+            name:'studies',
+            search:false,columns:false,upload:false,download:false,title:'studies',
             entries:[],
-            sortBy: 'order',
+            sortBy:'order',
             actions:actions,
             count:20,
             schema:[
                 {name:"id",type:"hidden"},
                 {
-                    "name": "pi_user_id",
-                    "label": "PI User",
-                    "type":"user",
-                    template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}"
+                    name:"pi_user_id",
+                    label:"PI User",
+                    type:"user",
+                    template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
+                    options:"/api/users",
+                    format: {
+                        label:"{{first_name}} {{last_name}}",
+                        value:"{{id}}",
+                        display:"{{first_name}} {{last_name}}" +
+                            '<div style="color:#aaa">{{email}}</div>'
+                    }
                 },
                 {
-                    "name": "title",
-                    "label": "Title",
-                    "type":"text",
+                    name:"title",
+                    label:"Title",
+                    type:"text",
                 },
                 {
-                    "name": "location",
-                    "label": "Location",
-                    "type":"text",
+                    name:"location",
+                    label:"Location",
+                    type:"text",
                 },
                 {
-                    "name": "description",
-                    "label": "Description",
-                    "type":"text",
+                    name:"description",
+                    label:"Description",
+                    type:"text",
                 },
                 {
-                    "name": "start_date",
-                    "label": "Start Date",
-                    "type":"date",
+                    name:"start_date",
+                    label:"Start Date",
+                    type:"date",
                 },
                 {
-                    "name": "end_date",
-                    "label": "End Date",
-                    "type":"date",
+                    name:"end_date",
+                    label:"End Date",
+                    type:"date",
                 }
-
             ],
             data: data
         }).on("model:edited",function(grid_event) {

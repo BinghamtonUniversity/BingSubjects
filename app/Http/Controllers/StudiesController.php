@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Permission;
 use App\Models\Study;
 use App\Models\Participant;
 use App\Models\StudyParticipant;
@@ -13,9 +14,18 @@ use Illuminate\Http\Request;
 
 class StudiesController extends Controller
 {
-    public function get_studies(Request $request) {
-        return Study::get();
+    public function get_studies(Request $request, User $user) {
+        // Hard coding for now
+        $user = User::find(1);
+
+        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
+        if($permission->contains('view_studies') || $permission->contains('manage_studies')) {
+            return Study::get();
+        }
+        // If User doesn't have permission to view all studies, then only return studies they can view
+        return Study::whereIn('id',$user->study_permissions->pluck('study_id'))->get();
     }
+
     public function get_study(Request $request, Study $study) {
         return $study;
     }

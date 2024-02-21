@@ -19,19 +19,34 @@ class StudyPolicy
     }
 
     public function view_study(User $user, Study $study) {
-        $study_permission = StudyPermission::where('study_id',$study->id)->where('user_id',1);  //$user->id
-        //$permission = Permission::where('user_id',1);
-        return $study_permission->where(function ($q) {
-            $q->orWhere('study_permission','view_study')
-                ->orWhere('study_permission','manage_study');
-        })->first();
-        //|| $permission->where('permission','view_studies')->first();
+        return $user->is_study_viewer($study->id) || $user->is_study_manager($study->id) ||
+            Permission::where('user_id',$user->id)->whereIn('permission',[
+                'view_studies',
+                'manage_studies'
+            ])->first();
     }
 
     public function manage_study(User $user, Study $study) {
-        $study_permission = StudyPermission::where('study_id',$study->id)->where('user_id',1);
-        //$permission = Permission::where('user_id',1);
-        return $study_permission->where('study_permission','manage_study');
-        // || $permission->where('permission','manage_studies')->first();
+        return $user->is_study_manager($study->id) || 
+            Permission::where('user_id',$user->id)->whereIn('permission',[
+                'manage_studies'
+            ])->first();
     }
+
+    public function view_studies(User $user) {
+        return $user->is_study_viewer() || $user->is_study_manager() ||
+            Permission::where('user_id',$user->id)->whereIn('permission',[
+                'view_studies',
+                'manage_studies'
+            ])->first();
+    }       
+
+    public function manage_studies(User $user) {
+        return $user->is_study_manager() || 
+            Permission::where('user_id',$user->id)->whereIn('permission',[
+                'manage_studies'
+            ])->first();
+    }
+
+    // Add get / set study permissions?
 }

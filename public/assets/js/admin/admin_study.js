@@ -1,7 +1,5 @@
 // hard coding study id until interface is implemented
 var study_id = 1;
-console.log("auth user perms:",auth_user_perms); 
-// Currently only receiving study permissions for this user/study. May need user permissions as well. 
 
 study_template = `
 <div class="row">
@@ -11,11 +9,11 @@ study_template = `
         <!-- Study Info -->
         <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">
-            {{#auth_user_perms}}
-                {{#if . == "manage_study"}}
+            {{#actions}}
+                {{#if . == "manage"}}
                     <a class="btn btn-primary btn-xs pull-right" onclick="display_study_info(true)">Manage Study Info</a>
                 {{/if}}
-            {{/auth_user_perms}}
+            {{/actions}}
             Study Info
         </h3></div>
         <div class="panel-body study-info"></div>
@@ -28,11 +26,11 @@ study_template = `
         <!-- Study Data Types -->
         <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">
-            {{#auth_user_perms}}
-                {{#if . == "manage_study"}}
+            {{#actions}}
+                {{#if . == "manage"}}
                     <a class="btn btn-primary btn-xs pull-right" href="/studies/{{id}}/data_types">Manage Study Data Types</a>
                 {{/if}}
-            {{/auth_user_perms}}
+            {{/actions}}
             Study Data Types
         </h3></div>
         <div class="panel-body study-data-types">{{>study_data_types_template}}</div>
@@ -41,11 +39,11 @@ study_template = `
         <!-- Study Participants -->
         <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">
-            {{#auth_user_perms}}
-                {{#if . == "manage_study"}}
+            {{#actions}}
+                {{#if . == "manage"}}
                     <a class="btn btn-primary btn-xs pull-right" href="/studies/{{id}}/participants">Manage Study Participants</a>
                 {{/if}}
-            {{/auth_user_perms}}
+            {{/actions}}
             Study Participants
         </h3></div>
         <div class="panel-body study-participants">{{>study_participants_template}}</div>
@@ -102,18 +100,15 @@ study_form_attributes = [
     {type:"text", name:"description", label:"Description", required:true},
     {type:"date", name:"start_date", label:"Start Date", required:false},
     {type:"date", name:"end_date", label:"End Date", required:false},
-
     // Could add data types here?
 ];
 
-var study_data = {};
-
 // Retrieve study data and display view
+var study_data = {};
 var load_study = function(study_id) {
     ajax.get('/api/studies/'+study_id,function(data) {
         study_data = data;
-        data.auth_user_perms = auth_user_perms;
-
+        data.actions = actions;
         $('#adminDataGrid').html(Ractive({
             template:study_template,
             partials: {
@@ -122,7 +117,6 @@ var load_study = function(study_id) {
             },
             data:data
         }).toHTML());
-
         display_study_info();
     });
 }
@@ -157,39 +151,7 @@ var display_study_info = function(edit=false) {
     });
 }
 
+/* Verify study id before loading page */
 if (study_id != null && study_id != '') {
     load_study(study_id)
 };
-
-
-    // Edit Study Permissions
-    // new gform(
-    //     {"fields":[
-    //         {
-    //             "type": "radio",
-    //             "label": "Study Permissions",
-    //             "name": "study_permissions",
-    //             "multiple": true,
-    //             "edit": auth_user_perms.some(e=> {return e === "manage_permissions"}),
-    //             "options": [
-    //                 {   "label":"View Study",
-    //                     "value":"view_study"
-    //                 },
-    //                 {
-    //                     "label": "Manage Study",
-    //                     "value": "manage_study"
-    //                 }
-    //             ]
-    //         }
-    //     ],
-    //     "el":".study-permissions",
-    //     "data":{"study_permissions":data.study_permissions},
-    //     "actions":[
-    //         {
-    //             "type": auth_user_perms.some(e=> {return e === "manage_permissions"}) ?"save":"hidden",
-    //             "label":"Update Study Permissions","modifiers":"btn btn-primary"}
-    //     ]}
-    // ).on('save',function(form_event) {
-    //     // Update route
-    //     ajax.put('/api/identities/'+identity_id+'/permissions',form_event.form.get(),function(data) {});
-    // });

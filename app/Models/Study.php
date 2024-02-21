@@ -13,6 +13,14 @@ class Study extends Model
     protected $casts = ['created_at'=>'date:Y-m-d','updated_at'=>'date:Y-m-d','start_date'=> 'date:Y-m-d','end_date'=>'date:Y-m-d'];
     protected $with = ['pi','data_types','participants'];
 
+    public function viewers() {
+        return $this->hasMany(StudyPermission::class,'study_id');
+    }
+
+    public function managers() {
+        return $this->hasMany(StudyPermission::class,'study_id');
+    }
+
     public function study_participants() {
         return $this->hasMany(StudyParticipant::class,'study_id');
     }
@@ -21,6 +29,7 @@ class Study extends Model
         return $this->belongsToMany(Participant::class,'study_participants');
     }
 
+    // Is this used?
     public function pi() {
         return $this->belongsTo(User::class,'pi_user_id');
     }
@@ -37,4 +46,13 @@ class Study extends Model
     public function data_types() {
         return $this->belongsToMany(DataType::class,'study_data_types');
     }
+
+    // Not used yet
+    // public function is_viewer(User $user) {
+    //     return (bool)$this->viewers->where('user_id',$user->id)->first();
+    // }
+
+    // public function is_manager(User $user) {
+    //     return (bool)$this->managers->where('user_id',$user->id)->first();
+    // }
 }
