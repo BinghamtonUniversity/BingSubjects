@@ -17,16 +17,19 @@ class ParticipantsController extends Controller
         $user = User::find(1);
 
         $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
-        $study_permission = StudyPermission::where('user_id',1)->select('study_permission')->get()->pluck('study_permission');
-        
-        if($permission->contains('view_participants') || $permission->contains('manage_participants') || $permission->contains('manage_studies') ||
-            $study_permission->contains('manage_study')) {
+        if($user->is_study_manager() || 
+            $permission->contains('view_participants') || 
+            $permission->contains('manage_participants') || 
+            $permission->contains('delete_participants') ||
+            $permission->contains('view_studies_participants') || 
+            $permission->contains('studies_admin')
+        ) {
             return Participant::get();
         }
-        // If User doesn't have permission to view all participants, then only return participants they can view
-        $permitted_studies = StudyPermission::where('user_id',1)->select('study_id')->get()->pluck('study_id')->toArray();
-        $permitted_participants = StudyParticipant::whereIn('study_id',$permitted_studies)->select('participant_id')->get()->pluck('participant_id')->toArray(); 
-        return Participant::whereIn('id',$permitted_participants)->get();
+        // If User doesn't have permission to view all participants, then only return participants from studies they can view
+        $study_participants = StudyParticipant::whereIn('study_id',$user->study_permissions->pluck('study_id'))
+            ->select('participant_id')->get()->pluck('participant_id')->toArray();
+        return Participant::whereIn('id',$study_participants)->get();
     }
 
     public function get_participant(Request $request, Participant $participant) {
@@ -55,7 +58,15 @@ class ParticipantsController extends Controller
 
     //START Study Participants Methods
     public function get_participant_studies(Request $request, Participant $participant) {
-        return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();        
+        // Hard coding for now
+        $user = User::find(1);
+
+        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
+        if($permission->contains('view_studies_participants') || $permission->contains('studies_admin')) {
+            return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();
+        }
+        return StudyParticipant::whereIn('study_id',$user->study_permissions->pluck('study_id'))
+            ->where('participant_id',$participant->id)->with('study')->get();
     }
 
     public function add_participant_study(Request $request, Participant $participant, Study $study) {

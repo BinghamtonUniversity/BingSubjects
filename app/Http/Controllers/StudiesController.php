@@ -19,7 +19,7 @@ class StudiesController extends Controller
         $user = User::find(1);
 
         $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
-        if($permission->contains('view_studies') || $permission->contains('manage_studies')) {
+        if($permission->contains('view_studies') || $permission->contains('view_studies_participants') || $permission->contains('studies_admin')) {
             return Study::get();
         }
         // If User doesn't have permission to view all studies, then only return studies they can view
@@ -52,7 +52,14 @@ class StudiesController extends Controller
 
     //START Study Participants Methods
     public function get_study_participants(Request $request, Study $study) {
-        return StudyParticipant::where('study_id',$study->id)->with('participant')->get();
+        // Hard coding for now
+        $user = User::find(1);
+
+        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
+        if($user->is_study_viewer($study->id) || $user->is_study_manager($study->id) ||
+            $permission->contains('view_studies_participants') || $permission->contains('studies_admin')) {
+            return StudyParticipant::where('study_id',$study->id)->with('participant')->get();
+        }
     }
 
     public function add_study_participant(Request $request, Study $study, Participant $participant) {

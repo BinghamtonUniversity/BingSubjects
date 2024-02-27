@@ -19,12 +19,16 @@ return new class extends Migration
                 "manage_users",
                 "view_permissions",
                 "manage_permissions",
-                "view_studies",
-                "manage_studies",
+                "view_studies", //view list of all study info (incl. data types), without participant relationships
+                "create_studies", //create new studies - automatically assigning the user 'manage_study' upon creation
                 "view_participants",
-                "manage_participants",
-                "view_data_types",
-                "manage_data_types",
+                "manage_participants", //create and update participant info
+                "delete_participants", //permanently delete participants
+                "view_studies_participants", //view any study participant relationship
+                //"view_data_types", ////////may remove in place of view studies
+                "create_data_types", //create data types
+                "manage_data_types", //permanently delete data types
+                "studies_admin", //manage any study's info, data type, and participant relationship
                 "super_user"
             ]);
             $table->foreign('user_id')->references('id')->on('users');

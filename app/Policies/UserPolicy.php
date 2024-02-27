@@ -27,7 +27,7 @@ class UserPolicy
                 'manage_users',
                 'view_permissions',
                 'manage_permissions',
-                'manage_studies',
+                'studies_admin',
             ])->first();
     }
 

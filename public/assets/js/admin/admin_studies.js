@@ -1,18 +1,5 @@
 ajax.get('/api/studies',function(data) {
-    
-    // Is this needed?
-    /* Determine if user should view only permitted study's PIs or access full users list for management */
-    // if(auth_user_perms.includes('manage_study') || auth_user_perms.includes('manage_studies') || 
-    //     auth_user_perms.includes('view_users') || auth_user_perms.includes('manage_users')) {
-    //     var options = "/api/users";
-    //     var format = {
-    //         label:"{{first_name}} {{last_name}}",
-    //         value:"{{id}}",
-    //         display:"{{first_name}} {{last_name}}" +
-    //             '<div style="color:#aaa">{{email}}</div>'
-    //     }
-    // }
-
+    console.log(data);
     data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
@@ -61,9 +48,27 @@ ajax.get('/api/studies',function(data) {
                     name:"end_date",
                     label:"End Date",
                     type:"date",
-                }
+                },
+                {
+                    name:"data_types",
+                    label:"Data Types",
+                    type:"text",
+                    // template:`{{#each attributes.data_types}}
+                    //     <p> {{type}}: {{description}} <p>
+                    // {{/each}}`
+                    template:"{{attributes.data_types.0.type}}: {{attributes.data_types.0.description}}",
+                    //options:"/api/data_types",
+                    // format: {
+                    //     label:"{{type}}: {{description}}",
+                    //     value:"{{id}}",
+                    //     display:"{{type}}: " +
+                    //         '<div style="color:#aaa">{{description}}</div>'
+                    // }
+                        //{type:"optgroup",options: [{label: "N/A",value:null}]},
+                        //{type:"optgroup",path: "/api/systems/subsystems",format:{label:"{{system}}: {{subsystem}}", value:"{{subsystem}}"}}
+                },
             ],
-            data: data
+            data:data
         }).on("model:edited",function(grid_event) {
             ajax.put('/api/studies/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
                 grid_event.model.update(data)
@@ -80,10 +85,13 @@ ajax.get('/api/studies',function(data) {
             ajax.delete('/api/studies/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
                 grid_event.model.undo();
             });
+        }).on('model:study_dashboard',function(grid_event) {
+            window.location = '/studies/'+grid_event.model.attributes.id;
         }).on('model:study_participants',function(grid_event) {
-            window.location = '/studies/'+grid_event.model.attributes.id+'/participants';  
-        }).on('model:study_data_types',function(grid_event) {
-            window.location = '/studies/'+grid_event.model.attributes.id+'/data_types';
-        }
+            window.location = '/studies/'+grid_event.model.attributes.id+'/participants'; 
+        } 
+        // }).on('model:study_data_types',function(grid_event) {
+        //     window.location = '/studies/'+grid_event.model.attributes.id+'/data_types';
+        // }
     );
 });

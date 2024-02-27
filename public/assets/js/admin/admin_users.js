@@ -55,20 +55,12 @@ ajax.get('/api/users',function(data) {
                                     type: "optgroup",
                                     options: [
                                         {
-                                            label:"View Studies",
-                                            value:"view_studies"
+                                            label:"View Users",
+                                            value:"view_users",
                                         },
                                         {
-                                            label:"Manage Studies",
-                                            value:"manage_studies"
-                                        },
-                                        {
-                                            label:"View PIs",
-                                            value:"view_pis",
-                                        },
-                                        {
-                                            label:"Manage PIs",
-                                            value:"manage_pis",
+                                            label:"Manage Users",
+                                            value:"manage_users",
                                         },
                                         {
                                             label:"View Permissions",
@@ -79,17 +71,46 @@ ajax.get('/api/users',function(data) {
                                             value:"manage_permissions",
                                         },
                                         {
+                                            label:"View Studies",
+                                            value:"view_studies"
+                                        },
+                                        {
+                                            label:"Create Studies",
+                                            value:"create_studies"
+                                        },
+                                        {
                                             label:"View Participants",
                                             value:"view_participants",
                                         },
                                         {
                                             label:"Manage Participants",
                                             value:"manage_participants",
+                                        },                                        
+                                        {
+                                            label:"Delete Participants",
+                                            value:"delete_participants"
                                         },
+                                        {
+                                            label:"View Study Participants",
+                                            value:"view_studies_participants"
+                                        },
+                                        {
+                                            label:"Create Data Types",
+                                            value:"create_data_types"
+                                        },
+                                        {
+                                            label:"Manage Data Types",
+                                            value:"manage_data_types"
+                                        },
+                                        {
+                                            label:"Manage Studies In Admin",
+                                            value:"studies_admin"
+                                        },
+
                                         {
                                             label:"Super User",
                                             value:"super_user"
-                                        }
+                                        },
                                     ]
                                 }
                             ]

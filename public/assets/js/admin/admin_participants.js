@@ -37,6 +37,10 @@ ajax.get('/api/participants',function(data) {
                         {
                             label:"Female",
                             value:"female"
+                        },
+                        {
+                            label:"Intersex",
+                            value:"intersex"
                         }
                     ],
                 },

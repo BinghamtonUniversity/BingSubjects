@@ -17,14 +17,11 @@ class DataTypePolicy
         //
     }
 
-    public function view_data_types(User $user) {
-        return $user->is_study_viewer() || $user->is_study_manager() ||
-            Permission::where('user_id',1)->whereIn('permission',[
-                'view_studies',
-                'manage_studies',
-                'view_data_types',
-                'manage_data_types'
-            ])->first();
+    public function create_data_types(User $user) {
+        return Permission::where('user_id',1)->whereIn('permission',[
+            'create_data_types',
+            'manage_data_types',
+        ])->first();
     }
 
     public function manage_data_types(User $user) {

@@ -1,17 +1,5 @@
 ajax.get('/api/studies/'+id+'/participants',function(data) {
     data = data.reverse();
-
-    // Is this needed?
-    /* Determine if user should view only this study's participants or access full participants list for management */
-    // if(auth_user_perms.includes('manage_study') || auth_user_perms.includes('manage_studies')) {
-    //     var options = "/api/participants";
-    //     var format = {
-    //         "label":"{{first_name}} {{last_name}}",
-    //         "value":"{{id}}",
-    //         "display":"{{first_name}} {{last_name}}"
-    //     }
-    // }
-
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'study_participants',

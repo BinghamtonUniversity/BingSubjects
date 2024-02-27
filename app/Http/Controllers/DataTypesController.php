@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class DataTypesController extends Controller
 {
     public function get_data_types(Request $request) {
-        return DataType::all();
+        return DataType::get();
     }
 
     public function get_data_type(Request $request, DataType $data_type) {
@@ -37,9 +37,8 @@ class DataTypesController extends Controller
         return $data_type;
     }
 
-
     //START Study Data Types Methods
-    public function get_data_type_studies(Request $request, DataType $data_type) { //Study $study)
+    public function get_data_type_studies(Request $request, DataType $data_type) {
         return StudyDataType::where('data_type_id',$data_type->id)->with('study')->get();
     }
 

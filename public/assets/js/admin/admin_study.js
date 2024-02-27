@@ -1,6 +1,3 @@
-// hard coding study id until interface is implemented
-var study_id = 1;
-
 study_template = `
 <div class="row">
     <div class="col-sm-6">
@@ -67,9 +64,9 @@ study_data_types_template = `
 <div style="font-size:20px;">
     {{#data_types}}
         <h4 style="padding-bottom:4px;border:solid;border-width:0px 0px 1px 0px;border-color:#ccc6;;"
-        >{{data_types[id-1].type}}</h4>
+        >{{type}}</h4>
         <h5 style="padding-bottom:20px;;"
-        >{{data_types[id-1].description}}</h5>
+        >{{description}}</h5>
     {{/data_types}}
 </div>
 {{^data_types}}
@@ -81,9 +78,9 @@ study_participants_template = `
 <div style="font-size:20px;">
     {{#participants}}
         <a class="label label-default label-block" 
-        href="/participants/{{participants[id-1].id}}"
+        href="/participants/{{participants[id-1].id}}/studies"
         style="width:100%;padding-top:4px;padding-bottom:4px;"
-        >{{participants[id-1].first_name}}&nbsp{{participants[id-1].last_name}}</a>
+        >{{first_name}}&nbsp{{last_name}}</a>
     {{/participants}}
 </div>
 {{^participants}}
@@ -103,11 +100,12 @@ study_form_attributes = [
     // Could add data types here?
 ];
 
-// Retrieve study data and display view
+/* Retrieve study data and display view */
 var study_data = {};
-var load_study = function(study_id) {
-    ajax.get('/api/studies/'+study_id,function(data) {
+var load_study = function() {
+    ajax.get('/api/studies/'+id,function(data) {
         study_data = data;
+        console.log(study_data.participants);
         data.actions = actions;
         $('#adminDataGrid').html(Ractive({
             template:study_template,
@@ -121,7 +119,7 @@ var load_study = function(study_id) {
     });
 }
 
-// Display study info as viewable or editable
+/* Display study info as viewable or editable */
 var display_study_info = function(edit=false) {
     if(edit == false) {
         manage_actions = []
@@ -141,17 +139,17 @@ var display_study_info = function(edit=false) {
         "data":study_data,
         "actions":manage_actions
     }).on('cancel',function() {
-        load_study(study_id);
+        load_study();
     }).on('save',function(form_event) {
         if(form_event.form.validate()) {
-            ajax.put('/api/studies/' + study_id, form_event.form.get(), function () {
-                load_study(study_id);
+            ajax.put('/api/studies/'+id,form_event.form.get(),function() {
+                load_study();
             });
         }
     });
 }
 
 /* Verify study id before loading page */
-if (study_id != null && study_id != '') {
-    load_study(study_id)
+if (id != null && id != '') { //check study model?
+    load_study()
 };
