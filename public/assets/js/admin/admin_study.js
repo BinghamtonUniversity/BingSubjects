@@ -105,7 +105,7 @@ var study_data = {};
 var load_study = function() {
     ajax.get('/api/studies/'+id,function(data) {
         study_data = data;
-        console.log(study_data.participants);
+        //console.log(study_data.participants);
         data.actions = actions;
         $('#adminDataGrid').html(Ractive({
             template:study_template,

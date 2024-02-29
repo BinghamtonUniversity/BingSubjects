@@ -101,7 +101,7 @@ class AdminController extends Controller
 
         return view('default.admin',
             ['page'=>'participant_studies',
-                'id'=>$participant->id,
+                'id'=>[$participant->id,$user->id],
                 'actions'=>$user_actions,
                 'title'=>'Manage Participant\'s Studies',
                 'help'=>'Use this page to manage studies for '.$participant->first_name.' '.$participant->last_name.'.'
@@ -125,10 +125,14 @@ class AdminController extends Controller
         if ($user->can('studies_admin','App\Study')) {     
             $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1];
         }
-        //$user_actions[] = ["name"=>"study_data_types","label"=>"Study's Data Types","min"=>1,"max"=>1];
         if($user->can('view_studies_participants','App\Study')) {
             $user_actions[] = ["name"=>"study_dashboard","label"=>"Study Dashboard","min"=>1,"max"=>1];
             $user_actions[] = ["name"=>"study_participants","label"=>"Study Participants","min"=>1,"max"=>1];
+
+        }
+        // To be removed
+        if($user->is_study_manager() || $user->can('studies_admin','App\Study')) {
+            $user_actions[] = ["name"=>"study_data_types","label"=>"Study Data Types","min"=>1,"max"=>1];
         }
 
         return view('default.admin',
@@ -243,7 +247,7 @@ class AdminController extends Controller
         }
         return view('default.admin',
             ['page'=>'data_type_studies',
-                'id'=>$data_type->id,
+                'id'=>[$data_type->id,$user->id],
                 'actions'=>$user_actions,
                 'title'=>'Manage Data Type\'s Studies',
                 'help'=>'Use this page to manage studies with '.$data_type->type.'.'

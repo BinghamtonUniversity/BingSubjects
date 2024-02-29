@@ -31,6 +31,11 @@ class StudyPolicy
             Permission::where('user_id',$user->id)->where('permission','studies_admin')->first();
     }
 
+    public function manage_studies(User $user) {
+        return $user->is_study_manager() || 
+            Permission::where('user_id',$user->id)->where('permission','studies_admin')->first();
+    }
+
     public function view_studies(User $user) {
         return Permission::where('user_id',$user->id)->whereIn('permission',[
             'view_studies',

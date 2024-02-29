@@ -121,4 +121,20 @@ class StudiesController extends Controller
         return $study->study_permission;
     }
     // END Study Permissions Methods
+
+    public function get_manageable_studies(Request $request, User $user) {
+        // Hard coding for now
+        $user = User::find(1);
+
+        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
+        $permitted_studies = StudyPermission::where('user_id',1)->where('study_permission','manage_study')
+            ->select('study_id')->get()->pluck('study_id')->toArray();
+
+        if($permission->contains('studies_admin')) {
+            return Study::get();
+        }
+        else {
+            return Study::whereIn('id',$permitted_studies)->get();
+        }
+    }
 }

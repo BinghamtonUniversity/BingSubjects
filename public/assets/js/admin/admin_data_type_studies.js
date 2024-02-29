@@ -1,4 +1,4 @@
-ajax.get('/api/data_types/'+id+'/studies',function(data) {
+ajax.get('/api/data_types/'+id[0]+'/studies',function(data) {
     data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
@@ -15,7 +15,7 @@ ajax.get('/api/data_types/'+id+'/studies',function(data) {
                     type:"combobox",
                     label:"Study",
                     template:"{{attributes.study.title}}, PI: {{attributes.study.pi.first_name}} {{attributes.study.pi.last_name}}",
-                    options:"/api/studies",
+                    options:"/api/studies/users/"+id[1],
                     format:{
                         label:"{{title}}, PI: {{pi.first_name}} {{pi.last_name}}",
                         value:"{{id}}",
@@ -29,13 +29,13 @@ ajax.get('/api/data_types/'+id+'/studies',function(data) {
             ],
             data:data
         }).on("model:created",function(grid_event) {
-        ajax.post('/api/data_types/'+id+'/studies/'+grid_event.model.attributes.study_id, {},function(data) {
+        ajax.post('/api/data_types/'+id[0]+'/studies/'+grid_event.model.attributes.study_id, {},function(data) {
             grid_event.model.update(data)
         },function(data) {
             grid_event.model.undo();
         });
     }).on("model:deleted",function(grid_event) {
-        ajax.delete('/api/data_types/'+id+'/studies/'+grid_event.model.attributes.study_id,{},function(data) {},function(data) {
+        ajax.delete('/api/data_types/'+id[0]+'/studies/'+grid_event.model.attributes.study_id,{},function(data) {},function(data) {
             grid_event.model.undo();
         });
     });

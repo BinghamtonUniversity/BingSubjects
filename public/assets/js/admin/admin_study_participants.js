@@ -10,7 +10,8 @@ ajax.get('/api/studies/'+id+'/participants',function(data) {
             count:20,
             schema:[
                 {name:"id",type:"hidden"},
-                {name:"participant_id",
+                {
+                    name:"participant_id",
                     type:"combobox",
                     label:"Participant",
                     template:"{{attributes.participant.first_name}} {{attributes.participant.last_name}}",

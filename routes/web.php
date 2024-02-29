@@ -60,6 +60,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::put('/studies/{study}',[StudiesController::class,'update_study'])->middleware('can:manage_study,study');
     Route::delete('/studies/{study}',[StudiesController::class,'delete_study'])->middleware('can:studies_admin,App\Models\Study');
     // Study Permissions
+    Route::get('/studies/users/{user}',[StudiesController::class,'get_manageable_studies'])->middleware('can:manage_studies,App\Models\Study');
     Route::put('/studies/{study}/users/{user}/permissions',[StudiesController::class,'set_study_permissions']);//->middleware('can:manage_permissions,App\Models\Study'); // Where should this be accessed from?
     Route::get('/studies/{study}/users/{user}/permissions',[StudiesController::class,'get_study_permissions']);//->middleware('can:view_permissions,App\Models\Study'); // Where should this be accessed from?
 
