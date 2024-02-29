@@ -49,7 +49,12 @@ ajax.get('/api/reports',function(data) {
                         "options": [
                             {"label": "participant_id", "value": "participants.id as participant_id"},
                             {"label": "study_title", "value": "studies.title as study_title"},
-                            {"label": "study_description", "value": "studies.description as study_description"}
+                            {"label": "participant_first_name", "value": "participants.first_name as participant_first_name"},
+                            {"label": "participant_last_name", "value": "participants.last_name as participant_last_name"},
+                            {"label": "participant_dob", "value": "participants.date_of_birth as participant_dob"},
+                            {"label": "participant_sex", "value": "participants.sex as participant_sex"},
+                            {"label": "participant_race", "value": "participants.race as participant_race"},
+                            {"label": "participant_city_of_birth", "value": "participants.city_of_birth as participant_city_of_birth"}
                         ]
                     },
                     {

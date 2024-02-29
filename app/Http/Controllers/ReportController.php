@@ -71,7 +71,9 @@ class ReportController extends Controller
     }
     public function execute(Request $request, Report $report) {
 
-        $default_columns = ['first_name','last_name','email'];
+        $default_columns = [
+            'email'
+        ];
         $columns = array_merge($default_columns, $report->report->columns);
 
 //        $subq_user_groups = DB::table('participants')
@@ -86,6 +88,9 @@ class ReportController extends Controller
                 $join->on('study_participants.study_id', '=', 'study_data_types.study_id');
             })->leftJoin('studies', function ($join) {
                 $join->on('study_participants.study_id', '=', 'studies.id');
+            })
+            ->leftJoin('data_types', function ($join) {
+                $join->on('study_data_types.data_type_id', '=', 'data_types.id');
             })
 //            ->leftJoin('group_memberships', function ($join) {
 //                $join->on('users.id', '=', 'group_memberships.user_id');
