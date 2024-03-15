@@ -13,9 +13,16 @@ return new class extends Migration
     {
         Schema::create('data_types', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->string('description');
-
+            $table->unsignedBigInteger('study_id');
+            $table->enum('type',[
+                "assessment",
+                "behavioral",
+                "neurosignal",
+                "biospecimen"
+            ]);
+            $table->string('description')->nullable()->default(null);
+            $table->foreign('study_id')->references('id')->on('studies');
+            
             // Look into removing the following:
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');

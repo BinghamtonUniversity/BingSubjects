@@ -39,39 +39,54 @@ class User extends Authenticatable
     protected $casts = ['email_verified_at' => 'datetime', 'password' => 'hashed'];
     protected $appends = ['permissions'];
 
-    public function studies() {
-        return $this->belongsToMany(Study::class,'study_viewers')->orderBy('order');
-    }
-
     public function user_permissions() {
         return $this->hasMany(Permission::class,'user_id');
     }
 
-    public function study_permissions() {
-        return $this->hasMany(StudyPermission::class,'user_id');
+    public function studies() {
+        return $this->belongsToMany(Study::class,'user_studies');
     }
 
-    public function is_study_manager($study_id=null) {
+    public function user_studies() {
+        return $this->hasMany(StudyUser::class,'user_id');
+    }
+ 
+    public function user_study_type($study_id) {
+        return StudyUser::where('user_id',$this->id)->where('study_id',$study_id)->select('type')->get()->pluck('type')->first();
+    }
+
+    public function is_study_user($study_id=null){
         if (is_null($study_id)){
-            return (bool)StudyPermission::where('user_id',1)
-                ->whereIn('study_permission',['manage_study'])
+            return (bool)StudyUser::where('user_id',$this->id)
                 ->first();
         }
-        return (bool)StudyPermission::where('user_id',1)
+        return (bool)StudyUser::where('user_id',$this->id)
             ->where('study_id',$study_id)
-            ->whereIn('study_permission',['manage_study'])
             ->first();
     }
 
-    public function is_study_viewer($study_id=null) {
+    public function is_study_manager($study_id=null){
         if (is_null($study_id)){
-            return (bool)StudyPermission::where('user_id',1)
-                ->whereIn('study_permission',['view_study'])
+            return (bool)StudyUser::where('user_id',$this->id)
+                ->where('type','manager')
                 ->first();
         }
-        return (bool)StudyPermission::where('user_id',1)
+        return (bool)StudyUser::where('user_id',$this->id)
             ->where('study_id',$study_id)
-            ->whereIn('study_permission',['view_study'])
+            ->where('type','manager')
+            ->first();
+    }
+
+    //Not used yet
+    public function is_study_viewer($study_id=null){
+        if (is_null($study_id)){
+            return (bool)StudyUser::where('user_id',$this->id)
+                ->where('type','viewer')
+                ->first();
+        }
+        return (bool)StudyUser::where('user_id',$this->id)
+            ->where('study_id',$study_id)
+            ->where('type','viewer')
             ->first();
     }
 

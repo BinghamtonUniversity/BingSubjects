@@ -79,7 +79,7 @@ ajax.get('/api/studies',function(data) {
                     label:"PI",
                     type:"user",
                     template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
-                    options:"/api/users",
+                    //options:"/api/users",
                     format: {
                         label:"{{first_name}} {{last_name}}",
                         value:"{{id}}",
@@ -138,43 +138,56 @@ ajax.get('/api/studies',function(data) {
                 {
                     name:"data_types",
                     label:"Data Types",
-                    type:"radio",
+                    type:"combobox",
                     template:`
                     <ul style="padding-left: 20px">
                         {{#each attributes.data_types}}
-                            <li>{{type}}: {{description}}</li>
+                            <li><span style="text-transform:capitalize;">{{type}}</span>: {{description}}</li>
                         {{/attributes.data_types}}
                     </ul>
                     `,
-                    options:"/api/data_types",
-                    format: {
-                        label:"{{type}}: {{description}}",
-                        value:"{{id}}",
-                        display:"{{type}}: {{description}}"
-                    }
+                    //options:"/api/data_types",
+                    options: [
+                        {
+                            label:"Assessment",
+                            value:"type === 'assessment'", //come back to
+                        },
+                        {
+                            label:"Behavioral",
+                            value:"type.behavioral",
+                        },
+                        {
+                            label:"Neurosignal",
+                            value:"type.neurosignal",
+                        },
+                        {
+                            label:"Biospecimen",
+                            value:"type.biospecimen",
+                        }
+                    ],
                 },
 
-                {
-                    name:"participants",
-                    label:"Participants",
-                    type:"number",
-                    template:"{{attributes.participants.length}}",
-                },
+                // {
+                //     name:"participants",
+                //     label:"Participants",
+                //     type:"number",
+                //     template:"{{attributes.participants.length}}",
+                // },
             ],
             data:data
         }).on("edit",function(e) {
             e.preventDefault();
         }).on("model:edit",function(grid_event) {
-            new gform({
+            var mymodal = new gform({
                 "legend":"Edit",
                 "name":"edit",
                 "fields": [
                     {name:"id",type:"hidden"},
                     {
-                        name:"pi_user_id",
+                        name:"pi",
                         label:"PI",
                         type:"user",
-                        template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
+                        template:"{{first_name}} {{last_name}}",
                         options:"/api/users",
                         format: {
                             label:"{{first_name}} {{last_name}}",
@@ -208,47 +221,47 @@ ajax.get('/api/studies',function(data) {
                         label:"Location",
                         type:"text",
                     },
-                    {
-                        name:"studys_data_types",
-                        label:"Study's Data Types",
-                        type:"fieldset",
-                    },
-
-                    // Combobox Array Option
                     // {
-                    //     name:"data_types",
-                    //     label:"Data Types",
-                    //     type:"combobox",
-                    //     template:"{{attributes.data_types.[0].type}} {{attributes.data_types.[0].description}}",
-                    //     array:{min:0,max:12},
-                    //     options:"/api/data_types",
-                    //     format: {
-                    //         label:"{{type}}: {{description}}",
-                    //         value:"{{id}}",
-                    //         display:"{{type}}" +
-                    //             '<div style="color:#aaa">{{description}}</div>',
-                    //     }
-                    //     //Look into updating 'click here to create Data Types' button text                  
+                    //     name:"studys_data_types",
+                    //     label:"Study's Data Types",
+                    //     type:"fieldset",
                     // },
 
-                    // Radio Option
+                    // Combobox Array Option
                     {
                         name:"data_types",
-                        label:false,
-                        type:"radio",
-                        multiple:true,
-                        options: [
-                            {
-                                type:"optgroup",
-                                options:"/api/data_types",
-                            }
-                        ],
+                        label:"Data Types",
+                        type:"combobox",
+                        template:"{{type}}: {{description}}",
+                        array:{min:0,max:12},
+                        //options:"/api/data_types",
                         format: {
                             label:"{{type}}: {{description}}",
                             value:"{{id}}",
-                            display:"{{type}}: {{description}}",
+                            display:"{{type}}" +
+                                '<div style="color:#aaa">{{description}}</div>',
                         }
-                    }
+                        //Look into updating 'click here to create Data Types' button text                  
+                    },
+
+                    // Radio Option
+                    // {
+                    //     name:"data_types",
+                    //     label:false,
+                    //     type:"radio",
+                    //     multiple:true,
+                    //     options: [
+                    //         {
+                    //             type:"optgroup",
+                    //             options:"/api/data_types",
+                    //         }
+                    //     ],
+                    //     format: {
+                    //         label:"{{type}}: {{description}}",
+                    //         value:"{{id}}",
+                    //         display:"{{type}}: {{description}}",
+                    //     }
+                    // }
                 ]
             }).on('save',function(form_event) {
                 if(form_event.form.validate()) {
@@ -262,7 +275,16 @@ ajax.get('/api/studies',function(data) {
                 }
             }).on('cancel',function(form_event) {
                 form_event.form.trigger('close');
-            }).modal().set(grid_event.model.attributes); //.set({data_types:grid_event.model.attributes.data_types});
+            });
+            mymodal.modal().set(grid_event.model.attributes);
+            mymodal.modal().set({pi:grid_event.model.attributes.pi.first_name+" "+grid_event.model.attributes.pi.last_name});
+            
+            // Needs revisiting
+            mymodal.modal().set({data_types:grid_event.model.attributes.data_types[0].type});
+            console.log(grid_event.model.attributes.data_types[0].type);
+            // grid_event.model.attributes.data_types.forEach(data_type => {
+            //     mymodal.modal().set({data_types:grid_event.model.attributes.data_types[data_type].type});
+            // });
 
         // }).on("model:edited",function(grid_event) {
         //     ajax.put('/api/studies/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
@@ -289,7 +311,7 @@ ajax.get('/api/studies',function(data) {
         // To be removed
         }).on('model:study_data_types',function(grid_event) {
             window.location = '/studies/'+grid_event.model.attributes.id+'/data_types';
-        
         }
+
     );
 });

@@ -25,14 +25,14 @@ ajax.get('/api/studies/'+id+'/participants',function(data) {
             ],
             data:data   
         }).on("model:created",function(grid_event) {
-        ajax.post('/api/studies/'+id+'/participants/'+grid_event.model.attributes.participant_id, {},function(data) {
-            grid_event.model.update(data)
-        },function(data) {
-            grid_event.model.undo();
+            ajax.post('/api/studies/'+id+'/participants/'+grid_event.model.attributes.participant_id,{},function(data) {
+                grid_event.model.update(data)
+            },function(data) {
+                grid_event.model.undo();
+            });
+        }).on("model:deleted",function(grid_event) {
+            ajax.delete('/api/studies/'+id+'/participants/'+grid_event.model.attributes.participant_id,{},function(data) {},function(data) {
+                grid_event.model.undo();
+            });
         });
-    }).on("model:deleted",function(grid_event) {
-        ajax.delete('/api/studies/'+id+'/participants/'+grid_event.model.attributes.participant_id,{},function(data) {},function(data) {
-            grid_event.model.undo();
-        });
-    });
 });

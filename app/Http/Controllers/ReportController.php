@@ -84,14 +84,14 @@ class ReportController extends Controller
         $q = DB::table('participants')
             ->leftJoin('study_participants', function ($join) {
                 $join->on('participants.id', '=', 'study_participants.participant_id');
-            })->leftJoin('study_data_types', function ($join) {
-                $join->on('study_participants.study_id', '=', 'study_data_types.study_id');
+            // })->leftJoin('study_data_types', function ($join) {
+            //     $join->on('study_participants.study_id', '=', 'study_data_types.study_id');
             })->leftJoin('studies', function ($join) {
                 $join->on('study_participants.study_id', '=', 'studies.id');
             })
-            ->leftJoin('data_types', function ($join) {
-                $join->on('study_data_types.data_type_id', '=', 'data_types.id');
-            })
+            // ->leftJoin('data_types', function ($join) {
+            //     $join->on('study_data_types.data_type_id', '=', 'data_types.id');
+            // })
 //            ->leftJoin('group_memberships', function ($join) {
 //                $join->on('users.id', '=', 'group_memberships.user_id');
 //            })->leftJoin('groups', function ($join) {

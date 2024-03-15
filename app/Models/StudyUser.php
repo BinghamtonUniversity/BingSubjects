@@ -4,15 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StudyPermission extends Model
+class StudyUser extends Model
 {
-    protected $fillable = ['study_id','user_id','study_permission'];
+    protected $fillable = ['study_id','user_id','type'];
 
-    public function study(){
+    public function study() {
         return $this->belongsTo(Study::class,'study_id');
     }
 
-    public function user(){
+    public function user() {
         return $this->belongsTo(User::class,'user_id');
     }
 }

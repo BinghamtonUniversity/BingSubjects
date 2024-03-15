@@ -9,13 +9,17 @@ class DataType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type','description'];
+    protected $fillable = ['study_id','type','description'];
 
-    public function study_data_types() {
-        return $this->hasMany(StudyDataType::class,'data_type_id');
-    }
+    // public function study_data_types() {
+    //     return $this->hasMany(StudyDataType::class,'data_type_id');
+    // }
 
-    public function studies() {
-        return $this->belongsToMany(Study::class,'study_data_types'); 
+    // public function studies() {
+    //     return $this->belongsToMany(Study::class,'study_data_types'); 
+    // }
+
+    public function study() {
+        return $this->belongsTo(Study::class); //'data_type_id');
     }
 }

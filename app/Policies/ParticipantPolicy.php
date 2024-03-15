@@ -2,10 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\User;
-use App\Models\Study;
-use App\Models\StudyPermission;
+use App\Models\Participant;
 use App\Models\Permission;
+use App\Models\Study;
+use App\Models\StudyParticipant;
+use App\Models\StudyUser;
+use App\Models\User;
 
 class ParticipantPolicy
 {
@@ -22,19 +24,30 @@ class ParticipantPolicy
             Permission::where('user_id',1)->whereIn('permission',[
                 'view_participants',
                 'manage_participants',
-                'delete_participants',
-                'view_studies_participants',
-                'studies_admin'
+                'manage_deletions'
             ])->first();
     }
 
-    public function manage_participants(User $user) {
+    public function create_participants(User $user) {
+        return Permission::where('user_id',1)->where('permission','manage_participants')->first();
+    }
+
+    public function update_participants(User $user) {
         return Permission::where('user_id',1)->where('permission','manage_participants')->first();
     }
 
     public function delete_participants(User $user) {
-        return Permission::where('user_id',1)->where('permission','delete_participants')->first();
+        return Permission::where('user_id',1)->where('permission','manage_deletions')->first();
     }
 
+    public function view_participant_studies(User $user, Participant $participant) {
+        $participant_studies = StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
+            ->where('participant_id',$participant->id)->select('study_id')->get()->pluck('study_id')->toArray();
 
+        return $user->is_study_user($participant_studies) ||
+            Permission::where('user_id',$user->id)->whereIn('permission',[
+                'manage_studies',
+                'manage_deletions'
+            ])->first();
+    }
 }

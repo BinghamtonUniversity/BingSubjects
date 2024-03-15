@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudyDataType extends Model
 {
-    use HasFactory;
+    // use HasFactory;
 
-    protected $fillable = ['data_type_id','study_id'];
+    // protected $fillable = ['study_id','data_type_id'];
 
-    public function study() {
-        return $this->belongsTo(Study::class);
-    }
+    // public function study() {
+    //     return $this->belongsTo(Study::class);
+    // }
 
-    public function data_type() {
-        return $this->belongsTo(DataType::class);
-    }
+    // public function data_type() {
+    //     return $this->belongsTo(DataType::class);
+    // }
 }

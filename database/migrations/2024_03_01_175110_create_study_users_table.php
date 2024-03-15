@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('study_permissions', function (Blueprint $table) {
+        Schema::create('study_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('study_id')->index();
-            $table->unsignedBigInteger('user_id')->index();
-            $table->enum('study_permission',[
-                "view_study",
-                "manage_study"
+            $table->unsignedBigInteger('study_id'); //->index();
+            $table->unsignedBigInteger('user_id'); //->index();
+            $table->enum('type',[
+                "viewer",
+                "manager"
             ]);
+            $table->unique(['study_id','user_id']);
             $table->foreign('study_id')->references('id')->on('studies');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('study_permissions');
+        Schema::dropIfExists('study_users');
     }
 };

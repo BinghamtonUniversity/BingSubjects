@@ -94,14 +94,14 @@ ajax.get('/api/users',function(data) {
                                             label:"View Study Participants",
                                             value:"view_studies_participants"
                                         },
-                                        {
-                                            label:"Create Data Types",
-                                            value:"create_data_types"
-                                        },
-                                        {
-                                            label:"Manage Data Types",
-                                            value:"manage_data_types"
-                                        },
+                                        // {
+                                        //     label:"Create Data Types",
+                                        //     value:"create_data_types"
+                                        // },
+                                        // {
+                                        //     label:"Manage Data Types",
+                                        //     value:"manage_data_types"
+                                        // },
                                         {
                                             label:"Manage Studies In Admin",
                                             value:"studies_admin"

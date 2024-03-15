@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'password' => '12345'
         ]);
 
-        // Assign default user all view permissions
+        // Assign default user all basic view permissions
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
             'permission' => 'view_users'
@@ -43,38 +43,12 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
-            'permission' => 'view_studies'
+            'permission' => 'view_studies_info'
         ]);
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
             'permission' => 'view_participants'
         ]);
-        // \App\Models\Permission::create([
-        //     'user_id' => $default_user->id,
-        //     'permission' => 'view_data_types'
-        // ]);
-
-        // Assign second user all view permissions
-        \App\Models\Permission::create([
-            'user_id' => 2,
-            'permission' => 'view_users'
-        ]);
-        \App\Models\Permission::create([
-            'user_id' => 2,
-            'permission' => 'view_permissions'
-        ]);
-        \App\Models\Permission::create([
-            'user_id' => 2,
-            'permission' => 'view_studies'
-        ]);
-        \App\Models\Permission::create([
-            'user_id' => 2,
-            'permission' => 'view_participants'
-        ]);
-        // \App\Models\Permission::create([
-        //     'user_id' => 2,
-        //     'permission' => 'view_data_types'
-        // ]);
 
         // Starter Participants
         Participant::factory(20)->create([
@@ -93,6 +67,7 @@ class DatabaseSeeder extends Seeder
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
+
         \App\Models\Study::create([
             'pi_user_id' => 2,
             'title' => "Dating, Literary Sexual Encounters and Brain Stimulation Study",
@@ -116,35 +91,58 @@ class DatabaseSeeder extends Seeder
 
         // Starter Data Types
         \App\Models\DataType::create([
-            'type' => "Interview",
-            'description' => "Stress and trauma evaluation",
-            'created_by' => $default_user->id,
-            'updated_by' => $default_user->id
-        ]);
-        \App\Models\DataType::create([
-            'type' => "Survey",
+            'study_id'=> 1,
+            'type' => "biospecimen",
             'description' => "Relationship history and satisfaction rating",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'type' => "Questionnaire",
+            'study_id'=> 2,
+            'type' => "assessment",
             'description' => "Quality of life inventory",
             'created_by' => 2,
             'updated_by' => 2
         ]);
         \App\Models\DataType::create([
-            'type' => "Interview",
+            'study_id'=> 3,
+            'type' => "behavioral",
             'description' => "Cognitive processing evaluation",
             'created_by' => 2,
             'updated_by' => 2
         ]);
-        \App\Models\DataType::create([
-            'type' => "MRI",
-            'description' => "Brain mapping",
-            'created_by' => 2,
-            'updated_by' => 2
-        ]);
+
+        // // Starter Data Types
+        // \App\Models\DataType::create([
+        //     'type' => "Interview",
+        //     'description' => "Stress and trauma evaluation",
+        //     'created_by' => $default_user->id,
+        //     'updated_by' => $default_user->id
+        // ]);
+        // \App\Models\DataType::create([
+        //     'type' => "Survey",
+        //     'description' => "Relationship history and satisfaction rating",
+        //     'created_by' => $default_user->id,
+        //     'updated_by' => $default_user->id
+        // ]);
+        // \App\Models\DataType::create([
+        //     'type' => "Questionnaire",
+        //     'description' => "Quality of life inventory",
+        //     'created_by' => 2,
+        //     'updated_by' => 2
+        // ]);
+        // \App\Models\DataType::create([
+        //     'type' => "Interview",
+        //     'description' => "Cognitive processing evaluation",
+        //     'created_by' => 2,
+        //     'updated_by' => 2
+        // ]);
+        // \App\Models\DataType::create([
+        //     'type' => "MRI",
+        //     'description' => "Brain mapping",
+        //     'created_by' => 2,
+        //     'updated_by' => 2
+        // ]);
 
         // Assign participants 1-10 to the first study
         for ($index = 1; $index < 11; $index++) {
@@ -169,49 +167,65 @@ class DatabaseSeeder extends Seeder
         }
 
         // Assign data types 1-3 to the first study
-        for ($index = 1; $index < 4; $index++) {
-            \App\Models\StudyDataType::create([
-                'study_id' => 1,
-                'data_type_id' => $index,
-            ]);
-        }
-        // Assign data types 2-4 to the second study
-        for ($index = 2; $index < 5; $index++) {
-            \App\Models\StudyDataType::create([
-                'study_id' => 2,
-                'data_type_id' => $index,
-            ]);
-        }
-        // Assign data types 4-5 to the third study
-        for ($index = 4; $index < 6; $index++) {
-            \App\Models\StudyDataType::create([
-                'study_id' => 3,
-                'data_type_id' => $index,
-            ]);
-        }
+        // for ($index = 1; $index < 4; $index++) {
+        //     \App\Models\StudyDataType::create([
+        //         'study_id' => 1,
+        //         'data_type_id' => $index,
+        //     ]);
+        // }
+        // // Assign data types 2-4 to the second study
+        // for ($index = 2; $index < 5; $index++) {
+        //     \App\Models\StudyDataType::create([
+        //         'study_id' => 2,
+        //         'data_type_id' => $index,
+        //     ]);
+        // }
+        // // Assign data types 4-5 to the third study
+        // for ($index = 4; $index < 6; $index++) {
+        //     \App\Models\StudyDataType::create([
+        //         'study_id' => 3,
+        //         'data_type_id' => $index,
+        //     ]);
+        // }
 
         // Assign default user manage 1st study and view 2nd study permissions
-        \App\Models\StudyPermission::create([
-            'user_id' => $default_user->id,
+        \App\Models\StudyUser::create([
             'study_id' => 1,
-            'study_permission' => 'manage_study'
-        ]);
-        \App\Models\StudyPermission::create([
             'user_id' => $default_user->id,
+            'type' => 'manager'     
+        ]);
+        \App\Models\StudyUser::create([
             'study_id' => 2,
-            'study_permission' => 'view_study'
+            'user_id' => $default_user->id,
+            'type' => 'viewer'
+        ]);
+        \App\Models\StudyUser::create([
+            'study_id' => 1,
+            'user_id' => 2,
+            'type' => 'viewer'
         ]);
 
+        // \App\Models\StudyPermission::create([
+        //     'user_id' => $default_user->id,
+        //     'study_id' => 1,
+        //     'study_permission' => 'manage_study'
+        // ]);
+        // \App\Models\StudyPermission::create([
+        //     'user_id' => $default_user->id,
+        //     'study_id' => 2,
+        //     'study_permission' => 'view_study'
+        // ]);
+
         // Assign second user manage 2nd and 3rd study permissions
-        \App\Models\StudyPermission::create([
-            'user_id' => 2,
-            'study_id' => 2,
-            'study_permission' => 'manage_study'
-        ]);
-        \App\Models\StudyPermission::create([
-            'user_id' => 2,
-            'study_id' => 3,
-            'study_permission' => 'manage_study'
-        ]);
+        // \App\Models\StudyPermission::create([
+        //     'user_id' => 2,
+        //     'study_id' => 2,
+        //     'study_permission' => 'manage_study'
+        // ]);
+        // \App\Models\StudyPermission::create([
+        //     'user_id' => 2,
+        //     'study_id' => 3,
+        //     'study_permission' => 'manage_study'
+        // ]);
     }
 }

@@ -15,21 +15,20 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->enum('permission',[
-                "view_users",
-                "manage_users",
-                "view_permissions",
-                "manage_permissions",
-                "view_studies", //view list of all study info (incl. data types), without participant relationships
-                "create_studies", //create new studies - automatically assigning the user 'manage_study' upon creation
-                "view_participants",
-                "manage_participants", //create and update participant info
-                "delete_participants", //permanently delete participants
-                "view_studies_participants", //view any study participant relationship
-                //"view_data_types", ////////may remove in place of view studies
-                "create_data_types", //create data types
-                "manage_data_types", //permanently delete data types
-                "studies_admin", //manage any study's info, data type, and participant relationship
-                "super_user"
+                "view_users", //view list of all users and their info
+                "manage_users", //create or update any user
+                "view_permissions", //view list of all users' permissions
+                "manage_permissions", //create or update any user's permissions
+                "view_studies_info", //view list of studies (incl. data types but excl. participant relationships) and view list of all data types (exactly which studies are shown is managed in the controller)
+                "view_studies", //view any study's info (incl. data types) and its participants
+                "create_studies", //create studies, automatically assigning yourself admin to that study
+                "manage_studies", //update any study's info (incl. data types) and its participants (and viewers)
+                // "create_data_types", //create data types
+                // "manage_data_types", //update data types
+                "view_participants", //view list of all participants (excl. study relationships)
+                "manage_participants", //create participants and update participant info (excl. study relationships)
+                "manage_deletions", //manage permanent deletion of any entity (studies, participants, data types, users)
+                //"super_user"
             ]);
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

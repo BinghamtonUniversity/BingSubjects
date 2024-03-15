@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Study;
-use App\Models\StudyParticipant;
 use Illuminate\Http\Request;
 use App\Models\Participant;
 use App\Models\Permission;
-use App\Models\StudyPermission;
+use App\Models\Study;
+use App\Models\StudyParticipant;
+use App\Models\StudyUser;
+use App\Models\User;
 
 class ParticipantsController extends Controller
 {
@@ -20,14 +20,12 @@ class ParticipantsController extends Controller
         if($user->is_study_manager() || 
             $permission->contains('view_participants') || 
             $permission->contains('manage_participants') || 
-            $permission->contains('delete_participants') ||
-            $permission->contains('view_studies_participants') || 
-            $permission->contains('studies_admin')
+            $permission->contains('manage_deletions')
         ) {
             return Participant::get();
         }
         // If User doesn't have permission to view all participants, then only return participants from studies they can view
-        $study_participants = StudyParticipant::whereIn('study_id',$user->study_permissions->pluck('study_id'))
+        $study_participants = StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
             ->select('participant_id')->get()->pluck('participant_id')->toArray();
         return Participant::whereIn('id',$study_participants)->get();
     }
@@ -62,10 +60,10 @@ class ParticipantsController extends Controller
         $user = User::find(1);
 
         $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
-        if($permission->contains('view_studies_participants') || $permission->contains('studies_admin')) {
+        if($permission->contains('view_studies') || $permission->contains('manage_studies')) {
             return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();
         }
-        return StudyParticipant::whereIn('study_id',$user->study_permissions->pluck('study_id'))
+        return StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
             ->where('participant_id',$participant->id)->with('study')->get();
     }
 

@@ -11,12 +11,11 @@ class StudyParticipant extends Model
 
     protected $fillable = ['study_id','participant_id'];
 
-    public function study(){
+    public function study() {
         return $this->belongsTo(Study::class);
     }
 
-    public function participant(){
+    public function participant() {
         return $this->belongsTo(Participant::class);
     }
-
 }
