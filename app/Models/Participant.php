@@ -12,7 +12,7 @@ class Participant extends Model
     protected $fillable = ['first_name','last_name','date_of_birth','sex','race','city_of_birth','email','phone_number'];
     protected $casts = ['date_of_birth'=>'date:Y-m-d'];
 
-    public function study_participants(){
+    public function study_participants() {
         return $this->hasMany(StudyParticipant::class,'participant_id');
     }
 

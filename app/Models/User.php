@@ -55,7 +55,7 @@ class User extends Authenticatable
         return StudyUser::where('user_id',$this->id)->where('study_id',$study_id)->select('type')->get()->pluck('type')->first();
     }
 
-    public function is_study_user($study_id=null){
+    public function is_study_user($study_id=null) {
         if (is_null($study_id)){
             return (bool)StudyUser::where('user_id',$this->id)
                 ->first();
@@ -65,7 +65,7 @@ class User extends Authenticatable
             ->first();
     }
 
-    public function is_study_manager($study_id=null){
+    public function is_study_manager($study_id=null) {
         if (is_null($study_id)){
             return (bool)StudyUser::where('user_id',$this->id)
                 ->where('type','manager')
@@ -74,19 +74,6 @@ class User extends Authenticatable
         return (bool)StudyUser::where('user_id',$this->id)
             ->where('study_id',$study_id)
             ->where('type','manager')
-            ->first();
-    }
-
-    //Not used yet
-    public function is_study_viewer($study_id=null){
-        if (is_null($study_id)){
-            return (bool)StudyUser::where('user_id',$this->id)
-                ->where('type','viewer')
-                ->first();
-        }
-        return (bool)StudyUser::where('user_id',$this->id)
-            ->where('study_id',$study_id)
-            ->where('type','viewer')
             ->first();
     }
 

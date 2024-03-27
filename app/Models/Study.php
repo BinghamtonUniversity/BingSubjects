@@ -25,14 +25,6 @@ class Study extends Model
         return $this->belongsToMany(User::class,'study_users')->withPivot('type');
     }
 
-    // public function viewers() {
-    //    return $this->users->where('type','viewer')->first();
-    // }
-
-    // public function managers() {
-    //     return $this->users->where('type','manager')->first();
-    // }
-
     public function study_participants() {
         return $this->hasMany(StudyParticipant::class,'study_id');
     }
@@ -41,24 +33,11 @@ class Study extends Model
         return $this->belongsToMany(Participant::class,'study_participants');
     }
 
-    // public function study_data_types() {
-    //     return $this->hasMany(StudyDataType::class,'study_id');
-    // }
-
-    // public function data_types() {
-    //     return $this->belongsToMany(DataType::class,'study_data_types');
-    // }
+    public function study_data_types() {
+        return $this->hasMany(StudyDataType::class,'study_id');
+    }
 
     public function data_types() {
-        return $this->hasMany(DataType::class); //'study_id'
-    }
-
-    // Not used yet
-    public function is_viewer(User $user) {
-        return (bool)$this->users->where('user_id',$user->id)->where('type','viewer')->first();
-    }
-
-    public function is_manager(User $user) {
-        return (bool)$this->users->where('user_id',$user->id)->where('type','manager')->first();
+        return $this->belongsToMany(DataType::class,'study_data_types')->withPivot('description');
     }
 }

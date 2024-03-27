@@ -109,12 +109,12 @@ gform.types['user']= _.extend({}, gform.types['combobox'], {
             search:"/api/users/search/{{search}}{{value}}",
             format:
                 {
-                    title:'{{{label}}}{{^label}}User{{/label}} <span class="text-success pull-right">{{value}}</span>',
+                    title:'{{{label}}}{{^label}}User{{/label}}',
                     label:"{{first_name}}{{#last_name}} {{last_name}}{{/last_name}}",
                     value:function(item){
                         return item.id;
                     },
-                    display:'{{first_name}} {{last_name}}<div style="color:#aaa">{{email}}</div><div style="color:#aaa">{{id}}</div>'
+                    display:'{{first_name}} {{last_name}}<div style="color:#aaa">{{email}}</div>'
                 }
         }
   })

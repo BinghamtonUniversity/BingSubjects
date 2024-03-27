@@ -16,15 +16,10 @@ class ParticipantsController extends Controller
         // Hard coding for now
         $user = User::find(1);
 
-        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
-        if($user->is_study_manager() || 
-            $permission->contains('view_participants') || 
-            $permission->contains('manage_participants') || 
-            $permission->contains('manage_deletions')
-        ) {
+        if($user->can('view_participants','App\Participant')) {
             return Participant::get();
         }
-        // If User doesn't have permission to view all participants, then only return participants from studies they can view
+        //If User doesn't have permission to view all participants, then only return participants from studies they can view
         $study_participants = StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
             ->select('participant_id')->get()->pluck('participant_id')->toArray();
         return Participant::whereIn('id',$study_participants)->get();
@@ -43,18 +38,18 @@ class ParticipantsController extends Controller
         return $participant;
     }
 
+    public function update_participant(Request $request, Participant $participant) {
+        $participant->updated_by = 1;
+        $participant->update($request->all());
+        return $participant;
+    }
+
     public function delete_participant(Request $request, Participant $participant) {
         $participant->delete();
         return 1;
     }
 
-    public function update_participant(Request $request, Participant $participant) {
-        $participant->updated_by = 1;
-        $participant->update($request->all());
-        return 1;
-    }
-
-    //START Study Participants Methods
+    /* START Study Participant Methods */
     public function get_participant_studies(Request $request, Participant $participant) {
         // Hard coding for now
         $user = User::find(1);
@@ -63,6 +58,7 @@ class ParticipantsController extends Controller
         if($permission->contains('view_studies') || $permission->contains('manage_studies')) {
             return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();
         }
+        // If User doesn't have permission to view all of this participants' study relationships, then only return the studies they can view
         return StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
             ->where('participant_id',$participant->id)->with('study')->get();
     }
@@ -76,10 +72,10 @@ class ParticipantsController extends Controller
         return StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->with('study')->first();
     }
 
-    public function delete_participant_study(Request $request, Participant $participant, Study $study) {
+    public function remove_participant_study(Request $request, Participant $participant, Study $study) {
         $study_participant = StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->first();
         $study_participant->delete();
         return 1;
     }
-    //END Study Participants Methods
+    /* END Study Participant Methods */
 }

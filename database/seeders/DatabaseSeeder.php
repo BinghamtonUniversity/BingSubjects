@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use \App\Models\Participant;
+use \App\Models\StudyDataType;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,10 +41,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
             'permission' => 'view_permissions'
-        ]);
-        \App\Models\Permission::create([
-            'user_id' => $default_user->id,
-            'permission' => 'view_studies_info'
         ]);
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
@@ -91,58 +88,78 @@ class DatabaseSeeder extends Seeder
 
         // Starter Data Types
         \App\Models\DataType::create([
-            'study_id'=> 1,
-            'type' => "biospecimen",
-            'description' => "Relationship history and satisfaction rating",
+            'category' => "assessment",
+            'type' => "Survey",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'study_id'=> 2,
-            'type' => "assessment",
-            'description' => "Quality of life inventory",
-            'created_by' => 2,
-            'updated_by' => 2
+            'category' => "assessment",
+            'type' => "Questionnaire",
+            'created_by' => $default_user->id,
+            'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'study_id'=> 3,
-            'type' => "behavioral",
-            'description' => "Cognitive processing evaluation",
-            'created_by' => 2,
-            'updated_by' => 2
+            'category' => "behavioral",
+            'type' => "Interview",
+            'created_by' => $default_user->id,
+            'updated_by' => $default_user->id
+        ]);
+        \App\Models\DataType::create([
+            'category' => "neurosignal",
+            'type' => "EEG",
+            'created_by' => $default_user->id,
+            'updated_by' => $default_user->id
+        ]);
+        \App\Models\DataType::create([
+            'category' => "neurosignal",
+            'type' => "Resting (f)MRI",
+            'created_by' => $default_user->id,
+            'updated_by' => $default_user->id
+        ]);
+        \App\Models\DataType::create([
+            'category' => "biospecimen",
+            'type' => "Blood Test",
+            'created_by' => $default_user->id,
+            'updated_by' => $default_user->id
         ]);
 
-        // // Starter Data Types
-        // \App\Models\DataType::create([
-        //     'type' => "Interview",
-        //     'description' => "Stress and trauma evaluation",
-        //     'created_by' => $default_user->id,
-        //     'updated_by' => $default_user->id
-        // ]);
-        // \App\Models\DataType::create([
-        //     'type' => "Survey",
-        //     'description' => "Relationship history and satisfaction rating",
-        //     'created_by' => $default_user->id,
-        //     'updated_by' => $default_user->id
-        // ]);
-        // \App\Models\DataType::create([
-        //     'type' => "Questionnaire",
-        //     'description' => "Quality of life inventory",
-        //     'created_by' => 2,
-        //     'updated_by' => 2
-        // ]);
-        // \App\Models\DataType::create([
-        //     'type' => "Interview",
-        //     'description' => "Cognitive processing evaluation",
-        //     'created_by' => 2,
-        //     'updated_by' => 2
-        // ]);
-        // \App\Models\DataType::create([
-        //     'type' => "MRI",
-        //     'description' => "Brain mapping",
-        //     'created_by' => 2,
-        //     'updated_by' => 2
-        // ]);
+        // Starter Study Data Types
+        \App\Models\StudyDataType::create([
+            'study_id' => 1,
+            'data_type_id' => 1,
+            'description' => "Relationship history and satisfaction rating"
+        ]);
+        \App\Models\StudyDataType::create([
+            'study_id'=> 1,
+            'data_type_id' => 2,
+            'description' => "Quality of life inventory"
+        ]);
+        \App\Models\StudyDataType::create([
+            'study_id'=> 1,
+            'data_type_id' => 6,
+            'description' => "Comprehensive metabolic panel"
+        ]);
+        \App\Models\StudyDataType::create([
+            'study_id'=> 2,
+            'data_type_id' => 2,
+            'description' => "Quality of life inventory"
+        ]);
+        \App\Models\StudyDataType::create([
+            'study_id'=> 2,
+            'data_type_id' => 3,
+            'description' => "Stress and trauma evaluation"
+        ]);
+        \App\Models\StudyDataType::create([
+            'study_id'=> 3,
+            'data_type_id' => 4,
+            'description' => null
+        ]);
+        \App\Models\StudyDataType::create([
+            'study_id'=> 3,
+            'data_type_id' => 5,
+            'description' => "Brain mapping"
+        ]);
 
         // Assign participants 1-10 to the first study
         for ($index = 1; $index < 11; $index++) {

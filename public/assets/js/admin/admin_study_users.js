@@ -1,12 +1,12 @@
 ajax.get('/api/studies/'+id+'/users',function(data) {
     console.log(data);
-    data = data.reverse();
+    //data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'study_users',
             search:false,columns:false,upload:false,download:false,title:'study_users',
             entries:[],
-            sortBy:'order',
+            sortBy:'type',
             actions:actions,
             count:20,
             schema:[

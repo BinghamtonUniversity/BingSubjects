@@ -10,26 +10,35 @@ use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
-    public function get_users(Request $request){
-        return User::get();
+    public function get_users(Request $request) {
+        // Hard coding for now
+        $user = User::find(1);
+        //$user->can('view_users)?
+
+        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
+        if($permission->contains('view_users')) {
+            return User::get();
+        }
+        // If User doesn't have permission to view all users, then only return their own user id
+        return User::where('id',$user->id)->get();
     }
 
-    public function get_user(Request $request, User $user){
+    public function get_user(Request $request, User $user) {
         return $user;
     }
 
-    public function create_user(Request $request){
+    public function create_user(Request $request) {
         $user = new User($request->all());
         $user->save();
         return $user;
     }
 
-    public function update_user(Request $request, User $user){
+    public function update_user(Request $request, User $user) {
         $user->update($request->all());
         return $user;
     }
 
-    public function delete_user(Request $request, User $user){
+    public function delete_user(Request $request, User $user) {
         $user->delete();
         return 1;
     }
@@ -69,6 +78,7 @@ class UsersController extends Controller
         return $users;
     }
 
+    /* START User Permissions Methods */
     public function set_permissions(Request $request, User $user) {
         $request->validate([
             'permissions' => 'array',
@@ -87,4 +97,5 @@ class UsersController extends Controller
     public function get_permissions(Request $request, User $user) {
         return $user->user_permissions;
     }
+    /* END User Permissions Methods */
 }

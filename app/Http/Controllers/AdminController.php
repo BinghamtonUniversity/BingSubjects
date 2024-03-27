@@ -32,7 +32,6 @@ class AdminController extends Controller
     }
 
     /* Users Tab */
-
     public function users(Request $request, User $user=null) {
         // Simulate User 1
         $user = User::find(1);
@@ -65,7 +64,6 @@ class AdminController extends Controller
     }
 
     /* Participants Tab */
-
     public function participants(Request $request) {
         // Simulate User 1
         $user = User::find(1);
@@ -101,7 +99,7 @@ class AdminController extends Controller
 
         /* Actions for Participant's Studies Page */
         $user_actions = [];
-        if($user->is_study_manager() || $user->can('update_studies','App\Study')) {
+        if($user->can('update_studies','App\Study')) { //$user->is_study_manager() || 
             $user_actions[] = ["name"=>"create","label"=>"Add to Study"];
             $user_actions[] = ["name"=>"delete","label"=>"Remove from Study"];
         }
@@ -116,8 +114,7 @@ class AdminController extends Controller
     }
 
     /* Studies Tab */
-
-    public function studies(Request $request) { // Study $study
+    public function studies(Request $request) {
         // Simulate User 1
         $user = User::find(1);
 
@@ -126,20 +123,14 @@ class AdminController extends Controller
         if ($user->can('create_studies','App\Study')) {
             $user_actions[] = ["name"=>"create","label"=>"Create Study"];
         }
-        if($user->is_study_manager() || $user->can('update_studies','App\Study')) {
-            $user_actions[] = ["name"=>"edit","label"=>"Update Study","min"=>1,"max"=>1];
+         // Update to only be clickable depending on if the user can view the selected study
+        if($user->is_study_user() || $user->can('view_studies','App\Study')) {
+            $user_actions[] = ["name"=>"edit","label"=>"View Study","min"=>1,"max"=>1];
         }
         if ($user->can('delete_studies','App\Study')) {
             $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1,"max"=>1]; //may remove max
         }
-        // Update to only be clickable depending on if the user can view this study's participants
-        if ($user->is_study_user() || $user->can('view_studies','App\Study')) {
-            $user_actions[] = ["name"=>"study_dashboard","label"=>"Study Dashboard","min"=>1,"max"=>1];
-            $user_actions[] = ["name"=>"study_participants","label"=>"Study Participants","min"=>1,"max"=>1];
-        }
-        // To be removed
-        // $user_actions[] = ["name"=>"study_data_types","label"=>"Study Data Types","min"=>1,"max"=>1];
-
+       
         return view('default.admin',
             ['page'=>'studies',
             'ids'=>[],
@@ -202,7 +193,7 @@ class AdminController extends Controller
         if($user->can('manage_study',$study)) {
             $user_actions[] = ["name"=>"create","label"=>"Add Data Type"];
             $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
-            $user_actions[] = ["name"=>"delete","label"=>"Remove Data Type"];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type"];
         }
         
         return view('default.admin',
@@ -220,7 +211,7 @@ class AdminController extends Controller
 
         /* Actions for Study's Participants Page */
         $user_actions = [];
-        if($user->can('manage_study_users',$study)) {
+        if($user->can('manage_study',$study)) {
             $user_actions[] = ["name"=>"create","label"=>"Add User"];
             $user_actions[] = ["name"=>"edit","label"=>"Update Type"];
             $user_actions[] = ["name"=>"delete","label"=>"Remove User"];

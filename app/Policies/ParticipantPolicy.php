@@ -19,9 +19,21 @@ class ParticipantPolicy
         //
     }
 
+    public function list_participants(User $user) {
+        return $user->is_study_user() ||
+            Permission::where('user_id',$user->id)->whereIn('permission',[
+                'view_studies',
+                'create_studies',
+                'manage_studies',
+                'view_participants',
+                'manage_participants',
+                'manage_deletions'
+            ])->first();
+    }
+
     public function view_participants(User $user) {
         return $user->is_study_manager() ||
-            Permission::where('user_id',1)->whereIn('permission',[
+            Permission::where('user_id',$user->id)->whereIn('permission',[
                 'view_participants',
                 'manage_participants',
                 'manage_deletions'
@@ -29,15 +41,15 @@ class ParticipantPolicy
     }
 
     public function create_participants(User $user) {
-        return Permission::where('user_id',1)->where('permission','manage_participants')->first();
+        return Permission::where('user_id',$user->id)->where('permission','manage_participants')->first();
     }
 
     public function update_participants(User $user) {
-        return Permission::where('user_id',1)->where('permission','manage_participants')->first();
+        return Permission::where('user_id',$user->id)->where('permission','manage_participants')->first();
     }
 
     public function delete_participants(User $user) {
-        return Permission::where('user_id',1)->where('permission','manage_deletions')->first();
+        return Permission::where('user_id',$user->id)->where('permission','manage_deletions')->first();
     }
 
     public function view_participant_studies(User $user, Participant $participant) {
