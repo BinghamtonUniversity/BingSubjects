@@ -1,50 +1,9 @@
 ajax.get('/api/studies',function(data) {
     console.log(data);
-    data = data.reverse();
-    
-    // To be removed
-    // study_form_attributes = [
-    //     {name:"id",type:"hidden"},
-    //     {
-    //         name:"pi_user_id",
-    //         label:"PI",
-    //         type:"user",
-    //         template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
-    //         options:"/api/users",
-    //         format: {
-    //             label:"{{first_name}} {{last_name}}",
-    //             value:"{{id}}",
-    //             display:"{{first_name}} {{last_name}}" +
-    //                 '<div style="color:#aaa">{{email}}</div>'
-    //         }
-    //     },
-    //     {
-    //         name:"start_date",
-    //         label:"Start Date",
-    //         type:"date",
-    //     },
-    //     {
-    //         name:"end_date",
-    //         label:"End Date",
-    //         type:"date",
-    //     },
-    //     {
-    //         name:"title",
-    //         label:"Title",
-    //         type:"text",
-    //     },
-    //     {
-    //         name:"description",
-    //         label:"Description",
-    //         type:"text",
-    //     },
-    //     {
-    //         name:"location",
-    //         label:"Location",
-    //         type:"text",
-    //     }
-    // ];
+    console.log(auth_user_perms);
+    console.log(id);
 
+    data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'studies',
@@ -60,13 +19,6 @@ ajax.get('/api/studies',function(data) {
                     label:"PI",
                     type:"user",
                     template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
-                    //options:"/api/users",
-                    format: {
-                        label:"{{first_name}} {{last_name}}",
-                        value:"{{id}}",
-                        display:"{{first_name}} {{last_name}}" +
-                            '<div style="color:#aaa">{{email}}</div>'
-                    }
                 },
                 {
                     name:"title",
@@ -79,11 +31,6 @@ ajax.get('/api/studies',function(data) {
                     type:"textarea",
                 },
                 {
-                    name:"location",
-                    label:"Location",
-                    type:"text",
-                },
-                {
                     name:"start_date",
                     label:"Start Date",
                     type:"date",
@@ -94,64 +41,119 @@ ajax.get('/api/studies',function(data) {
                     type:"date",
                 },
                 {
+                    name:"location",
+                    label:"Location",
+                    type:"select",
+                    options:[
+                        {
+                            label:"In-person",
+                            value:"In-person"
+                        },
+                        {
+                            label:"Virtual",
+                            value:"Virtual"
+                        },
+                        {
+                            label:"Hybrid",
+                            value:"Hybrid"
+                        }
+                    ]
+                },
+                {
+                    name:"design",
+                    label:"Design",
+                    type:"select",
+                    options:[
+                        {
+                            label:"Cross-sectional",
+                            value:"Cross-sectional"
+                        },
+                        {
+                            label:"Longitudinal",
+                            value:"Longitudinal"
+                        }
+                    ]
+                },
+                {
+                    name:"sample_type",
+                    label:"Sample Type",
+                    type:"select",
+                    options:[
+                        {
+                            label:"Neurotypical",
+                            value:"Neurotypical"
+                        },
+                        {
+                            label:"Neurodivergent",
+                            value:"Neurodivergent"
+                        },
+                        {
+                            label:"Neurodiverse",
+                            value:"Neurodiverse"
+                        },
+                        {
+                            label:"Unspecified",
+                            value:"Unspecified"
+                        }
+                    ]
+                },
+                {
+                    name:"participantCount",
+                    label:"Participants",
+                    type:"number"
+                },
+                {
                     name:"data_types",
                     label:"Data Types",
-                    type:"combobox",
+                    type:"text", // search is inefficient - look into other methods
                     template:`
-                    <ul style="padding-left: 20px">
-                        {{#each attributes.data_types}}
-                            <li><span style="text-transform:capitalize;">{{category}} - {{type}}</span>: {{pivot.description}}</li>
-                        {{/attributes.data_types}}
-                    </ul>
-                    `,
-                    options: [
-                        {
-                            //come back to
-                            label:"Assessment",
-                            value:"assessment", 
-                        },
-                        {
-                            label:"Behavioral",
-                            value:"behavioral",
-                        },
-                        {
-                            label:"Neurosignal",
-                            value:"neurosignal",
-                        },
-                        {
-                            label:"Biospecimen",
-                            value:"biospecimen",
-                        }
-                    ],
-                },
-
-                // {
-                //     name:"participants",
-                //     label:"Participants",
-                //     type:"number",
-                //     template:"{{attributes.participants.length}}",
-                // },
+                    {{#each attributes.data_types}}
+                        <div style="margin-bottom:10px">{{type}}<br>
+                            {{#if pivot.description}}
+                                <span style="color:#aaa;font-size:12px;display:inline-block;line-height:15px;">{{pivot.description}}</span>
+                            {{/pivot.description}}
+                        </div>
+                    {{/attributes.data_types}}
+                    </div>
+                    `
+                }
             ],
             data:data
-        }).on("create",function(e) {
-            e.preventDefault();
+        }).on("create",function(grid_event) {
+            grid_event.preventDefault();
+
+            // Give dropdown option if user is allowed to assign others to studies
+            if(auth_user_perms.includes('manage_studies')) {
+                pi_user_field = {
+                    name:"pi_user_id",
+                    label:"PI",
+                    type:"user",
+                    template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
+                    options:"/api/users",
+                    format:{
+                        label:"{{first_name}} {{last_name}}",
+                        value:"{{id}}",
+                        display:"{{first_name}} {{last_name}}" +
+                            '<div style="color:#aaa">{{email}}</div>'
+                    }
+                };
+            } else {
+                pi_user_field = {
+                    name:"pi_user_id",
+                    label:"PI",
+                    type:"user",
+                    template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
+                    value:id,
+                    display:"{{first_name}} {{last_name}}",
+                    editable:false
+                };
+            }
+
             new gform({
                 "legend" : "Create Study",
                 "fields": [
                     {name:"id",type:"hidden"},
-                    {
-                        name:"pi_user_id",
-                        label:"PI",
-                        type:"user",
-                        template:"{{attributes.pi.first_name}} {{attributes.pi.last_name}}",
-                        options:"/api/users", //change to current user if not admin
-                        format: {
-                            label:"{{first_name}} {{last_name}}",
-                            value:"{{id}}",
-                            display:"{{first_name}} {{last_name}}" +
-                                '<div style="color:#aaa">{{email}}</div>'
-                        }
-                    },
+                    pi_user_field,
                     {
                         name:"title",
                         label:"Title",
@@ -163,11 +165,6 @@ ajax.get('/api/studies',function(data) {
                         type:"textarea",
                     },
                     {
-                        name:"location",
-                        label:"Location",
-                        type:"text",
-                    },
-                    {
                         name:"start_date",
                         label:"Start Date",
                         type:"date",
@@ -177,25 +174,76 @@ ajax.get('/api/studies',function(data) {
                         label:"End Date",
                         type:"date",
                     },
+                    {
+                        name:"location",
+                        label:"Location",
+                        type:"select",
+                        options:[
+                            {
+                                label:"In-person",
+                                value:"In-person"
+                            },
+                            {
+                                label:"Virtual",
+                                value:"Virtual"
+                            },
+                            {
+                                label:"Hybrid",
+                                value:"Hybrid"
+                            }
+                        ]
+                    },
+                    {
+                        name:"design",
+                        label:"Design",
+                        type:"select",
+                        options:[
+                            {
+                                label:"Cross-sectional",
+                                value:"Cross-sectional"
+                            },
+                            {
+                                label:"Longitudinal",
+                                value:"Longitudinal"
+                            }
+                        ]
+                    },
+                    {
+                        name:"sample_type",
+                        label:"Sample Type",
+                        type:"select",
+                        options:[
+                            {
+                                label:"Neurotypical",
+                                value:"Neurotypical"
+                            },
+                            {
+                                label:"Neurodivergent",
+                                value:"Neurodivergent"
+                            },
+                            {
+                                label:"Neurodiverse",
+                                value:"Neurodiverse"
+                            },
+                            {
+                                label:"Unspecified",
+                                value:"Unspecified"
+                            }
+                        ]
+                    }
                 ]
-            }).modal().on('save',function(form_event) {
-                if(form_event.form.validate()){
-                    ajax.post('/api/studies',grid_event.model.attributes,function(data) {
-                        grid_event.model.update(data)
-                    },function(data) {
-                        grid_event.model.undo();
+            }).on('save',function(form_event) {
+                if(form_event.form.validate()) {
+                    form_data = form_event.form.get();
+                    form_event.form.trigger('close');
+                    ajax.post('/api/studies/',form_data,function(data) {
+                        //refresh page
+                        
                     });
                 }
             }).on('cancel',function(form_event) {
                 form_event.form.trigger('close');
-            });
-        
-        // }).on("model:created",function(grid_event) {
-        //     ajax.post('/api/studies',grid_event.model.attributes,function(data) {
-        //         grid_event.model.update(data)
-        //     },function(data) {
-        //         grid_event.model.undo();
-        //     });
+            }).modal();
         }).on("edit",function(e) {
             e.preventDefault();
         }).on("model:edit",function(grid_event) {
@@ -205,11 +253,4 @@ ajax.get('/api/studies',function(data) {
                 grid_event.model.undo();
             });
         });
-
-         // To be removed
-        // }).on('model:study_participants',function(grid_event) {
-        //     window.location = '/studies/'+grid_event.model.attributes.id+'/participants'; 
-        // }).on('model:study_data_types',function(grid_event) {
-        //     window.location = '/studies/'+grid_event.model.attributes.id+'/data_types';
-        // }
 });

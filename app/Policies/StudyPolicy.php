@@ -25,30 +25,26 @@ class StudyPolicy
             Permission::where('user_id',$user->id)->whereIn('permission',[
                 'view_studies',
                 'create_studies',
-                'manage_studies',
-                'manage_deletions'
+                'manage_studies'
             ])->first();
     }
 
     public function view_studies(User $user) {
         return Permission::where('user_id',$user->id)->whereIn('permission',[
             'view_studies',
-            'manage_studies',
-            'manage_deletions'
+            'manage_studies'
         ])->first();
     }
 
     public function create_studies(User $user) {
-        return Permission::where('user_id',$user->id)->where('permission','create_studies')->first();
+        return Permission::where('user_id',$user->id)->whereIn('permission',[
+            'create_studies',
+            'manage_studies'
+        ])->first();
     }
 
-    public function update_studies(User $user) {
-        return $user->is_study_manager() ||
-            Permission::where('user_id',$user->id)->where('permission','manage_studies')->first();
-    }
-
-    public function delete_studies(User $user) {
-        return Permission::where('user_id',$user->id)->where('permission','manage_deletions')->first();
+    public function manage_studies(User $user) {
+        return Permission::where('user_id',$user->id)->where('permission','manage_studies')->first();
     }
 
     /* Individual Studies */
@@ -56,8 +52,7 @@ class StudyPolicy
         return $user->is_study_user($study->id) ||
             Permission::where('user_id',$user->id)->whereIn('permission',[
                 'view_studies',
-                'manage_studies',
-                'manage_deletions'
+                'manage_studies'
             ])->first();
     }
 

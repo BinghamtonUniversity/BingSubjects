@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\Permission;
 
 class DataTypePolicy
 {
@@ -20,20 +21,11 @@ class DataTypePolicy
                 'view_studies',
                 'create_studies',
                 'manage_studies',
-                'manage_data_types',
-                'manage_deletions'
+                'manage_data_types'
             ])->first();
     }
 
-    public function create_data_types(User $user) {
+    public function manage_data_types(User $user) {
         return Permission::where('user_id',$user->id)->where('permission','manage_data_types')->first();
-    }
-
-    public function update_data_types(User $user) {
-        return Permission::where('user_id',$user->id)->where('permission','manage_data_types')->first();
-    }
-
-    public function delete_data_types(User $user) {
-        return Permission::where('user_id',$user->id)->where('permission','manage_deletions')->first();
     }
 }

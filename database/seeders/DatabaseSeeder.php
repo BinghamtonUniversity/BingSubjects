@@ -40,11 +40,43 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
+            'permission' => 'manage_users'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
             'permission' => 'view_permissions'
         ]);
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
+            'permission' => 'manage_permissions'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'view_studies'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'create_studies'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'manage_studies'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'manage_data_types'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
             'permission' => 'view_participants'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'update_participants'
+        ]);
+        \App\Models\Permission::create([
+            'user_id' => $default_user->id,
+            'permission' => 'manage_participants'
         ]);
 
         // Starter Participants
@@ -58,9 +90,11 @@ class DatabaseSeeder extends Seeder
             'pi_user_id' => $default_user->id,
             'title' => "Childhood Adversity and Romantic Relationship Functioning Among Lesbian, Gay, Bisexual, and Queer Individuals",
             'description' => "The CAST Lab want to learn more about how different types of minority stress (e.g., prejudice, discrimination, unsupportive family and friends) affect us and our romantic relationships. We are looking for lesbian, gay, bisexual or otherwise non-heterosexual (LGBQ+) couples in a committed relationship for six months or longer to participate in a study conducted by researchers at Binghamton University. We are interested in couples who experience a broad range of everyday stress, including people who have experienced highly stressful events. Individuals will be compensated for participation, and you can participate in the comfort of your home. This survey study takes approximately 30 minutes to complete.",
-            'location' => "Virtual",
             'start_date' => '2024-04-01',
             'end_date' => '2024-08-01',
+            'location' => 'Virtual',
+            'design' => 'Cross-sectional',
+            'sample_type' => 'Neurodivergent',
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
@@ -69,9 +103,11 @@ class DatabaseSeeder extends Seeder
             'pi_user_id' => 2,
             'title' => "Dating, Literary Sexual Encounters and Brain Stimulation Study",
             'description' => "This is a research study being conducted at Binghamton University's Clearview Hall by the Center for Transdisciplinary Research on Intimate Relationships. The purpose of this work is to explore different elements of people's attitudes and beliefs about dating, institutional policies and certain groups (e.g., women and trans people).",
-            'location' => "Clearview Hall",
             'start_date' => '2024-03-01',
             'end_date' => '2024-05-01',
+            'location' => 'In-person',
+            'design' => 'Longitudinal',
+            'sample_type' => 'Neurotypical',
             'created_by' => 2,
             'updated_by' => 2
         ]);
@@ -79,46 +115,48 @@ class DatabaseSeeder extends Seeder
             'pi_user_id' => 2,
             'title' => "Nurses' Perspectives on Barriers while Serving Individuals with Dysphagia and Cognitive Communication Disorders",
             'description' => "Registered nurses (RNs), licensed practical nurses (LPNs) and certified nursing assistants (CNAs) are needed for a research study. Participate in a 30-60 minute, semi-structured interview about nurses' experiences working with patients who experience dysphagia and cognitive communication disorder. The interview will be conducted via Zoom and audio-recorded for data analysis purposes.",
-            'location' => 'Virtual',
             'start_date' => '2024-02-01',
             'end_date' => '2024-04-01',
+            'location' => 'Hybrid',
+            'design' => 'Longitudinal',
+            'sample_type' => 'Neurodiverse',
             'created_by' => 2,
             'updated_by' => 2
         ]);
 
         // Starter Data Types
         \App\Models\DataType::create([
-            'category' => "assessment",
+            'category' => "Assessment",
             'type' => "Survey",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'category' => "assessment",
+            'category' => "Assessment",
             'type' => "Questionnaire",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'category' => "behavioral",
+            'category' => "Behavioral",
             'type' => "Interview",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'category' => "neurosignal",
+            'category' => "Neurosignal",
             'type' => "EEG",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'category' => "neurosignal",
+            'category' => "Neurosignal",
             'type' => "Resting (f)MRI",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id
         ]);
         \App\Models\DataType::create([
-            'category' => "biospecimen",
+            'category' => "Biospecimen",
             'type' => "Blood Test",
             'created_by' => $default_user->id,
             'updated_by' => $default_user->id

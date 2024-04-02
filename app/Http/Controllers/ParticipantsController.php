@@ -54,8 +54,7 @@ class ParticipantsController extends Controller
         // Hard coding for now
         $user = User::find(1);
 
-        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
-        if($permission->contains('view_studies') || $permission->contains('manage_studies')) {
+        if($user->can('view_studies','App\Participant')) {
             return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();
         }
         // If User doesn't have permission to view all of this participants' study relationships, then only return the studies they can view
@@ -67,7 +66,6 @@ class ParticipantsController extends Controller
         $study_participant = new StudyParticipant();
         $study_participant->participant_id = $participant->id;
         $study_participant->study_id = $study->id;
-
         $study_participant->save();
         return StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->with('study')->first();
     }

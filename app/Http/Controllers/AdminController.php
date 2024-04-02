@@ -41,14 +41,13 @@ class AdminController extends Controller
 
         /* Actions for Users Page */
         $user_actions = [];
-        if ($user->can('create_users','App\User')) {
+        if ($user->can('manage_users','App\User')) {
             $user_actions[] = ["name"=>"create","label"=>"Create User"];
-        }
-        if ($user->can('update_users','App\User')) {
             $user_actions[] = ["name"=>"edit","label"=>"Update User","min"=>1,"max"=>1];
-        }
-        if ($user->can('delete_users','App\User')) {
             $user_actions[] = ["name"=>"delete","label"=>"Delete User","min"=>1,"max"=>1]; //may remove max
+        }
+        if ($user->can('manage_users','App\User') && $user->can('view_permissions','App\User')) {
+            $user_actions[] = [];
         }
         if($user->can('view_permissions','App\User')) {
             $user_actions[] = ["name"=>"user_permissions","label"=>"User Permissions","min"=>1,"max"=>1];
@@ -70,22 +69,23 @@ class AdminController extends Controller
 
         /* Actions for Participants Page */
         $user_actions = [];
-        if ($user->can('create_participants','App\Participant')) {
-            $user_actions[] = ["name"=>"create","label"=>"Create Participant"];
-        }
         if ($user->can('update_participants','App\Participant')) {
+            $user_actions[] = ["name"=>"create","label"=>"Create Participant"];
             $user_actions[] = ["name"=>"edit","label"=>"Update Participant","min"=>1,"max"=>1];
         }
-        if ($user->can('delete_participants','App\Participant')) {
-            $user_actions[] = ["name"=>"delete","label"=>"Delete Participant","min"=>1,"max"=>1]; //may remove max
+        if ($user->can('manage_participants','App\Participant')) {
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Participant","min"=>1,"max"=>1];
+        }
+        if (($user->can('update_participants','App\Participant') || $user->can('manage_participants','App\Participant')) && ($user->is_study_user() || $user->can('view_studies','App\Study'))) {
+            $user_actions[] = [];
         }
         // Update to only be clickable depending on if the user can view any studies of the participant checked
         if ($user->is_study_user() || $user->can('view_studies','App\Study')) {
             $user_actions[] = ["name"=>"participant_studies","label"=>"Participant's Studies","min"=>1,"max"=>1];
         }
 
-        return view('default.admin',
-            ['page'=>'participants',
+        return view('default.admin',[
+            'page'=>'participants',
             'ids'=>[],
             'actions'=>$user_actions,
             'title'=>'Manage Participants',
@@ -99,18 +99,18 @@ class AdminController extends Controller
 
         /* Actions for Participant's Studies Page */
         $user_actions = [];
-        if($user->can('update_studies','App\Study')) { //$user->is_study_manager() || 
+        if($user->can('manage_studies','App\Study') || $user->is_study_manager()) {
             $user_actions[] = ["name"=>"create","label"=>"Add to Study"];
             $user_actions[] = ["name"=>"delete","label"=>"Remove from Study"];
         }
 
-        return view('default.admin',
-            ['page'=>'participant_studies',
-                'id'=>[$participant->id,$user->id],
-                'actions'=>$user_actions,
-                'title'=>'Manage Participant\'s Studies',
-                'help'=>'Use this page to manage studies for '.$participant->first_name.' '.$participant->last_name.'.'
-            ]);
+        return view('default.admin',[
+            'page'=>'participant_studies',
+            'id'=>[$participant->id,$user->id],
+            'actions'=>$user_actions,
+            'title'=>'Manage Participant\'s Studies',
+            'help'=>'Use this page to manage studies for '.$participant->first_name.' '.$participant->last_name.'.'
+        ]);
     }
 
     /* Studies Tab */
@@ -118,23 +118,31 @@ class AdminController extends Controller
         // Simulate User 1
         $user = User::find(1);
 
+        /* Permissions for User Permissions Options */
+        $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
+
         /* Actions for Studies Page */
         $user_actions = [];
         if ($user->can('create_studies','App\Study')) {
             $user_actions[] = ["name"=>"create","label"=>"Create Study"];
         }
-         // Update to only be clickable depending on if the user can view the selected study
-        if($user->is_study_user() || $user->can('view_studies','App\Study')) {
-            $user_actions[] = ["name"=>"edit","label"=>"View Study","min"=>1,"max"=>1];
-        }
-        if ($user->can('delete_studies','App\Study')) {
+        if ($user->can('manage_studies','App\Study')) {
             $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1,"max"=>1]; //may remove max
         }
+        if (($user->can('create_studies','App\Study') || $user->can('manage_studies','App\Study')) && ($user->is_study_user() || $user->can('view_studies','App\Study'))) {
+            $user_actions[] = [];
+        }
+        // Update to only be clickable depending on if the user can view the selected study
+        if($user->is_study_user() || $user->can('view_studies','App\Study')) {
+            $user_actions[] = ["name"=>"edit","label"=>"View Study","type"=>"warning","min"=>1,"max"=>1];
+        }
+
        
-        return view('default.admin',
-            ['page'=>'studies',
-            'ids'=>[],
+        return view('default.admin',[
+            'page'=>'studies',
+            'id'=>$user->id,
             'actions'=>$user_actions,
+            'permissions'=>$auth_user_perms,
             'title'=>'Manage Studies',
             'help'=>'Use this page to manage studies.'
         ]);
@@ -154,8 +162,8 @@ class AdminController extends Controller
             $user_actions[] = ["manage"];
         }
 
-        return view('default.admin',
-            ['page'=>'study',
+        return view('default.admin',[
+            'page'=>'study',
             'id'=>$study->id,
             'actions'=>$user_actions,
             'permissions'=>$auth_user_perms,
@@ -175,13 +183,13 @@ class AdminController extends Controller
             $user_actions[] = ["name"=>"delete","label"=>"Remove Participant"];
         }
 
-        return view('default.admin',
-            ['page'=>'study_participants',
-                'id'=>$study->id,
-                'actions'=>$user_actions,
-                'title'=>'Manage Study\'s Participants',
-                'help'=>'Use this page to manage participants for '.$study->title.'.'
-            ]);
+        return view('default.admin',[
+            'page'=>'study_participants',
+            'id'=>$study->id,
+            'actions'=>$user_actions,
+            'title'=>'Manage Study\'s Participants',
+            'help'=>'Use this page to manage participants for '.$study->title.'.'
+        ]);
     }
 
     public function study_data_types(Request $request, Study $study) {
@@ -193,16 +201,16 @@ class AdminController extends Controller
         if($user->can('manage_study',$study)) {
             $user_actions[] = ["name"=>"create","label"=>"Add Data Type"];
             $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
-            $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type"];
+            $user_actions[] = ["name"=>"delete","label"=>"Remove Data Type"];
         }
         
-        return view('default.admin',
-            ['page'=>'study_data_types',
-                'id'=>$study->id,
-                'actions'=>$user_actions,
-                'title'=>'Manage Study\'s Data Types',
-                'help'=>'Use this page to manage data types for '.$study->title.'.'
-            ]);
+        return view('default.admin',[
+            'page'=>'study_data_types',
+            'id'=>$study->id,
+            'actions'=>$user_actions,
+            'title'=>'Manage Study\'s Data Types',
+            'help'=>'Use this page to manage data types for '.$study->title.'.'
+        ]);
     }
 
     public function study_users(Request $request, Study $study) {
@@ -217,62 +225,36 @@ class AdminController extends Controller
             $user_actions[] = ["name"=>"delete","label"=>"Remove User"];
         }
 
-        return view('default.admin',
-            ['page'=>'study_users',
-                'id'=>$study->id,
-                'actions'=>$user_actions,
-                'title'=>'Manage Study\'s Users',
-                'help'=>'Use this page to manage users for '.$study->title.'.'
-            ]);
+        return view('default.admin',[
+            'page'=>'study_users',
+            'id'=>$study->id,
+            'actions'=>$user_actions,
+            'title'=>'Manage Study\'s Users',
+            'help'=>'Use this page to manage users for '.$study->title.'.'
+        ]);
     }
 
     /* Data Types Tab */
+    public function data_types(Request $request){
+        // Simulate User 1
+        $user = User::find(1);
 
-    // public function data_types(Request $request){
-    //     // Simulate User 1
-    //     $user = User::find(1);
+        /* Actions for Data Types Page */
+        $user_actions = [];
 
-    //     /* Actions for Data Types Page */
-    //     $user_actions = [];
-    //     if ($user->can('create_data_types','App\DataType')) {
-    //         $user_actions[] = ["name"=>"create","label"=>"Create Data Type"];
-    //     }
-    //     if ($user->can('update_data_types','App\DataType')) {
-    //         $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
-    //     }
-    //     if ($user->can('delete_data_types','App\DataType')) {
-    //         $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type","min"=>1];
-    //     }
-    //     //if ($user->can('view_studies','App\Study')) {
-    //         $user_actions[] = ["name"=>"data_type_studies","label"=>"Data Type's Studies","min"=>1,"max"=>1];
-    //     //}
+        if ($user->can('manage_data_types','App\DataType')) {
+            $user_actions[] = ["name"=>"create","label"=>"Create Data Type"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type","min"=>1];
+        }
 
-    //     return view('default.admin',
-    //         ['page'=>'data_types',
-    //             'actions'=>$user_actions,
-    //             'title'=>'Manage Data Types',
-    //             'help'=>'Use this page to manage data types.'
-    //         ]);
-    // }
-
-    // public function data_type_studies(Request $request, DataType $data_type){
-    //     // Simulate User 1
-    //     $user = User::find(1);
-
-    //     /* Actions for Data Type's Studies Page */
-    //     $user_actions = [];
-    //     if ($user->is_study_manager() || $user->can('update_studies','App\Study')) {
-    //         $user_actions[] = ["name"=>"create","label"=>"Add to Study"];
-    //         $user_actions[] = ["name"=>"delete","label"=>"Remove from Study"];
-    //     }
-    //     return view('default.admin',
-    //         ['page'=>'data_type_studies',
-    //             'id'=>[$data_type->id,$user->id],
-    //             'actions'=>$user_actions,
-    //             'title'=>'Manage Data Type\'s Studies',
-    //             'help'=>'Use this page to manage studies with '.$data_type->type.'.'
-    //         ]);
-    // }
+        return view('default.admin',[
+            'page'=>'data_types',
+            'actions'=>$user_actions,
+            'title'=>'Manage Data Types',
+            'help'=>'Use this page to manage data types.'
+        ]);
+    }
 
     /* Reports Tab */
 
@@ -282,7 +264,10 @@ class AdminController extends Controller
      */
     public function reports(Request $request) {
         $user = Auth::user();
-        return view('default.admin',['page'=>'reports','ids'=>[],'title'=>'Reports',
+        return view('default.admin',[
+            'page'=>'reports',
+            'ids'=>[],
+            'title'=>'Reports',
             'actions' => [
                 ["name"=>"create","label"=>"Create New Report"],
                 '',
@@ -292,8 +277,7 @@ class AdminController extends Controller
                 '',
                 ["name"=>"delete","label"=>"Delete Report"]
             ],
-            'help'=>
-                'Build and Manage Reports'
+            'help'=>'Build and Manage Reports'
         ]);
     }
 
@@ -304,7 +288,11 @@ class AdminController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function run_report(Request $request, Report $report) {
-        return view('default.admin',['page'=>'reports_execute','id'=>[$report->id],'title'=>$report->name,'help'=>$report->description
+        return view('default.admin',[
+            'page'=>'reports_execute',
+            'id'=>[$report->id],
+            'title'=>$report->name,
+            'help'=>$report->description
         ]);
     }
 }

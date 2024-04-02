@@ -13,17 +13,31 @@ return new class extends Migration
     {
         Schema::create('studies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pi_user_id')->index();
+            $table->unsignedBigInteger('pi_user_id')->index()->nullable();
             $table->text('title');
             $table->text('description')->nullable()->default(null);
-            $table->text('location')->nullable()->default(null);// should these be nullable?
             $table->date('start_date')->nullable()->default(null);// should these be nullable?
             $table->date('end_date')->nullable()->default(null);// should these be nullable?
-            $table->unsignedBigInteger('created_by')->index();
-            $table->unsignedBigInteger('updated_by')->index();
-            $table->foreign('pi_user_id')->references('id')->on('users');
-            $table->foreign('created_by')->references('id')->on('users');
-            $table->foreign('updated_by')->references('id')->on('users');
+            $table->enum('location',[
+                "In-person",
+                "Virtual",
+                "Hybrid"
+            ]);
+            $table->enum('design',[
+                "Cross-sectional",
+                "Longitudinal"
+            ]);
+            $table->enum('sample_type',[
+                "Neurotypical",
+                "Neurodivergent",
+                "Neurodiverse",
+                "Unspecified"
+            ]);
+            $table->unsignedBigInteger('created_by')->index()->nullable();
+            $table->unsignedBigInteger('updated_by')->index()->nullable();
+            $table->foreign('pi_user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
             //data types
         });

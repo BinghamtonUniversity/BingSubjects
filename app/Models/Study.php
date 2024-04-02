@@ -9,9 +9,10 @@ class Study extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['pi_user_id','title','location','description','start_date','end_date','created_by','updated_by'];
+    protected $fillable = ['pi_user_id','title','description','start_date','end_date','location','design','sample_type','created_by','updated_by'];
     protected $casts = ['created_at'=>'date:Y-m-d','updated_at'=>'date:Y-m-d','start_date'=> 'date:Y-m-d','end_date'=>'date:Y-m-d'];
     protected $with = ['pi','data_types'];
+    protected $appends = ['participantCount'];
 
     public function pi() {
         return $this->belongsTo(User::class,'pi_user_id');
@@ -39,5 +40,10 @@ class Study extends Model
 
     public function data_types() {
         return $this->belongsToMany(DataType::class,'study_data_types')->withPivot('description');
+    }
+
+    public function getParticipantCountAttribute() {
+        $participants = $this->participants;
+        return $participants->count();
     }
 }

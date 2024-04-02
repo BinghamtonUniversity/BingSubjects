@@ -11,15 +11,33 @@ ajax.get('/api/data_types',function(data) {
             schema:[
                 {name:"id",type:"hidden"},
                 {
+                    name:"category",
+                    label:"Category",
+                    type:"select",
+                    options: [
+                        {
+                            label:"Assessment",
+                            value:"Assessment",
+                        },
+                        {
+                            label:"Behavioral",
+                            value:"Behavioral",
+                        },
+                        {
+                            label:"Neurosignal",
+                            value:"Neurosignal",
+                        },
+                        {
+                            label:"Biospecimen",
+                            value:"Biospecimen",
+                        }
+                    ]
+                },
+                {
                     name:"type",
                     label:"Type",
                     type:"text",
-                },
-                {
-                    name:"description",
-                    label:"Description",
-                    type:"text",
-                },
+                }
             ],
             data:data
     }).on("model:edited",function(grid_event) {
@@ -38,7 +56,5 @@ ajax.get('/api/data_types',function(data) {
         ajax.delete('/api/data_types/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
             grid_event.model.undo();
         });
-    }).on('model:data_type_studies',function(grid_event){
-        window.location = '/data_types/'+grid_event.model.attributes.id+'/studies';
     });
 });

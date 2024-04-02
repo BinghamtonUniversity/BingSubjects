@@ -106,6 +106,5 @@ ajax.get('/api/participants',function(data) {
         });
     }).on('model:participant_studies',function(grid_event){
         window.location = '/participants/'+grid_event.model.attributes.id+'/studies';
-        // console.log(grid_event.model.attributes.id)
     });;
 });

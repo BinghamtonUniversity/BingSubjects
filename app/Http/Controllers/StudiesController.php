@@ -36,7 +36,15 @@ class StudiesController extends Controller
         $study->created_by = 1;
         $study->updated_by = 1;
         $study->save();
-        return $study; //->first();
+
+        // Make PI a study manager
+        $study_user = new StudyUser;
+        $study_user->study_id = $study->id;
+        $study_user->user_id = $study->pi_user_id;
+        $study_user->type = "Manager";
+        $study_user->save();
+
+        return $study;
     }
 
     public function update_study(Request $request, Study $study) {
@@ -59,7 +67,6 @@ class StudiesController extends Controller
         $study_participant = new StudyParticipant();
         $study_participant->participant_id = $participant->id;
         $study_participant->study_id = $study->id;
-
         $study_participant->save();
         return StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->with('study')->first();
     }
@@ -88,7 +95,7 @@ class StudiesController extends Controller
         $study_data_type->study_id = $study->id;
         $study_data_type->data_type_id = $data_type->id;
         $study_data_type->save();
-        return StudyDataType::where('study_id',$study->id)->where('data_type_id',$data_type->id)->first(); //->with('study')
+        return StudyDataType::where('study_id',$study->id)->where('data_type_id',$data_type->id)->first();
     }
 
     public function update_study_data_type(Request $request, Study $study, DataType $data_type) {
@@ -120,7 +127,7 @@ class StudiesController extends Controller
         $study_user->study_id = $study->id;
         $study_user->user_id = $user->id;
         $study_user->save();
-        return StudyUser::where('study_id',$study->id)->where('user_id',$user->id)->first(); //->with('type')
+        return StudyUser::where('study_id',$study->id)->where('user_id',$user->id)->first();
     }
 
     public function update_study_user(Request $request, Study $study, User $user) {
@@ -141,13 +148,12 @@ class StudiesController extends Controller
         // Hard coding for now
         $user = User::find(1);
 
-        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
         $manageable_studies = StudyUser::where('user_id',1)->where('type','manager')->select('study_id')->get()->pluck('study_id')->toArray();
         
-        if($permission->contains('manage_studies')) {
+        if($user->can('manage_studies','App\Participant')) {
             return Study::get();
         }
-        if (!empty($manageable_studies)) {
+        if(!empty($manageable_studies)) {
             return Study::whereIn('id',$manageable_studies)->get();
         }
         else {

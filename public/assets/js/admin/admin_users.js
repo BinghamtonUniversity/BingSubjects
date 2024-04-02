@@ -13,7 +13,7 @@ ajax.get('/api/users',function(data) {
                 {name:'first_name',type:'text',label:'First Name'},
                 {name:'last_name',type:'text',label:'Last Name'},
                 {name:'email',type:'email',label:'Email'},
-                {name:'password',type:'password',label:'Password'},
+                //{name:'password',type:'password',label:'Password'}, // Return to
             ],
             data:data
         }).on("model:created",function(grid_event) {
@@ -79,38 +79,25 @@ ajax.get('/api/users',function(data) {
                                             value:"create_studies"
                                         },
                                         {
+                                            label:"Manage Studies",
+                                            value:"manage_studies"
+                                        },
+                                        {
+                                            label:"Manage Data Types",
+                                            value:"manage_data_types"
+                                        },
+                                        {
                                             label:"View Participants",
                                             value:"view_participants",
                                         },
                                         {
+                                            label:"Update Participants",
+                                            value:"update_participants",
+                                        },  
+                                        {
                                             label:"Manage Participants",
                                             value:"manage_participants",
-                                        },                                        
-                                        {
-                                            label:"Delete Participants",
-                                            value:"delete_participants"
-                                        },
-                                        {
-                                            label:"View Study Participants",
-                                            value:"view_studies_participants"
-                                        },
-                                        // {
-                                        //     label:"Create Data Types",
-                                        //     value:"create_data_types"
-                                        // },
-                                        // {
-                                        //     label:"Manage Data Types",
-                                        //     value:"manage_data_types"
-                                        // },
-                                        {
-                                            label:"Manage Studies In Admin",
-                                            value:"studies_admin"
-                                        },
-
-                                        {
-                                            label:"Super User",
-                                            value:"super_user"
-                                        },
+                                        }
                                     ]
                                 }
                             ]

@@ -29,7 +29,7 @@ Route::get('/studies/{study}/users',[AdminController::class,'study_users']);
 Route::get('/studies/{study}/participants',[AdminController::class,'study_participants']);
 Route::get('/studies/{study}/data_types',[AdminController::class,'study_data_types']);
 Route::get('/participants/{participant}/studies',[AdminController::class,'participant_studies']);
-//Route::get('/data_types',[AdminController::class,'data_types']);
+Route::get('/data_types',[AdminController::class,'data_types']);
 //Route::get('/data_types/{data_type}/studies',[AdminController::class,'data_type_studies']);
 Route::get('/reports',[AdminController::class,'reports']);
 Route::get('/reports/{report}/run',[AdminController::class,'run_report']);
@@ -37,36 +37,36 @@ Route::get('/reports/{report}/run',[AdminController::class,'run_report']);
 Route::group(['prefix' => 'api'], function () {
     // User Routes
     Route::get('/users/search/{search_string?}',[UsersController::class,'search']);
-    Route::get('/users',[UsersController::class,'get_users'])->middleware('can:view_users,App\Models\User');
+    Route::get('/users',[UsersController::class,'get_users'])->middleware('can:list_users,App\Models\User');
     //Route::get('/users/{user}',[UsersController::class,'get_user']);   // Is this utilized?
-    Route::post('/users',[UsersController::class,'create_user'])->middleware('can:create_users,App\Models\User');
-    Route::put('/users/{user}',[UsersController::class,'update_user'])->middleware('can:update_users,App\Models\User');
-    Route::delete('/users/{user}',[UsersController::class,'delete_user'])->middleware('can:delete_users,App\Models\User');
+    Route::post('/users',[UsersController::class,'create_user'])->middleware('can:manage_users,App\Models\User');
+    Route::put('/users/{user}',[UsersController::class,'update_user'])->middleware('can:manage_users,App\Models\User');
+    Route::delete('/users/{user}',[UsersController::class,'delete_user'])->middleware('can:manage_users,App\Models\User');
     
     // User Permission Routes
-    Route::put('/users/{user}/permissions',[UsersController::class,'set_permissions'])->middleware('can:update_permissions,App\Models\User');
+    Route::put('/users/{user}/permissions',[UsersController::class,'set_permissions'])->middleware('can:manage_permissions,App\Models\User');
     Route::get('/users/{user}/permissions',[UsersController::class,'get_permissions'])->middleware('can:view_permissions,App\Models\User');
 
     // Participant Routes
     Route::get('/participants',[ParticipantsController::class,'get_participants'])->middleware('can:list_participants,App\Models\Participant');
     //Route::get('/participants/{participant}',[ParticipantsController::class,'get_participant']); // Is this utilized?
-    Route::post('/participants',[ParticipantsController::class,'create_participant'])->middleware('can:create_participants,App\Models\Participant');
-    Route::put('/participants/{participant}',[ParticipantsController::class,'update_participant'])->middleware('can:update_participants,App\Models\Participant');
-    Route::delete('/participants/{participant}',[ParticipantsController::class,'delete_participant'])->middleware('can:delete_participants,App\Models\Participant');
+    Route::post('/participants',[ParticipantsController::class,'create_participant'])->middleware('can:update_participants,App\Models\Participant');
+    Route::put('/participants/{participant}',[ParticipantsController::class,'update_participant'])->middleware('can:manage_participants,App\Models\Participant');
+    Route::delete('/participants/{participant}',[ParticipantsController::class,'delete_participant'])->middleware('can:manage_participants,App\Models\Participant');
 
     // Study Routes
     Route::get('/studies',[StudiesController::class,'list_studies'])->middleware('can:list_studies,App\Models\Study');
     Route::get('/studies/{study}',[StudiesController::class,'get_study'])->middleware('can:view_study,study');
     Route::post('/studies',[StudiesController::class,'create_study'])->middleware('can:create_studies,App\Models\Study');
     Route::put('/studies/{study}',[StudiesController::class,'update_study'])->middleware('can:manage_study,study');
-    Route::delete('/studies/{study}',[StudiesController::class,'delete_study'])->middleware('can:delete_studies,App\Models\Study');
+    Route::delete('/studies/{study}',[StudiesController::class,'delete_study'])->middleware('can:manage_study,study'); //->middleware('can:manage_studies,App\Models\Study');
     
     // Data Type Routes
     Route::get('/data_types',[DataTypesController::class,'list_data_types'])->middleware('can:list_data_types,App\Models\DataType');
     Route::get('/data_types/{data_type}',[DataTypesController::class,'get_data_type']); // Is this utilized?
-    Route::post('/data_types',[DataTypesController::class,'create_data_type'])->middleware('can:create_data_types,App\Models\DataType');
-    Route::put('/data_types/{data_type}',[DataTypesController::class,'update_data_type'])->middleware('can:update_data_types,App\Models\DataType');
-    Route::delete('/data_types/{data_type}',[DataTypesController::class,'delete_data_type'])->middleware('can:delete_data_types,App\Models\DataType');
+    Route::post('/data_types',[DataTypesController::class,'create_data_type'])->middleware('can:manage_data_types,App\Models\DataType');
+    Route::put('/data_types/{data_type}',[DataTypesController::class,'update_data_type'])->middleware('can:manage_data_types,App\Models\DataType');
+    Route::delete('/data_types/{data_type}',[DataTypesController::class,'delete_data_type'])->middleware('can:manage_data_types,App\Models\DataType');
 
     // Study User Routes
     Route::get('/studies/users/{user}',[StudiesController::class,'get_manageable_studies'])->middleware('can:list_studies,App\Models\Study');
@@ -86,7 +86,7 @@ Route::group(['prefix' => 'api'], function () {
 
     // Study Data Type Routes
     Route::get('/studies/{study}/data_types',[StudiesController::class,'get_study_data_types'])->middleware('can:view_study,study'); 
-    Route::post('/studies/{study}/data_types',[StudiesController::class,'add_study_data_type'])->middleware('can:manage_study,study');
+    Route::post('/studies/{study}/data_types/{data_type}',[StudiesController::class,'add_study_data_type'])->middleware('can:manage_study,study');
     Route::put('/studies/{study}/data_types/{data_type}',[StudiesController::class,'update_study_data_type'])->middleware('can:manage_study,study');
     Route::delete('/studies/{study}/data_types/{data_type}',[StudiesController::class,'remove_study_data_type'])->middleware('can:manage_study,study');
 

@@ -13,10 +13,8 @@ class UsersController extends Controller
     public function get_users(Request $request) {
         // Hard coding for now
         $user = User::find(1);
-        //$user->can('view_users)?
 
-        $permission = Permission::where('user_id',1)->select('permission')->get()->pluck('permission');
-        if($permission->contains('view_users')) {
+        if($user->can('view_users','App\User')) {
             return User::get();
         }
         // If User doesn't have permission to view all users, then only return their own user id

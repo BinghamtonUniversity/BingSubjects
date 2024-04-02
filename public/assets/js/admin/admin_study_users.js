@@ -1,6 +1,6 @@
 ajax.get('/api/studies/'+id+'/users',function(data) {
-    console.log(data);
-    //data = data.reverse();
+    console.log(data); // Remove PI from manageable list?
+    data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'study_users',
@@ -38,7 +38,7 @@ ajax.get('/api/studies/'+id+'/users',function(data) {
                         display:"{{first_name}} {{last_name}}" +
                             '<div style="color:#aaa">{{email}}</div>'
                     }
-                }               
+                }
             ],
             data:data
         }).on("edit",function(e) {

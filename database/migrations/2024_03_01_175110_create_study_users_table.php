@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('study_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('study_id'); //->index();
-            $table->unsignedBigInteger('user_id'); //->index();
+            $table->unsignedBigInteger('study_id');
+            $table->unsignedBigInteger('user_id');
             $table->enum('type',[
                 "viewer",
                 "manager"
             ]);
             $table->unique(['study_id','user_id']);
-            $table->foreign('study_id')->references('id')->on('studies');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('study_id')->references('id')->on('studies')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

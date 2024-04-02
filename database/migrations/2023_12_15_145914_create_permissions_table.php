@@ -13,21 +13,21 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('user_id')->index()->nullable();
             $table->enum('permission',[
-                "view_users", //view list of all users and their info
-                "manage_users", //create or update any user
+                "view_users", //view list of all users
+                "manage_users", //view, create, update, or delete any user
                 "view_permissions", //view list of all users' permissions
-                "manage_permissions", //create or update any user's permissions
+                "manage_permissions", //create or update all users' permissions
                 "view_studies", //view any study's info (incl. data types) and its participants
-                "create_studies", //create studies, automatically assigning yourself admin to that study
-                "manage_studies", //update any study's info (incl. data types) and its participants (and viewers)
-                "manage_data_types", //create, update, or delete data types from database
+                "create_studies", //create studies - automatically assigning this user a manager to that study
+                "manage_studies", //update or delete any study's info (incl. data types), its participants, and its users
+                "manage_data_types", //create, update, or delete data types
                 "view_participants", //view list of all participants (excl. study relationships)
-                "manage_participants", //create participants and update participant info (excl. study relationships)
-                "manage_deletions", //manage permanent deletion of any entity (studies, participants, data types, users)
+                "update_participants", //create participants and update participant info (excl. study relationships)
+                "manage_participants" //delete participants
             ]);
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
