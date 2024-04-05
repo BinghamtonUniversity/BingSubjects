@@ -14,22 +14,29 @@ ajax.get('/api/participants',function(data) {
                     name:"first_name",
                     label:"First Name",
                     type:"text",
+                    required:true
                 },
                 {
                     name:"last_name",
                     label:"Last Name",
                     type:"text",
+                    required:true
                 },
                 {
                     name:"date_of_birth",
                     label:"Date of Birth",
                     type:"date",
+                    required:true
                 },
                 {
                     name:"sex",
                     label:"Sex",
                     type:"select",
                     options: [
+                        {
+                            label:"",
+                            value:null
+                        },
                         {
                             label:"Male",
                             value:"male"
@@ -45,13 +52,40 @@ ajax.get('/api/participants',function(data) {
                     ],
                 },
                 {
+                    name:"gender",
+                    label:"Gender",
+                    type:"select",
+                    options: [
+                        {
+                            label:"",
+                            value:null
+                        },
+                        {
+                            label:"Man",
+                            value:"man"
+                        },
+                        {
+                            label:"Woman",
+                            value:"woman"
+                        },
+                        {
+                            label:"Non-Binary",
+                            value:"non_binary"
+                        }
+                    ],
+                },
+                {
                     name:"race",
                     label:"Race",
                     type:"select",
                     options: [
                         {
-                            label:"American Indian",
-                            value:"american_indian"
+                            label:"",
+                            value:null
+                        },
+                        {
+                            label:"American Indian or Alaska Native",
+                            value:"american_native"
                         },
                         {
                             label:"Asian",
@@ -72,19 +106,38 @@ ajax.get('/api/participants',function(data) {
                     ],
                 },
                 {
+                    name:"ethnicity",
+                    label:"Ethnicity",
+                    type:"select",
+                    options: [
+                        {
+                            label:"",
+                            value:null
+                        },
+                        {
+                            label:"Hispanic or Latino",
+                            value:"hispanic"
+                        },
+                        {
+                            label:"Not Hispanic or Latino",
+                            value:"not_hispanic"
+                        }
+                    ],
+                },
+                {
                     name:"city_of_birth",
                     label:"City of Birth",
-                    type:"text",
+                    type:"text"
                 },
                 {
                     name:"email",
                     label:"Email",
-                    type:"text",
+                    type:"text"
                 },
                 {
                     name:"phone_number",
                     label:"Phone Number",
-                    type:"text",
+                    type:"text"
                 }
             ],
             data:data

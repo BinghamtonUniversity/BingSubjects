@@ -15,9 +15,28 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->date('date_of_birth')->nullable()->default(null);
-            $table->string('sex')->nullable()->default(null);
-            $table->string('race')->nullable()->default(null);
+            $table->date('date_of_birth');
+            $table->enum('sex',[
+                'male',
+                'female',
+                'intersex'
+            ])->nullable()->default(null);
+            $table->enum('gender',[
+                'man',
+                'woman',
+                'non_binary'
+            ])->nullable()->default(null);
+            $table->enum('race',[
+                'american_native',
+                'asian',
+                'black',
+                'pacific_islander',
+                'white'
+            ])->nullable()->default(null);
+            $table->enum('ethnicity',[
+                'hispanic',
+                'not_hispanic'
+            ])->nullable()->default(null);
             $table->string('city_of_birth')->nullable()->default(null);
             $table->string('email')->nullable()->default(null); 
             $table->string('phone_number')->nullable()->default(null);

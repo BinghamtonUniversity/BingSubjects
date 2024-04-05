@@ -221,28 +221,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Assign data types 1-3 to the first study
-        // for ($index = 1; $index < 4; $index++) {
-        //     \App\Models\StudyDataType::create([
-        //         'study_id' => 1,
-        //         'data_type_id' => $index,
-        //     ]);
-        // }
-        // // Assign data types 2-4 to the second study
-        // for ($index = 2; $index < 5; $index++) {
-        //     \App\Models\StudyDataType::create([
-        //         'study_id' => 2,
-        //         'data_type_id' => $index,
-        //     ]);
-        // }
-        // // Assign data types 4-5 to the third study
-        // for ($index = 4; $index < 6; $index++) {
-        //     \App\Models\StudyDataType::create([
-        //         'study_id' => 3,
-        //         'data_type_id' => $index,
-        //     ]);
-        // }
-
         // Assign default user manage 1st study and view 2nd study permissions
         \App\Models\StudyUser::create([
             'study_id' => 1,
@@ -260,27 +238,16 @@ class DatabaseSeeder extends Seeder
             'type' => 'viewer'
         ]);
 
-        // \App\Models\StudyPermission::create([
-        //     'user_id' => $default_user->id,
-        //     'study_id' => 1,
-        //     'study_permission' => 'manage_study'
-        // ]);
-        // \App\Models\StudyPermission::create([
-        //     'user_id' => $default_user->id,
-        //     'study_id' => 2,
-        //     'study_permission' => 'view_study'
-        // ]);
-
-        // Assign second user manage 2nd and 3rd study permissions
-        // \App\Models\StudyPermission::create([
-        //     'user_id' => 2,
-        //     'study_id' => 2,
-        //     'study_permission' => 'manage_study'
-        // ]);
-        // \App\Models\StudyPermission::create([
-        //     'user_id' => 2,
-        //     'study_id' => 3,
-        //     'study_permission' => 'manage_study'
-        // ]);
+        // Assign PI manager to their study
+        \App\Models\StudyUser::create([
+            'study_id' => 2,
+            'user_id' => 2,
+            'type' => 'manager'     
+        ]);
+        \App\Models\StudyUser::create([
+            'study_id' => 3,
+            'user_id' => 2,
+            'type' => 'manager'     
+        ]);
     }
 }

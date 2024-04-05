@@ -53,7 +53,9 @@ ajax.get('/api/reports',function(data) {
                             {"label": "participant_last_name", "value": "participants.last_name as participant_last_name"},
                             {"label": "participant_dob", "value": "participants.date_of_birth as participant_dob"},
                             {"label": "participant_sex", "value": "participants.sex as participant_sex"},
+                            {"label": "participant_gender", "value": "participants.gender as participant_gender"},
                             {"label": "participant_race", "value": "participants.race as participant_race"},
+                            {"label": "participant_ethnicity", "value": "participants.ethnicity as participant_ethnicity"},
                             {"label": "participant_city_of_birth", "value": "participants.city_of_birth as participant_city_of_birth"}
                         ]
                     },

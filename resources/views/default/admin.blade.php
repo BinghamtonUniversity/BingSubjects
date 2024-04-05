@@ -136,7 +136,19 @@
                 <style>
                 div#adminDataGrid > div.well > div {
                     /* Make All Datagrid Stuff Scrollable Hack */
-                    overflow: scroll !important;
+                    /* overflow: scroll !important; */
+                }
+                div#adminDataGrid > div.well > div.table-container > div > table {
+                    width: 99.5%;
+                }
+                div#adminDataGrid > div.tab-content > div#data-types.tab-pane > div#study_data_types > div.well > div.table-container > div > table {
+                    width: 99.5%;
+                }
+                div#adminDataGrid > div.tab-content > div#participants.tab-pane > div#study_participants > div.well > div.table-container > div > table {
+                    width: 99.5%;
+                }
+                div#adminDataGrid > div.tab-content > div#users.tab-pane > div#study_users > div.well > div.table-container > div > table {
+                    width: 99.5%;
                 }
                 </style>
             </div>

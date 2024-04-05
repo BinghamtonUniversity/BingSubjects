@@ -25,10 +25,7 @@ class StudiesController extends Controller
         return Study::whereIn('id',$user->user_studies->pluck('study_id'))->get();
     }
 
-    public function get_study(Request $request, Study $study) {
-        $study = Study::where('id',$study->id)->with('users')->with('data_types')->with('participants')->first();
-        return $study;
-    }
+
 
     public function create_study(Request $request) {
         $study = new Study($request->all());
@@ -59,7 +56,7 @@ class StudiesController extends Controller
     }
 
     /* START Study Participant Methods */
-    public function get_study_participants(Request $request, Study $study) {
+    public function get_study_participants(Request $request, Study $study) { 
         return StudyParticipant::where('study_id',$study->id)->with('participant')->get();
     }
 
@@ -80,7 +77,7 @@ class StudiesController extends Controller
 
 
     /* START Study Data Type Methods */
-    public function get_study_data_types(Request $request, Study $study) {
+    public function get_study_data_types(Request $request, Study $study) { 
         $data_types = DataType::select('id','category','type')->whereHas('data_type_studies',function($q) use ($study) {
             $q->where('study_id',$study->id);
         })->get();
@@ -159,5 +156,28 @@ class StudiesController extends Controller
         else {
             return 0;
         }
+    }
+
+
+    public function get_study(Request $request, Study $study) {
+        $study = Study::where('id',$study->id)->with('users')->with('data_types')->with('participants')->first();
+
+        // $data_types = DataType::select('id','category','type')->whereHas('data_type_studies',function($q) use ($study) {
+        //     $q->where('study_id',$study->id);
+        // })->get();
+        // foreach($data_types as $data_type) {
+        //     $data_type->description = $data_type->data_type_study_description($study->id);
+        // }
+        // $study->$study_data_types = $data_types;
+
+        // $study->study_data_types = get_study_data_types($study);
+        // $study->study_participants = get_study_participants($study);
+        // $study->study_users = get_study_users($study);
+        
+        return $study;
+
+
+        // $study = Study::where('id',$study->id)->with('users')->with('data_types')->with('participants')->first();
+        // return $study;
     }
 }

@@ -123,21 +123,19 @@ class AdminController extends Controller
 
         /* Actions for Studies Page */
         $user_actions = [];
+        if($user->is_study_user() || $user->can('view_studies','App\Study')) {
+            $user_actions[] = ["name"=>"edit","label"=>"View Study","type"=>"warning","min"=>1,"max"=>1];
+        }
+        if (($user->can('create_studies','App\Study') || $user->can('manage_studies','App\Study')) && ($user->is_study_user() || $user->can('view_studies','App\Study'))) {
+            $user_actions[] = [];
+        }
         if ($user->can('create_studies','App\Study')) {
             $user_actions[] = ["name"=>"create","label"=>"Create Study"];
         }
         if ($user->can('manage_studies','App\Study')) {
             $user_actions[] = ["name"=>"delete","label"=>"Delete Study","min"=>1,"max"=>1]; //may remove max
         }
-        if (($user->can('create_studies','App\Study') || $user->can('manage_studies','App\Study')) && ($user->is_study_user() || $user->can('view_studies','App\Study'))) {
-            $user_actions[] = [];
-        }
-        // Update to only be clickable depending on if the user can view the selected study
-        if($user->is_study_user() || $user->can('view_studies','App\Study')) {
-            $user_actions[] = ["name"=>"edit","label"=>"View Study","type"=>"warning","min"=>1,"max"=>1];
-        }
 
-       
         return view('default.admin',[
             'page'=>'studies',
             'id'=>$user->id,
@@ -156,11 +154,32 @@ class AdminController extends Controller
         $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
 
         /* Actions for Study Page */
-        // Look into moving actions here from js
         $user_actions = [];
+        $user_actions_manage = false;
+        $user_actions_data_types = [];
+        $user_actions_participants = [];
+        $user_actions_users = [];
+
         if($user->can('manage_study',$study)) {
-            $user_actions[] = ["manage"];
+            $user_actions_manage = true;
+            // Data Types Actions
+            $user_actions_data_types[] = ["name"=>"create","label"=>"Add Data Type"];
+            $user_actions_data_types[] = ["name"=>"edit","label"=>"Update Data Type"];
+            $user_actions_data_types[] = ["name"=>"delete","label"=>"Remove Data Type"];
+            // Participants Actions
+            $user_actions_participants[] = ["name"=>"create","label"=>"Add Participant"];
+            $user_actions_participants[] = ["name"=>"delete","label"=>"Remove Participant"];
+            // Users Actions
+            $user_actions_users[] = ["name"=>"create","label"=>"Add User"];
+            $user_actions_users[] = ["name"=>"edit","label"=>"Update Type"];
+            $user_actions_users[] = ["name"=>"delete","label"=>"Remove User"];
         }
+        $user_actions = [
+            'manage'=>$user_actions_manage,
+            'data_types'=>$user_actions_data_types,
+            'participants'=>$user_actions_participants,
+            'users'=>$user_actions_users
+        ];
 
         return view('default.admin',[
             'page'=>'study',

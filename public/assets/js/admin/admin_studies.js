@@ -1,8 +1,4 @@
 ajax.get('/api/studies',function(data) {
-    console.log(data);
-    console.log(auth_user_perms);
-    console.log(id);
-
     data = data.reverse();
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',

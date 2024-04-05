@@ -54,7 +54,7 @@ class ParticipantsController extends Controller
         // Hard coding for now
         $user = User::find(1);
 
-        if($user->can('view_studies','App\Participant')) {
+        if($user->can('view_studies','App\Study')) {
             return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();
         }
         // If User doesn't have permission to view all of this participants' study relationships, then only return the studies they can view
