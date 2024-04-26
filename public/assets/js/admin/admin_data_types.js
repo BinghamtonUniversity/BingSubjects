@@ -1,10 +1,11 @@
 ajax.get('/api/data_types',function(data) {
     data = data.reverse();
+    // console.log(data)
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'data_types',
-            search:false,columns:false,upload:false,download:false,title:'data_types',
-            entries:[],
+            search:true,columns:false,upload:false,download:false,title:'data_types',
+            // entries:[],
             sortBy:'order',
             actions:actions,
             count:20,

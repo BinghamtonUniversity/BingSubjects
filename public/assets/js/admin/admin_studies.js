@@ -234,7 +234,7 @@ ajax.get('/api/studies',function(data) {
                     form_event.form.trigger('close');
                     ajax.post('/api/studies/',form_data,function(data) {
                         //refresh page
-                        
+
                     });
                 }
             }).on('cancel',function(form_event) {

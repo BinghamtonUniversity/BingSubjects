@@ -1,9 +1,13 @@
 ajax.get('/api/participants',function(data) {
     data = data.reverse();
+    // data.forEach(e=>{
+    //     console.log(e.studies)
+    //     // debugger
+    // })
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'participants',
-            search:false,columns:false,upload:false,download:false,title:'participants',
+            search:false,columns:false,upload:true,download:true,title:'participants',
             entries:[],
             sortBy:'order',
             actions:actions,
@@ -34,8 +38,7 @@ ajax.get('/api/participants',function(data) {
                     type:"select",
                     options: [
                         {
-                            label:"",
-                            value:null
+                            label:"Please select",
                         },
                         {
                             label:"Male",
@@ -57,8 +60,7 @@ ajax.get('/api/participants',function(data) {
                     type:"select",
                     options: [
                         {
-                            label:"",
-                            value:null
+                            label:"Please select",
                         },
                         {
                             label:"Man",
@@ -80,8 +82,7 @@ ajax.get('/api/participants',function(data) {
                     type:"select",
                     options: [
                         {
-                            label:"",
-                            value:null
+                            label:"Please select",
                         },
                         {
                             label:"American Indian or Alaska Native",
@@ -111,8 +112,7 @@ ajax.get('/api/participants',function(data) {
                     type:"select",
                     options: [
                         {
-                            label:"",
-                            value:null
+                            label:"Please select",
                         },
                         {
                             label:"Hispanic or Latino",
@@ -138,6 +138,43 @@ ajax.get('/api/participants',function(data) {
                     name:"phone_number",
                     label:"Phone Number",
                     type:"text"
+                },
+                {
+                    name:"participant_comments",
+                    label:"Participant Comments",
+                    type:"text"
+                },
+                {
+                    name:"studies",
+                    label:"Studies",
+                    type:"select",
+                    options: [
+                        {label:'Please select'},
+                        {
+                        "path": "/api/studies",
+                        "type": "optgroup",
+                        "format": {
+                            "label":"{{title}}",
+                            "value":"{{id}}",
+                            "display": "{{title}}"
+                            },
+                        }
+                    ],
+                    "array": {
+                        "min": 0,
+                        "max": 10,
+                        "duplicate": {
+                            "enable": "auto",
+                            "label": "",
+                            "clone": false
+                        },
+                        "remove": {
+                            "enable": "auto",
+                            "label": ""
+                        }
+                    },
+                    required: true,
+                    template: "<ul>{{#attributes.studies}}<li>{{title}}</li>{{/attributes.studies}}</ul>"
                 }
             ],
             data:data

@@ -13,7 +13,7 @@ ajax.get('/api/users',function(data) {
                 {name:'first_name',type:'text',label:'First Name'},
                 {name:'last_name',type:'text',label:'Last Name'},
                 {name:'email',type:'email',label:'Email'},
-                //{name:'password',type:'password',label:'Password'}, // Return to
+                {name:'password',type:'password',label:'Password'}, // Return to
             ],
             data:data
         }).on("model:created",function(grid_event) {
@@ -93,7 +93,7 @@ ajax.get('/api/users',function(data) {
                                         {
                                             label:"Update Participants",
                                             value:"update_participants",
-                                        },  
+                                        },
                                         {
                                             label:"Manage Participants",
                                             value:"manage_participants",

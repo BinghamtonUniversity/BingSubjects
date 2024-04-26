@@ -9,15 +9,16 @@ use App\Models\Study;
 use App\Models\StudyParticipant;
 use App\Models\StudyUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ParticipantsController extends Controller
 {
     public function get_participants(Request $request, User $user) {
         // Hard coding for now
-        $user = User::find(1);
+        $user = Auth::user();
 
         if($user->can('view_participants','App\Participant')) {
-            return Participant::get();
+            return Participant::with('studies')->get();
         }
         //If User doesn't have permission to view all participants, then only return participants from studies they can view
         $study_participants = StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
@@ -26,22 +27,32 @@ class ParticipantsController extends Controller
     }
 
     public function get_participant(Request $request, Participant $participant) {
-        return $participant;
+        return $participant->with('studies');
     }
 
     public function create_participant(Request $request) {
         $participant = new Participant($request->all());
         // Hard coding these values for now until we have authentication and users set up properly.
-        $participant->created_by = 1;
-        $participant->updated_by = 1;
+
+
+        $participant->created_by = Auth::user()->id;
+        $participant->updated_by = Auth::user()->id;
         $participant->save();
-        return $participant;
+
+        foreach ($request->studies as $study){
+            $study_participant = new StudyParticipant([
+                'study_id'=>$study,
+                'participant_id'=> $participant->id
+            ]);
+            $study_participant->save();
+        }
+        return $participant->with('studies')->where('id',$participant->id)->first();
     }
 
     public function update_participant(Request $request, Participant $participant) {
-        $participant->updated_by = 1;
+        $participant->updated_by = Auth::user()->id;
         $participant->update($request->all());
-        return $participant;
+        return $participant->with('studies')->where('id',$participant->id)->first();
     }
 
     public function delete_participant(Request $request, Participant $participant) {
@@ -52,7 +63,7 @@ class ParticipantsController extends Controller
     /* START Study Participant Methods */
     public function get_participant_studies(Request $request, Participant $participant) {
         // Hard coding for now
-        $user = User::find(1);
+        $user = Auth::user();
 
         if($user->can('view_studies','App\Study')) {
             return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();

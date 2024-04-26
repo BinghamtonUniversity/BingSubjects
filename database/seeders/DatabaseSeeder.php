@@ -15,23 +15,19 @@ class DatabaseSeeder extends Seeder
     {
         // Starter Users
         $default_user = \App\Models\User::create([
-            'first_name' => 'Lindsey',
-            'last_name' => 'Braun',
-            'email' => 'lbraun2@binghamton.edu',
+            'first_name' => 'Ali Kemal',
+            'last_name' => 'Tanriverdi',
+            'email' => 'atanrive@binghamton.edu',
             'password' => '12345'
         ]);
+
         \App\Models\User::create([
             'first_name' => 'Tim',
             'last_name' => 'Cortesi',
             'email' => 'tcortesi@binghamton.edu',
             'password' => '12345'
         ]);
-        \App\Models\User::create([
-            'first_name' => 'Ali Kemal',
-            'last_name' => 'Tanriverdi',
-            'email' => 'atanrive@binghamton.edu',
-            'password' => '12345'
-        ]);
+
 
         // Assign default user all basic view permissions
         \App\Models\Permission::create([
@@ -225,7 +221,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\StudyUser::create([
             'study_id' => 1,
             'user_id' => $default_user->id,
-            'type' => 'manager'     
+            'type' => 'manager'
         ]);
         \App\Models\StudyUser::create([
             'study_id' => 2,
@@ -242,12 +238,12 @@ class DatabaseSeeder extends Seeder
         \App\Models\StudyUser::create([
             'study_id' => 2,
             'user_id' => 2,
-            'type' => 'manager'     
+            'type' => 'manager'
         ]);
         \App\Models\StudyUser::create([
             'study_id' => 3,
             'user_id' => 2,
-            'type' => 'manager'     
+            'type' => 'manager'
         ]);
     }
 }

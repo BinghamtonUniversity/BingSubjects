@@ -34,7 +34,7 @@ class AdminController extends Controller
     /* Users Tab */
     public function users(Request $request, User $user=null) {
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Permissions for User Permissions Options */
         $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
@@ -64,8 +64,9 @@ class AdminController extends Controller
 
     /* Participants Tab */
     public function participants(Request $request) {
+//        dd($request);
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Actions for Participants Page */
         $user_actions = [];
@@ -95,7 +96,7 @@ class AdminController extends Controller
 
     public function participant_studies(Request $request, Participant $participant) {
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Actions for Participant's Studies Page */
         $user_actions = [];
@@ -116,7 +117,7 @@ class AdminController extends Controller
     /* Studies Tab */
     public function studies(Request $request) {
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Permissions for User Permissions Options */
         $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
@@ -148,7 +149,7 @@ class AdminController extends Controller
 
     public function study(Request $request, Study $study) {
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Permissions for Study Page */
         $auth_user_perms = Permission::where('user_id',$user->id)->select('permission')->get()->pluck('permission')->toArray();
@@ -193,7 +194,7 @@ class AdminController extends Controller
 
     public function study_participants(Request $request, Study $study) {
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Actions for Study's Participants Page */
         $user_actions = [];
@@ -213,7 +214,7 @@ class AdminController extends Controller
 
     public function study_data_types(Request $request, Study $study) {
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Actions for Study's Data Types Page */
         $user_actions = [];
@@ -222,7 +223,7 @@ class AdminController extends Controller
             $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
             $user_actions[] = ["name"=>"delete","label"=>"Remove Data Type"];
         }
-        
+
         return view('default.admin',[
             'page'=>'study_data_types',
             'id'=>$study->id,
@@ -234,7 +235,7 @@ class AdminController extends Controller
 
     public function study_users(Request $request, Study $study) {
         // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Actions for Study's Participants Page */
         $user_actions = [];
@@ -255,12 +256,10 @@ class AdminController extends Controller
 
     /* Data Types Tab */
     public function data_types(Request $request){
-        // Simulate User 1
-        $user = User::find(1);
+        $user = Auth::user();
 
         /* Actions for Data Types Page */
         $user_actions = [];
-
         if ($user->can('manage_data_types','App\DataType')) {
             $user_actions[] = ["name"=>"create","label"=>"Create Data Type"];
             $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
