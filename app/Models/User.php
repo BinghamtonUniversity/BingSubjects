@@ -21,7 +21,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
-        'password',
+        'bnumber'
     ];
 
     /**
@@ -50,7 +50,7 @@ class User extends Authenticatable
     public function user_studies() {
         return $this->hasMany(StudyUser::class,'user_id');
     }
- 
+
     public function user_study_type($study_id) {
         return StudyUser::where('user_id',$this->id)->where('study_id',$study_id)->select('type')->get()->pluck('type')->first();
     }

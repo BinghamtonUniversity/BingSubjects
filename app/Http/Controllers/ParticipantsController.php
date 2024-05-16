@@ -23,7 +23,7 @@ class ParticipantsController extends Controller
         //If User doesn't have permission to view all participants, then only return participants from studies they can view
         $study_participants = StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
             ->select('participant_id')->get()->pluck('participant_id')->toArray();
-        return Participant::whereIn('id',$study_participants)->get();
+        return Participant::whereIn('id',$study_participants)->with('studies')->get();
     }
 
     public function get_participant(Request $request, Participant $participant) {

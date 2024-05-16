@@ -11,14 +11,8 @@ use Illuminate\Support\Facades\DB;
 class UsersController extends Controller
 {
     public function get_users(Request $request) {
-        // Hard coding for now
-        $user = User::find(1);
-
-        if($user->can('view_users','App\User')) {
-            return User::get();
-        }
         // If User doesn't have permission to view all users, then only return their own user id
-        return User::where('id',$user->id)->get();
+        return User::get();
     }
 
     public function get_user(Request $request, User $user) {
@@ -37,8 +31,7 @@ class UsersController extends Controller
     }
 
     public function delete_user(Request $request, User $user) {
-        $user->delete();
-        return 1;
+        return $user->delete();
     }
 
     public function search($search_string='') {

@@ -19,42 +19,26 @@ class UserPolicy
     {
         //
     }
-
-    public function list_users(User $user) {
+    public function list_users_sidebar(User $user){
+       return Permission::where('user_id',$user->id)->whereIn('permission',[
+            'view_users',
+            'manage_users',
+        ])->first();
+    }
+    public function list_search_users(User $user) {
         return $user->is_study_user() ||
             Permission::where('user_id',$user->id)->whereIn('permission',[
                 'view_users',
                 'manage_users',
-                'view_permissions',
                 'manage_permissions',
                 'view_studies',
-                'create_studies',
                 'manage_studies',
-                'manage_data_types',
                 'view_participants',
-                'update_participants',
-                'manage_participants'
-            ])->first();
-    }
-
-    public function view_users(User $user) {
-        return $user->is_study_manager() ||
-            Permission::where('user_id',$user->id)->whereIn('permission',[
-                'view_users',
-                'manage_users',
-                'manage_studies'
             ])->first();
     }
 
     public function manage_users(User $user) {
         return Permission::where('user_id',$user->id)->where('permission','manage_users')->first();
-    }
-
-    public function view_permissions(User $user) {
-        return Permission::where('user_id',1)->whereIn('permission',[
-            'view_permissions',
-            'manage_permissions'
-        ])->first();
     }
 
     public function manage_permissions(User $user) {

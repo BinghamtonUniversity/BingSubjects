@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Ali Kemal',
             'last_name' => 'Tanriverdi',
             'email' => 'atanrive@binghamton.edu',
-            'password' => '12345'
+            'bnumber' => 'B00450942'
         ]);
 
         \App\Models\User::create([
             'first_name' => 'Tim',
             'last_name' => 'Cortesi',
             'email' => 'tcortesi@binghamton.edu',
-            'password' => '12345'
+            'bnumber' => 'B00505893'
         ]);
 
 
@@ -40,20 +40,13 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
-            'permission' => 'view_permissions'
-        ]);
-        \App\Models\Permission::create([
-            'user_id' => $default_user->id,
             'permission' => 'manage_permissions'
         ]);
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
             'permission' => 'view_studies'
         ]);
-        \App\Models\Permission::create([
-            'user_id' => $default_user->id,
-            'permission' => 'create_studies'
-        ]);
+
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
             'permission' => 'manage_studies'
@@ -66,10 +59,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $default_user->id,
             'permission' => 'view_participants'
         ]);
-        \App\Models\Permission::create([
-            'user_id' => $default_user->id,
-            'permission' => 'update_participants'
-        ]);
+
         \App\Models\Permission::create([
             'user_id' => $default_user->id,
             'permission' => 'manage_participants'

@@ -1,9 +1,13 @@
 ajax.get('/api/participants',function(data) {
     data = data.reverse();
-    // data.forEach(e=>{
-    //     console.log(e.studies)
-    //     // debugger
-    // })
+     data.forEach(e=>{
+          e.studies = e.studies.map(d=>{
+            return (String)(d.id)
+        })
+        return e
+    })
+    console.log(data)
+
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'participants',
@@ -142,27 +146,15 @@ ajax.get('/api/participants',function(data) {
                 {
                     name:"participant_comments",
                     label:"Participant Comments",
-                    type:"text"
+                    type:"textarea"
                 },
                 {
-                    name:"studies",
-                    label:"Studies",
-                    type:"select",
-                    options: [
-                        {label:'Please select'},
-                        {
-                        "path": "/api/studies",
-                        "type": "optgroup",
-                        "format": {
-                            "label":"{{title}}",
-                            "value":"{{id}}",
-                            "display": "{{title}}"
-                            },
-                        }
-                    ],
-                    "array": {
-                        "min": 0,
-                        "max": 10,
+                    type: "combobox",
+                    label: "Studies",
+                    name: "studies",
+                    array: {
+                        "min": null,
+                        "max": 25,
                         "duplicate": {
                             "enable": "auto",
                             "label": "",
@@ -173,19 +165,42 @@ ajax.get('/api/participants',function(data) {
                             "label": ""
                         }
                     },
-                    required: true,
-                    template: "<ul>{{#attributes.studies}}<li>{{title}}</li>{{/attributes.studies}}</ul>"
+                    "showColumn": false,
+                    "strict": true,
+                    "options": [
+                        {
+                            "label": "",
+                            "type": "optgroup",
+                            "path": "/api/studies",
+                            "format": {
+                                "label": "{{title}}",
+                                "value": "{{id}}",
+                                "display": "{{title}}"
+                            }
+                        }
+                    ],
+                    "format": {
+                        "label": "{{title}}",
+                        "value": "{{id}}",
+                        "display": "{{title}}"
+                    }
                 }
             ],
             data:data
     }).on("model:edited",function(grid_event) {
         ajax.put('/api/participants/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
+            data.studies = data.studies.map(d=>{
+                return (String)(d.id)
+            })
             grid_event.model.update(data)
         },function(data) {
             grid_event.model.undo();
         });
     }).on("model:created",function(grid_event) {
         ajax.post('/api/participants',grid_event.model.attributes,function(data) {
+            data.studies = data.studies.map(d=>{
+                return (String)(d.id)
+            })
             grid_event.model.update(data)
         },function(data) {
             grid_event.model.undo();

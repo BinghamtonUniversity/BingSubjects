@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('study_id');
             $table->unsignedBigInteger('data_type_id');
-            $table->string('description')->nullable()->default(null);
+            $table->string('description')->nullable();
             $table->foreign('study_id')->references('id')->on('studies')->cascadeOnDelete();
             $table->foreign('data_type_id')->references('id')->on('data_types')->cascadeOnDelete();
             $table->timestamps();

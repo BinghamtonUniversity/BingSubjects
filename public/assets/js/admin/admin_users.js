@@ -13,7 +13,7 @@ ajax.get('/api/users',function(data) {
                 {name:'first_name',type:'text',label:'First Name'},
                 {name:'last_name',type:'text',label:'Last Name'},
                 {name:'email',type:'email',label:'Email'},
-                {name:'password',type:'password',label:'Password'}, // Return to
+                {name:'bnumber',type:'text',label:'B-Number',length:10}, // Return to
             ],
             data:data
         }).on("model:created",function(grid_event) {
@@ -74,10 +74,7 @@ ajax.get('/api/users',function(data) {
                                             label:"View Studies",
                                             value:"view_studies"
                                         },
-                                        {
-                                            label:"Create Studies",
-                                            value:"create_studies"
-                                        },
+
                                         {
                                             label:"Manage Studies",
                                             value:"manage_studies"
@@ -89,10 +86,6 @@ ajax.get('/api/users',function(data) {
                                         {
                                             label:"View Participants",
                                             value:"view_participants",
-                                        },
-                                        {
-                                            label:"Update Participants",
-                                            value:"update_participants",
                                         },
                                         {
                                             label:"Manage Participants",
