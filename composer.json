@@ -1,8 +1,10 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Binghamton University BComply",
+    "keywords": [ "binghamton",
+                "university",
+                "bingsubjects"],
     "license": "MIT",
     "require": {
         "php": "^8.1",

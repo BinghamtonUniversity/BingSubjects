@@ -66,5 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'public.api.auth' =>  \App\Http\Middleware\PublicAPIAuth::class,
         'custom.auth' => \App\Http\Middleware\CustomAuthentication::class,
+        'cas.auth'  => Subfission\Cas\Middleware\CASAuth::class,
+        'cas.guest' => Subfission\Cas\Middleware\RedirectCASAuthenticated::class
     ];
 }
