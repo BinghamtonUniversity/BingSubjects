@@ -1,7 +1,10 @@
 <?php
 
 return [
-
+    'api' => [
+        'user' => env('API_USER','defaultuser'),
+        'password' => env('API_PASSWORD','defaultpass'),
+    ],
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -39,6 +42,11 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'hash' => false,
         ],
     ],
 

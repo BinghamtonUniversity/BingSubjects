@@ -1,10 +1,12 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "Binghamton University BComply",
-    "keywords": [ "binghamton",
-                "university",
-                "bingsubjects"],
+    "description": "Binghamton University BingSubjects",
+    "keywords": [
+        "binghamton",
+        "university",
+        "bingsubjects"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
