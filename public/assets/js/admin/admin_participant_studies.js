@@ -14,7 +14,7 @@ ajax.get('/api/participants/'+id[0]+'/studies',function(data) {
                     name:"study_id",
                     type:"combobox",
                     label:"Study",
-                    template:"{{attributes.study.title}}, PI: {{attributes.study.pi.first_name}} {{attributes.study.pi.last_name}}",
+                    template:"{{attributes.title}}, PI: {{attributes.pi.first_name}} {{attributes.pi.last_name}}",
                     options:"/api/studies/users/"+id[1],
                     format:{
                         label:"{{title}}, PI: {{pi.first_name}} {{pi.last_name}}",

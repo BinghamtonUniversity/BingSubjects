@@ -19,6 +19,13 @@ class ParticipantPolicy
         //
     }
 
+    public function list_participants_sidebar(User $user){
+        return
+            Permission::where('user_id',$user->id)->whereIn('permission',[
+                'view_participants',
+                'manage_participants'
+            ])->first();
+    }
     public function list_participants(User $user) {
         return $user->is_study_user() ||
             Permission::where('user_id',$user->id)->whereIn('permission',[

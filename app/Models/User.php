@@ -57,12 +57,9 @@ class User extends Authenticatable
 
     public function is_study_user($study_id=null) {
         if (is_null($study_id)){
-            return (bool)StudyUser::where('user_id',$this->id)
-                ->first();
+            return !is_null(StudyUser::where('user_id',$this->id)->first());
         }
-        return (bool)StudyUser::where('user_id',$this->id)
-            ->where('study_id',$study_id)
-            ->first();
+        return !is_null(StudyUser::where('user_id',$this->id)->where('study_id',$study_id)->first());
     }
 
     public function is_study_manager($study_id=null) {

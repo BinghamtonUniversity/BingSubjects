@@ -49,7 +49,7 @@ class AdminController extends Controller
         if ($user->can('manage_users','App\User') && $user->can('view_permissions','App\User')) {
             $user_actions[] = [];
         }
-        if($user->can('view_permissions','App\User')) {
+        if($user->can('manage_permissions','App\User')) {
             $user_actions[] = ["name"=>"user_permissions","label"=>"User Permissions","min"=>1,"max"=>1];
         }
 
@@ -124,13 +124,13 @@ class AdminController extends Controller
 
         /* Actions for Studies Page */
         $user_actions = [];
-        if($user->is_study_user() || $user->can('view_studies','App\Study')) {
+        if($user->is_study_user() || $user->can('list_search_studies','App\Study')) {
             $user_actions[] = ["name"=>"edit","label"=>"View Study","type"=>"warning","min"=>1,"max"=>1];
         }
-        if (($user->can('create_studies','App\Study') || $user->can('manage_studies','App\Study')) && ($user->is_study_user() || $user->can('view_studies','App\Study'))) {
-            $user_actions[] = [];
-        }
-        if ($user->can('create_studies','App\Study')) {
+
+        $user_actions[] = [];
+
+        if ($user->can('manage_studies','App\Study')) {
             $user_actions[] = ["name"=>"create","label"=>"Create Study"];
         }
         if ($user->can('manage_studies','App\Study')) {
@@ -164,15 +164,15 @@ class AdminController extends Controller
         if($user->can('manage_study',$study)) {
             $user_actions_manage = true;
             // Data Types Actions
-            $user_actions_data_types[] = ["name"=>"create","label"=>"Add Data Type"];
-            $user_actions_data_types[] = ["name"=>"edit","label"=>"Update Data Type"];
+            $user_actions_data_types[] = ["name"=>"add_data_type","label"=>"Add Data Type"];
+            $user_actions_data_types[] = ["name"=>"edit_data_type","label"=>"Update Data Type"];
             $user_actions_data_types[] = ["name"=>"delete","label"=>"Remove Data Type"];
             // Participants Actions
-            $user_actions_participants[] = ["name"=>"create","label"=>"Add Participant"];
+            $user_actions_participants[] = ["name"=>"add_participant","label"=>"Add Participant"];
             $user_actions_participants[] = ["name"=>"delete","label"=>"Remove Participant"];
             // Users Actions
-            $user_actions_users[] = ["name"=>"create","label"=>"Add User"];
-            $user_actions_users[] = ["name"=>"edit","label"=>"Update Type"];
+            $user_actions_users[] = ["name"=>"add_user","label"=>"Add User"];
+            $user_actions_users[] = ["name"=>"edit","label"=>"Update User Permissions"];
             $user_actions_users[] = ["name"=>"delete","label"=>"Remove User"];
         }
         $user_actions = [

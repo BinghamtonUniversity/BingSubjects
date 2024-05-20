@@ -178,7 +178,8 @@ var display_study_info = function(edit=false) {
         load_study();
     }).on('save',function(form_event) {
         if(form_event.form.validate()) {
-            ajax.put('/api/studies/'+id,form_event.form.get(),function() {
+            ajax.put('/api/studies/'+id,form_event.form.get(),function(data) {
+                // console.log(data)
                 load_study();
             });
         };
@@ -197,6 +198,7 @@ var load_study = function() {
 
         /* Info Tab */
         display_study_info();
+    // debugger
 
         /* Data Types Tab */
         study_data_types_template = new GrapheneDataGrid({
@@ -250,7 +252,7 @@ var load_study = function() {
                 }
             ],
             data:data.data_types
-        }).on("create",function(grid_event) {
+        }).on("add_data_type",function(grid_event) {
             grid_event.preventDefault();
             new gform({
                 "legend" : "Add Data Type to Study",
@@ -280,17 +282,14 @@ var load_study = function() {
                     form_event.form.trigger('close');
                     ajax.post('/api/studies/'+id+'/data_types/'+form_data.data_type_id,form_data,function(data) {
                         //refresh page
-                        // window.location.hash = '#data_types';
-                        // window.location.reload(true);
-                        //grid_event.model.update(data);
+
+                        grid_event.grid.add(data);
                     });
                 }
             }).on('cancel',function(form_event) {
                 form_event.form.trigger('close');
             }).modal();
-        }).on("edit",function(e) {
-            e.preventDefault();
-        }).on("model:edit",function(grid_event) {
+        }).on("model:edit_data_type",function(grid_event) {
             new gform({
                 "legend" : "Update Description for this study's "+grid_event.model.attributes.type,
                 "fields": [
@@ -450,11 +449,11 @@ var load_study = function() {
                 }
             ],
             data:data.participants
-        }).on("create",function(grid_event) {
-            grid_event.preventDefault();
+        }).on("add_participant",function(grid_event) {
+            // grid_event.preventDefault();
             new gform({
                 "legend" : "Add Participant to Study",
-                "fields": [                    
+                "fields": [
                     {name:"id",type:"hidden"},
                     {
                         name:"participant_id",
@@ -479,10 +478,9 @@ var load_study = function() {
             }).on('save',function(form_event) {
                 if(form_event.form.validate()) {
                     form_data = form_event.form.get();
-                    form_event.form.trigger('close');
-                    ajax.post('/api/studies/'+id+'/participants/'+form_data.participant_id,form_data,function(data) {
-                        //refresh page
-                        //grid_event.model.update(data);
+                    ajax.post('/api/studies/'+id+'/participants/'+form_data.participant_id,form_data,function(partipant_res) {
+                        grid_event.grid.add(partipant_res)
+                        form_event.form.trigger('close');
                     });
                 }
             }).on('cancel',function(form_event) {
@@ -493,7 +491,7 @@ var load_study = function() {
                 grid_event.model.undo();
             });
         });
-
+// debugger
         /* Users Tab */
         study_users_template = new GrapheneDataGrid({
             el:'#study_users',
@@ -566,8 +564,8 @@ var load_study = function() {
             }).on('cancel',function(form_event) {
                 form_event.form.trigger('close');
             }).modal().set(grid_event.model.attributes);
-        }).on("create",function(grid_event) {
-            grid_event.preventDefault();
+        }).on("add_user",function(grid_event) {
+            // grid_event.preventDefault();
             new gform({
                 "legend" : "Add User to Study",
                 "fields": [
@@ -605,9 +603,10 @@ var load_study = function() {
                 if(form_event.form.validate()) {
                     form_data = form_event.form.get();
                     form_event.form.trigger('close');
-                    ajax.post('/api/studies/'+id+'/users/'+form_data.user_id,form_data,function(data) {
+                    ajax.post('/api/studies/'+id+'/users/'+form_data.user_id,form_data,function(datus) {
                         //refresh page
-                        //grid_event.model.update(data);
+                        console.log(datus)
+                        grid_event.grid.add(datus);
                     });
                 }
             }).on('cancel',function(form_event) {

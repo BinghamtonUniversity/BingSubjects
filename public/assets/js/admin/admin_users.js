@@ -62,10 +62,7 @@ ajax.get('/api/users',function(data) {
                                             label:"Manage Users",
                                             value:"manage_users",
                                         },
-                                        {
-                                            label:"View Permissions",
-                                            value:"view_permissions",
-                                        },
+
                                         {
                                             label:"Manage Permissions",
                                             value:"manage_permissions",
@@ -90,6 +87,18 @@ ajax.get('/api/users',function(data) {
                                         {
                                             label:"Manage Participants",
                                             value:"manage_participants",
+                                        },
+                                        {
+                                            label:"View Reports",
+                                            value:"view_reports",
+                                        },
+                                        {
+                                            label:"Manage Reports",
+                                            value:"manage_reports",
+                                        },
+                                        {
+                                            label:"Run Reports",
+                                            value:"run_reports",
                                         }
                                     ]
                                 }

@@ -71,10 +71,12 @@ class UsersController extends Controller
 
     /* START User Permissions Methods */
     public function set_permissions(Request $request, User $user) {
+
         $request->validate([
             'permissions' => 'array',
         ]);
         Permission::where('user_id',$user->id)->delete();
+
         foreach($request->permissions as $permission) {
             $permission = new Permission([
                 'user_id' => $user->id,

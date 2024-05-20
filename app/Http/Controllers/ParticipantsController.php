@@ -65,12 +65,19 @@ class ParticipantsController extends Controller
         // Hard coding for now
         $user = Auth::user();
 
-        if($user->can('view_studies','App\Study')) {
-            return StudyParticipant::where('participant_id',$participant->id)->with('study')->get();
+        if($user->can('view_studies','App\Study') || $user->can('manage_studies','App\Study')) {
+            return Study::whereHas('study_participants',function($q) use ($participant) {
+                $q->where('participant_id',$participant->id);
+            })->with('users')->get();
         }
-        // If User doesn't have permission to view all of this participants' study relationships, then only return the studies they can view
-        return StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
-            ->where('participant_id',$participant->id)->with('study')->get();
+//        return
+//         If User doesn't have permission to view all of this participants' study relationships, then only return the studies they can view
+        return Study::whereIn('id',$user->user_studies->pluck('study_id'))->whereHas('study_participants',function($q) use ($participant) {
+            $q->where('participant_id',$participant->id);
+        })->with('users')->get();
+
+//        return StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
+//            ->where('participant_id',$participant->id)->with('study')->get();
     }
 
     public function add_participant_study(Request $request, Participant $participant, Study $study) {

@@ -88,10 +88,18 @@
               @can('list_users_sidebar','App\User')
                 <li class="visible-xs-block @if($page=="users") active @endif"><a href="/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
               @endcan
+              @can('list_participant_sidebar','App\Participant')
                 <li class="visible-xs-block @if($page=="participants") active @endif"><a href="/participants"><i class="fa fa-users fa-fw"></i>&nbsp; Participants</a></li>
+              @endcan
+              @can('list_studies_sidebar','App\Study')
                 <li class="visible-xs-block @if($page=="studies") active @endif"><a href="/studies"><i class="fa fa-clipboard fa-fw"></i>&nbsp; Studies</a></li>
+              @endcan
+              @can('list_datatypes_sidebar','App\DataType')
                 <li class="visible-xs-block @if($page=="data_types") active @endif"><a href="/data_types"><i class="fa fa-database fa-fw"></i>&nbsp; Data Types</a></li>
+              @endcan
+              @can('list_reports_sidebar','App\Report')
                 <li class="visible-xs-block @if($page=="reports") active @endif"><a href="/reports"><i class="fa fa-archive fa-fw"></i>&nbsp; Reports</a></li>
+              @endcan
                 <li class="visible-xs-block"><a href="https://github.com/BinghamtonUniversity/BingSubjects/wiki" target="_blank"><i class="fa fa-info fa-fw"></i>&nbsp; View Documentation</a></li>
             </li>
           </ul>
@@ -104,12 +112,20 @@
     <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
             @can('list_users_sidebar','App\User')
-            <li class="@if($page=="users") active @endif"><a href="/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
+                <li class="@if($page=="users") active @endif"><a href="/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
             @endcan
-            <li class="@if($page=="participants") active @endif"><a href="/participants"><i class="fa fa-users fa-fw"></i>&nbsp; Participants</a></li>
-            <li class="@if($page=="studies") active @endif"><a href="/studies"><i class="fa fa-clipboard fa-fw"></i>&nbsp; Studies</a></li>
-            <li class="@if($page=="data_types") active @endif"><a href="/data_types"><i class="fa fa-database fa-fw"></i>&nbsp; Data Types</a></li>
-            <li class="@if($page=="reports") active @endif"><a href="/reports"><i class="fa fa-archive fa-fw"></i>&nbsp; Reports</a></li>
+            @can('list_participants_sidebar','App\Participant')
+                <li class="@if($page=="participants") active @endif"><a href="/participants"><i class="fa fa-users fa-fw"></i>&nbsp; Participants</a></li>
+            @endcan
+            @can('list_studies_sidebar','App\Study')
+                <li class="@if($page=="studies") active @endif"><a href="/studies"><i class="fa fa-clipboard fa-fw"></i>&nbsp; Studies</a></li>
+            @endcan
+            @can('list_datatypes_sidebar','App\DataType')
+                <li class="@if($page=="data_types") active @endif"><a href="/data_types"><i class="fa fa-database fa-fw"></i>&nbsp; Data Types</a></li>
+            @endcan
+            @can('list_reports_sidebar','App\Report')
+                    <li class="@if($page=="reports") active @endif"><a href="/reports"><i class="fa fa-archive fa-fw"></i>&nbsp; Reports</a></li>
+            @endcan
             <li><a href="https://github.com/BinghamtonUniversity/BingSubjects/wiki" target="_blank"><i class="fa fa-fw fa-info"></i>&nbsp; View Documentation</a></li>
         </ul>
     </div>

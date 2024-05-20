@@ -96,11 +96,11 @@ ajax.get('/api/studies/'+id+'/participants',function(data) {
                 }
             ],
             data:data
-        }).on("create",function(grid_event) {
+        }).on("created",function(grid_event) {
             grid_event.preventDefault();
             new gform({
                 "legend" : "Add Data Type to Study",
-                "fields": [                    
+                "fields": [
                     {name:"id",type:"hidden"},
                     {
                         name:"participant_id",
@@ -126,7 +126,7 @@ ajax.get('/api/studies/'+id+'/participants',function(data) {
                     form_event.form.trigger('close');
                     ajax.post('/api/studies/'+id+'/participants/'+form_data.participant_id,form_data,function(data) {
                         //refresh page
-                        //grid_event.model.update(data);
+                        grid_event.model.update(data);
                     });
                 }
             }).on('cancel',function(form_event) {
