@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
@@ -17,20 +18,16 @@ class ReportController extends Controller
     public function __construct() {}
 
     public function get_all_reports(Request $request) {
-//        if(Auth::user()){
-//            if (in_array('manage_reports',Auth::user()->user_permissions)){
-                return Report::all();
-//            }
-//            elseif(in_array('run_reports',Auth::user()->user_permissions)&& in_array('manage_reports',Auth::user()->user_permissions)){
-//                return Report::all();
-//            }
-//            else {
-//                return Report::where('owner_user_id',Auth::user()->id)->orWhereJsonContains('permissions',Auth::user()->id)->get();
-//            }
-//        }
-//        else{
-//            return "Failed to authenticate";
-//        }
+        $user = Auth::user();
+
+        if($user->can('manage_reports','App\Report')){
+            return Report::all();
+        }else{
+            return Report::where(function($q) use ($user){
+                $q->where('owner_user_id',$user->id)
+                    ->orWhereJsonContains('permissions',$user->id);
+            })->get();
+        }
     }
 
     public function get_report(Request $request, Report $report) {

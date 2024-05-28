@@ -64,14 +64,28 @@ class User extends Authenticatable
 
     public function is_study_manager($study_id=null) {
         if (is_null($study_id)){
-            return (bool)StudyUser::where('user_id',$this->id)
+            return !is_null(StudyUser::where('user_id',$this->id)
                 ->where('type','manager')
-                ->first();
+                ->first());
         }
-        return (bool)StudyUser::where('user_id',$this->id)
+        return !is_null(StudyUser::where('user_id',$this->id)
             ->where('study_id',$study_id)
             ->where('type','manager')
-            ->first();
+            ->first());
+    }
+
+    public function is_report_user($report_id=null){
+        if (is_null($report_id)){
+             return !is_null(Report::whereJsonContains('permissions',$this->id)
+                    ->orWhere('owner_user_id',$this->id)
+                ->first());
+        }
+        return !is_null(Report::where('report_id',$report_id->id)
+            ->where(function($q){
+                $q->whereJsonContains('permissions',$this->id)
+                    ->orWhere('owner',$this->id);
+            })
+            ->first());
     }
 
     public function getPermissionsAttribute() {

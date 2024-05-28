@@ -21,8 +21,6 @@ class AdminController extends Controller
     }
 
     public function admin(Request $request) {
-        // Simulate User 1
-        Auth::loginUsingId(1, true);
 
         return view('default.admin',[
             'page'=>'dashboard',
@@ -64,7 +62,7 @@ class AdminController extends Controller
 
     /* Participants Tab */
     public function participants(Request $request) {
-//        dd($request);
+
         // Simulate User 1
         $user = Auth::user();
 
@@ -260,7 +258,7 @@ class AdminController extends Controller
 
         /* Actions for Data Types Page */
         $user_actions = [];
-        if ($user->can('manage_data_types','App\DataType')) {
+        if ($user->can('manage_datatypes','App\DataType')) {
             $user_actions[] = ["name"=>"create","label"=>"Create Data Type"];
             $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
             $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type","min"=>1];
@@ -282,19 +280,29 @@ class AdminController extends Controller
      */
     public function reports(Request $request) {
         $user = Auth::user();
+
+        /* Actions for Data Types Page */
+        $user_actions = [];
+        if ($user->can('manage_reports','App\Report') ||
+            in_array('run_reports',$user->permissions) || !is_null(Report::where('owner_user_id',$user->id)->first())) {
+            $user_actions[] = ["name"=>"create","label"=>"Create New Report"];
+            $user_actions[] = [""];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
+            $user_actions[] = ["label"=>"Configure Query","name"=>"configure_query","min"=>1,"max"=>1,"type"=>"default"];
+            $user_actions[] = [""];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type","min"=>1];
+        }
+
+        if (in_array('run_reports',$user->permissions) || !is_null(Report::where('owner_user_id',$user->id)->first())) {
+            $user_actions[] = ["label"=>"Run Report","name"=>"run_report","min"=>1,"max"=>1,"type"=>"warning"];
+        }
+
+
         return view('default.admin',[
             'page'=>'reports',
             'ids'=>[],
             'title'=>'Reports',
-            'actions' => [
-                ["name"=>"create","label"=>"Create New Report"],
-                '',
-                ["name"=>"edit","label"=>"Edit Description"],
-                ["label"=>"Configure Query","name"=>"configure_query","min"=>1,"max"=>1,"type"=>"default"],
-                ["label"=>"Run Report","name"=>"run_report","min"=>1,"max"=>1,"type"=>"warning"],
-                '',
-                ["name"=>"delete","label"=>"Delete Report"]
-            ],
+            'actions' => $user_actions,
             'help'=>'Build and Manage Reports'
         ]);
     }

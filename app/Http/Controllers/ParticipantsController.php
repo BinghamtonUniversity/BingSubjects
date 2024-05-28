@@ -70,14 +70,13 @@ class ParticipantsController extends Controller
                 $q->where('participant_id',$participant->id);
             })->with('users')->get();
         }
-//        return
+
 //         If User doesn't have permission to view all of this participants' study relationships, then only return the studies they can view
         return Study::whereIn('id',$user->user_studies->pluck('study_id'))->whereHas('study_participants',function($q) use ($participant) {
             $q->where('participant_id',$participant->id);
         })->with('users')->get();
 
-//        return StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
-//            ->where('participant_id',$participant->id)->with('study')->get();
+
     }
 
     public function add_participant_study(Request $request, Participant $participant, Study $study) {

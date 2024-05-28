@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     protected $fillable = ['name','description','report','owner_user_id','permissions'];
-    protected $casts = ['report' =>'object','permissions'=>'object'];
+    protected $casts = ['report' =>'object','permissions'=>'array'];
     protected $with = ['owner'];
 
     protected function serializeDate(\DateTimeInterface $date) {
