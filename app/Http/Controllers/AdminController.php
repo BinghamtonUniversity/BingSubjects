@@ -21,17 +21,27 @@ class AdminController extends Controller
     }
 
     public function admin(Request $request) {
-
-        return view('default.admin',[
-            'page'=>'dashboard',
-            'ids'=>[],
-            'title'=>'Admin'
-        ]);
+        $user = Auth::user();
+        $page = '';
+//        dd($user);
+        if($user->can('list_users_sidebar','App\User')){
+            return redirect('/users');
+        }elseif ($user->can('list_studies_sidebar','App\Studies')){
+            return redirect('/studies');
+        }elseif ($user->can('list_reports_sidebar','App\Reports')){
+            return redirect('/reports');
+        }elseif ($user->can('list_participants_sidebar','App\Participants')){
+            return redirect('/participants');
+        }elseif ($user->can('list_datatypes_sidebar','App\Datatypes')){
+            return redirect('/datatypes');
+        }
+        else{
+            Auth::logout();
+        }
     }
 
     /* Users Tab */
     public function users(Request $request, User $user=null) {
-        // Simulate User 1
         $user = Auth::user();
 
         /* Permissions for User Permissions Options */
@@ -42,6 +52,10 @@ class AdminController extends Controller
         if ($user->can('manage_users','App\User')) {
             $user_actions[] = ["name"=>"create","label"=>"Create User"];
             $user_actions[] = ["name"=>"edit","label"=>"Update User","min"=>1,"max"=>1];
+            $user_actions[] = ["name"=>"activate_user","label"=>"Activate User",'type'=>'success',"min"=>1,"max"=>5];
+            $user_actions[] = ["name"=>"deactivate_user","label"=>"Deactivate User",'type'=>'danger',"min"=>1,"max"=>5];
+            $user_actions[] = [""];
+            $user_actions[] = [""];
             $user_actions[] = ["name"=>"delete","label"=>"Delete User","min"=>1,"max"=>1]; //may remove max
         }
         if ($user->can('manage_users','App\User') && $user->can('view_permissions','App\User')) {
@@ -62,8 +76,6 @@ class AdminController extends Controller
 
     /* Participants Tab */
     public function participants(Request $request) {
-
-        // Simulate User 1
         $user = Auth::user();
 
         /* Actions for Participants Page */
@@ -93,7 +105,6 @@ class AdminController extends Controller
     }
 
     public function participant_studies(Request $request, Participant $participant) {
-        // Simulate User 1
         $user = Auth::user();
 
         /* Actions for Participant's Studies Page */
@@ -114,7 +125,6 @@ class AdminController extends Controller
 
     /* Studies Tab */
     public function studies(Request $request) {
-        // Simulate User 1
         $user = Auth::user();
 
         /* Permissions for User Permissions Options */
@@ -146,7 +156,6 @@ class AdminController extends Controller
     }
 
     public function study(Request $request, Study $study) {
-        // Simulate User 1
         $user = Auth::user();
 
         /* Permissions for Study Page */
@@ -191,7 +200,6 @@ class AdminController extends Controller
     }
 
     public function study_participants(Request $request, Study $study) {
-        // Simulate User 1
         $user = Auth::user();
 
         /* Actions for Study's Participants Page */
@@ -211,7 +219,6 @@ class AdminController extends Controller
     }
 
     public function study_data_types(Request $request, Study $study) {
-        // Simulate User 1
         $user = Auth::user();
 
         /* Actions for Study's Data Types Page */
@@ -232,7 +239,6 @@ class AdminController extends Controller
     }
 
     public function study_users(Request $request, Study $study) {
-        // Simulate User 1
         $user = Auth::user();
 
         /* Actions for Study's Participants Page */

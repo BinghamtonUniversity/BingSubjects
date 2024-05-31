@@ -14,6 +14,44 @@ ajax.get('/api/users',function(data) {
                 {name:'last_name',type:'text',label:'Last Name'},
                 {name:'email',type:'email',label:'Email'},
                 {name:'bnumber',type:'text',label:'B-Number',length:10}, // Return to
+                {name:'active',type:'checkbox',label:'Active',
+                    "options": [
+                        {
+                            "label": "No",
+                            "value": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "value": 1
+                        }
+
+                    ]},
+                {name:'will_expire',type:'checkbox',label:'Will Expire',
+                    "options": [
+                        {
+                            "label": "No",
+                            "value": 0
+                        },
+                        {
+                            "label": "Yes",
+                            "value": 1
+                        }
+                    ]},
+                {name:'expiration_date',type:'date',label:'Expiration Date',"required":"show",
+                    "show": [
+                        {
+                            "op": "and",
+                            "conditions": [
+                                {
+                                    "type": "matches",
+                                    "name": "will_expire",
+                                    "value": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]}, // Return to
             ],
             data:data
         }).on("model:created",function(grid_event) {
@@ -23,9 +61,24 @@ ajax.get('/api/users',function(data) {
                 grid_event.model.undo();
             });
         }).on('model:edited',function (grid_event) {
-            ajax.put('/api/users/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {},function(data) {
-                grid_event.model.undo();
-            });
+            if(grid_event.model.attributes.active ===0){
+                if(confirm("You are about to deactivate the user: Deactivating a user will reset the user permissions. Would you like to continue?")){
+                    ajax.put('/api/users/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
+                        grid_event.model.attributes.update(data)
+                    },function(data) {
+                        grid_event.model.undo();
+                    });
+                }else{
+                    grid_event.model.undo();
+                }
+            }else{
+                ajax.put('/api/users/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
+                    grid_event.model.attributes.update(data)
+                },function(data) {
+                    grid_event.model.undo();
+                });
+            }
+
         }).on("model:deleted",function(grid_event) {
             ajax.delete('/api/users/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
                 grid_event.model.undo();
@@ -114,5 +167,23 @@ ajax.get('/api/users',function(data) {
                         perm_event.form.trigger('close')
                     });
                 }).set({permissions:grid_event.model.attributes.permissions})
-        })
+        }).on("model:activate_user",function(grid_event){
+            grid_event.model.attributes.active = 1
+            console.log(grid_event);
+            // debugger
+            ajax.put('/api/users/'+grid_event.model.attributes.id,grid_event.model.attributes,function(res) {
+                grid_event.model.update(res)
+            },function (err){
+                grid_event.model.undo();
+            });
+        }).on('model:deactivate_user',function(grid_event){
+            if(confirm("Deactivating a user will reset the user permissions. Would you like to continue?")){
+                grid_event.model.attributes.active = 0
+                ajax.put('/api/users/'+grid_event.model.attributes.id,grid_event.model.attributes,function(res) {
+                    grid_event.model.update(res)
+                }, function (err){
+                    grid_event.model.undo();
+                });
+            }
+    })
 });

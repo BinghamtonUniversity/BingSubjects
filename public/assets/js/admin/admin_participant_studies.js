@@ -29,13 +29,14 @@ ajax.get('/api/participants/'+id[0]+'/studies',function(data) {
             ],
             data:data
         }).on("model:created",function(grid_event) {
+            debugger
         ajax.post('/api/participants/'+id[0]+'/studies/'+grid_event.model.attributes.study_id, {},function(data) {
             grid_event.model.update(data)
         },function(data) {
             grid_event.model.undo();
         });
     }).on("model:deleted",function(grid_event) {
-        ajax.delete('/api/participants/'+id[0]+'/studies/'+grid_event.model.attributes.study_id,{},function(data) {},function(data) {
+        ajax.delete('/api/participants/'+id[0]+'/studies/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
             grid_event.model.undo();
         });
     });

@@ -26,7 +26,20 @@ class UsersController extends Controller
     }
 
     public function update_user(Request $request, User $user) {
-        $user->update($request->all());
+        $request = $request->all();
+        // Remove expiration date for "will_expire" is null
+        if($request['will_expire']===0){
+            $request['expiration_date'] = null;
+        }
+
+        //remove user permissions if the user is deactive
+        if($request['active']===0){
+            $request['will_expire']===0;
+            $request['expiration_date'] = null;
+            Permission::where('user_id',$user->id)->delete();
+        }
+
+        $user->update($request);
         return $user;
     }
 
@@ -71,7 +84,6 @@ class UsersController extends Controller
 
     /* START User Permissions Methods */
     public function set_permissions(Request $request, User $user) {
-
         $request->validate([
             'permissions' => 'array',
         ]);

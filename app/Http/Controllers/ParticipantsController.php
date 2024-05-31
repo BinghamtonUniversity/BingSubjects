@@ -23,7 +23,7 @@ class ParticipantsController extends Controller
         //If User doesn't have permission to view all participants, then only return participants from studies they can view
         $study_participants = StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
             ->select('participant_id')->get()->pluck('participant_id')->toArray();
-        return Participant::whereIn('id',$study_participants)->with('studies')->get();
+        return Participant::whereIn('id',$study_participants)->with('studies')->orderBy('studies')->get();
     }
 
     public function get_participant(Request $request, Participant $participant) {
@@ -75,21 +75,24 @@ class ParticipantsController extends Controller
         return Study::whereIn('id',$user->user_studies->pluck('study_id'))->whereHas('study_participants',function($q) use ($participant) {
             $q->where('participant_id',$participant->id);
         })->with('users')->get();
-
-
     }
 
     public function add_participant_study(Request $request, Participant $participant, Study $study) {
+        $user = Auth::user();
+
         $study_participant = new StudyParticipant();
         $study_participant->participant_id = $participant->id;
         $study_participant->study_id = $study->id;
         $study_participant->save();
-        return StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->with('study')->first();
+
+        return Study::where('id',$study_participant->study_id)->
+        whereIn('id',$user->user_studies->pluck('study_id'))->whereHas('study_participants',function($q) use ($participant) {
+            $q->where('participant_id',$participant->id);
+        })->with('users')->first();
     }
 
     public function remove_participant_study(Request $request, Participant $participant, Study $study) {
-        $study_participant = StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->first();
-        $study_participant->delete();
+        StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->delete();
         return 1;
     }
     /* END Study Participant Methods */

@@ -6,12 +6,11 @@ ajax.get('/api/participants',function(data) {
         })
         return e
     })
-    console.log(data)
 
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'participants',
-            search:false,columns:false,upload:true,download:true,title:'participants',
+            upload:true,download:true,title:'participants',
             entries:[],
             sortBy:'order',
             actions:actions,
@@ -153,7 +152,7 @@ ajax.get('/api/participants',function(data) {
                     label: "Studies",
                     name: "studies",
                     array: {
-                        "min": null,
+                        "min": 1,
                         "max": 25,
                         "duplicate": {
                             "enable": "auto",
@@ -211,5 +210,5 @@ ajax.get('/api/participants',function(data) {
         });
     }).on('model:participant_studies',function(grid_event){
         window.location = '/participants/'+grid_event.model.attributes.id+'/studies';
-    });;
+    });
 });
