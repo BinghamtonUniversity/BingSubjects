@@ -22,8 +22,7 @@ class AdminController extends Controller
 
     public function admin(Request $request) {
         $user = Auth::user();
-        $page = '';
-//        dd($user);
+
         if($user->can('list_users_sidebar','App\User')){
             return redirect('/users');
         }elseif ($user->can('list_studies_sidebar','App\Studies')){
@@ -296,10 +295,10 @@ class AdminController extends Controller
             $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
             $user_actions[] = ["label"=>"Configure Query","name"=>"configure_query","min"=>1,"max"=>1,"type"=>"default"];
             $user_actions[] = [""];
-            $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type","min"=>1];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Report","min"=>1];
         }
 
-        if (in_array('run_reports',$user->permissions) || !is_null(Report::where('owner_user_id',$user->id)->first())) {
+        if ($user->can('run_reports','App\Report')) {
             $user_actions[] = ["label"=>"Run Report","name"=>"run_report","min"=>1,"max"=>1,"type"=>"warning"];
         }
 

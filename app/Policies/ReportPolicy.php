@@ -36,11 +36,26 @@ class ReportPolicy
         return !is_null(Permission::where('user_id',$user->id)
             ->where('permission','manage_reports')->first());
     }
+    public function manage_report(User $user, Report $report){
+        return !is_null(Permission::where('user_id',$user->id)
+            ->where('permission','manage_reports')->first()) ||
+            Report::where('owner_user_id',$user->id)->first();
+    }
 
-    public function run_reports(User $user, Report $report){
+    public function run_reports(User $user){
+        return !is_null(Permission::where('user_id',$user->id)->where('permission','run_reports')->first()) ||
+            !is_null(Report::where(function($q) use ($user){
+                    $q->whereJsonContains('permissions',$user->id)
+                        ->orWhere('owner_user_id',$user->id);
+                })
+                ->first())
+            ;
+    }
+
+    public function run_report(User $user, Report $report){
         return !is_null(Permission::where('user_id',$user->id)->where('permission','run_reports')->first()) ||
             !is_null(Report::where('owner_user_id',$user->id)->where('id',$report->id)
-                ->first());
+                ->first()) || $user->is_report_user();
     }
 
 }

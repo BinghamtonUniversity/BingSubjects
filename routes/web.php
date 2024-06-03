@@ -34,7 +34,6 @@ Route::group(['middleware'=>['custom.auth']], function () {
     Route::get('/studies/{study}/data_types',[AdminController::class,'study_data_types']);
     Route::get('/participants/{participant}/studies',[AdminController::class,'participant_studies']);
     Route::get('/data_types',[AdminController::class,'data_types']);
-//Route::get('/data_types/{data_type}/studies',[AdminController::class,'data_type_studies']);
     Route::get('/reports',[AdminController::class,'reports']);
     Route::get('/reports/{report}/run',[AdminController::class,'run_report']);
 
@@ -53,7 +52,6 @@ Route::group(['middleware'=>['custom.auth']], function () {
 
         /* Participant Routes */
         Route::get('/participants',[ParticipantsController::class,'get_participants'])->middleware('can:list_participants,App\Models\Participant');
-        //Route::get('/participants/{participant}',[ParticipantsController::class,'get_participant']); // Is this utilized?
         Route::post('/participants',[ParticipantsController::class,'create_participant'])->middleware('can:update_participants,App\Models\Participant');
         Route::put('/participants/{participant}',[ParticipantsController::class,'update_participant'])->middleware('can:manage_participants,App\Models\Participant');
         Route::delete('/participants/{participant}',[ParticipantsController::class,'delete_participant'])->middleware('can:manage_participants,App\Models\Participant');
@@ -75,7 +73,7 @@ Route::group(['middleware'=>['custom.auth']], function () {
         /* Study User Routes */
         Route::get('/studies/users/{user}',[StudiesController::class,'get_manageable_studies'])->middleware('can:list_search_studies,App\Models\Study');
         Route::get('/studies/{study}/users',[StudiesController::class,'get_study_users'])->middleware('can:view_study,study');
-        //Route::get('/studies/{study}/users/{user}',[StudiesController::class,'get_study_user']);//->middleware('can:view_study_user,study');
+
         Route::post('/studies/{study}/users/{user}',[StudiesController::class,'add_study_user'])->middleware('can:manage_study,study');
         Route::put('/studies/{study}/users/{user}',[StudiesController::class,'update_study_user'])->middleware('can:manage_study,study');
         Route::delete('/studies/{study}/users/{user}',[StudiesController::class,'remove_study_user'])->middleware('can:manage_study,study');
@@ -94,19 +92,14 @@ Route::group(['middleware'=>['custom.auth']], function () {
         Route::put('/studies/{study}/data_types/{data_type}',[StudiesController::class,'update_study_data_type'])->middleware('can:manage_study,study');
         Route::delete('/studies/{study}/data_types/{data_type}',[StudiesController::class,'remove_study_data_type'])->middleware('can:manage_study,study');
 
-        // Remove - data type to study routes
-        // Route::get('/data_types/{data_type}/studies',[DataTypesController::class,'get_data_type_studies'])->middleware('can:list_studies,App\Models\Study');
-        // Route::post('/data_types/{data_type}/studies/{study}',[DataTypesController::class,'add_data_type_study'])->middleware('can:manage_study,study');
-        // Route::delete('/data_types/{data_type}/studies/{study}',[DataTypesController::class,'remove_data_type_study'])->middleware('can:manage_study,study');
-
         /* Report Methods */
         Route::get('/reports',[ReportController::class,'get_all_reports'])->middleware('can:list_search_reports,App\Models\Report');
         Route::get('/reports/{report}',[ReportController::class,'get_report'])->middleware('can:list_search_reports,App\Models\Report');
         Route::post('/reports',[ReportController::class,'add_report'])->middleware('can:manage_reports,App\Models\Report');
-        Route::put('/reports/{report}',[ReportController::class,'update_report'])->middleware('can:manage_reports,App\Models\Report');
+        Route::put('/reports/{report}',[ReportController::class,'update_report'])->middleware('can:manage_report,report');
         Route::delete('/reports/{report}',[ReportController::class,'delete_report'])->middleware('can:manage_reports,App\Models\Report');
         Route::get('/reports/tables',[ReportController::class,'get_tables'])->middleware('can:list_search_reports,App\Models\Report');
         Route::get('/reports/tables/columns',[ReportController::class,'get_columns'])->middleware('can:list_search_reports,App\Models\Report');
-        Route::get('/reports/{report}/execute',[ReportController::class,'execute'])->middleware('can:run_reports,report');
+        Route::get('/reports/{report}/execute',[ReportController::class,'execute'])->middleware('can:run_report,report');
     });
 });

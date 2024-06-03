@@ -175,14 +175,16 @@ ajax.get('/api/participants',function(data) {
                                 "label": "{{title}}",
                                 "value": "{{id}}",
                                 "display": "{{title}}"
-                            }
+                            },
+
                         }
                     ],
                     "format": {
                         "label": "{{title}}",
                         "value": "{{id}}",
                         "display": "{{title}}"
-                    }
+                    },
+
                 }
             ],
             data:data
