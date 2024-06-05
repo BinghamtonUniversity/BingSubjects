@@ -84,7 +84,7 @@ class AdminController extends Controller
             $user_actions[] = ["name"=>"edit","label"=>"Update Participant","min"=>1,"max"=>1];
         }
         if ($user->can('manage_participants','App\Participant')) {
-            $user_actions[] = ["name"=>"delete","label"=>"Delete Participant","min"=>1,"max"=>1];
+            $user_actions[] = ["name"=>"delete","label"=>"Delete Participant","min"=>1,"max"=>5];
         }
         if (($user->can('update_participants','App\Participant') || $user->can('manage_participants','App\Participant')) && ($user->is_study_user() || $user->can('view_studies','App\Study'))) {
             $user_actions[] = [];
@@ -171,14 +171,14 @@ class AdminController extends Controller
             $user_actions_manage = true;
             // Data Types Actions
             $user_actions_data_types[] = ["name"=>"add_data_type","label"=>"Add Data Type"];
-            $user_actions_data_types[] = ["name"=>"edit_data_type","label"=>"Update Data Type"];
+            $user_actions_data_types[] = ["name"=>"edit_data_type","label"=>"Update Data Type", "min"=>1, "max"=>1];
             $user_actions_data_types[] = ["name"=>"delete","label"=>"Remove Data Type"];
             // Participants Actions
             $user_actions_participants[] = ["name"=>"add_participant","label"=>"Add Participant"];
             $user_actions_participants[] = ["name"=>"delete","label"=>"Remove Participant"];
             // Users Actions
             $user_actions_users[] = ["name"=>"add_user","label"=>"Add User"];
-            $user_actions_users[] = ["name"=>"edit","label"=>"Update User Permissions"];
+            $user_actions_users[] = ["name"=>"edit","label"=>"Update User Permissions", "min"=>1, "max"=>1];
             $user_actions_users[] = ["name"=>"delete","label"=>"Remove User"];
         }
         $user_actions = [
@@ -224,8 +224,8 @@ class AdminController extends Controller
         $user_actions = [];
         if($user->can('manage_study',$study)) {
             $user_actions[] = ["name"=>"create","label"=>"Add Data Type"];
-            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
-            $user_actions[] = ["name"=>"delete","label"=>"Remove Data Type"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type", "min"=>1];
+            $user_actions[] = ["name"=>"delete","label"=>"Remove Data Type", "min"=>1];
         }
 
         return view('default.admin',[
@@ -244,7 +244,7 @@ class AdminController extends Controller
         $user_actions = [];
         if($user->can('manage_study',$study)) {
             $user_actions[] = ["name"=>"create","label"=>"Add User"];
-            $user_actions[] = ["name"=>"edit","label"=>"Update Type"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Type", "min"=>1, "max"=>1];
             $user_actions[] = ["name"=>"delete","label"=>"Remove User"];
         }
 
@@ -265,7 +265,7 @@ class AdminController extends Controller
         $user_actions = [];
         if ($user->can('manage_datatypes','App\DataType')) {
             $user_actions[] = ["name"=>"create","label"=>"Create Data Type"];
-            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type", "min"=>1, "max"=>1];
             $user_actions[] = ["name"=>"delete","label"=>"Delete Data Type","min"=>1];
         }
 
@@ -292,7 +292,7 @@ class AdminController extends Controller
             in_array('run_reports',$user->permissions) || !is_null(Report::where('owner_user_id',$user->id)->first())) {
             $user_actions[] = ["name"=>"create","label"=>"Create New Report"];
             $user_actions[] = [""];
-            $user_actions[] = ["name"=>"edit","label"=>"Update Data Type"];
+            $user_actions[] = ["name"=>"edit","label"=>"Update Report", "min"=>1, "max"=>1];
             $user_actions[] = ["label"=>"Configure Query","name"=>"configure_query","min"=>1,"max"=>1,"type"=>"default"];
             $user_actions[] = [""];
             $user_actions[] = ["name"=>"delete","label"=>"Delete Report","min"=>1];

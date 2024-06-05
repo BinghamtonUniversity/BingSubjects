@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class DataType extends Model
@@ -18,5 +19,9 @@ class DataType extends Model
 
     public function data_type_study_description($study_id) {
         return StudyDataType::where('data_type_id',$this->id)->where('study_id',$study_id)->select('description')->get()->pluck('description')->first();
+    }
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,11 +20,8 @@ class StudyDataType extends Model
         return $this->belongsTo(DataType::class,'data_type_id');
     }
 
-    // public function study_data_category($data_type_id) {
-    //     return DataType::where('data_type_id',$data_type_id)->select('category')->get()->pluck('category')->first();
-    // }
-
-    // public function study_data_type($data_type_id) {
-    //     return DataType::where('data_type_id',$data_type_id)->select('type')->get()->pluck('type')->first();
-    // }
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }

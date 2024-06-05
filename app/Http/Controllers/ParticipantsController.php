@@ -32,20 +32,26 @@ class ParticipantsController extends Controller
 
     public function create_participant(Request $request) {
         $participant = new Participant($request->all());
-        // Hard coding these values for now until we have authentication and users set up properly.
 
 
         $participant->created_by = Auth::user()->id;
         $participant->updated_by = Auth::user()->id;
         $participant->save();
 
-        foreach ($request->studies as $study){
-            $study_participant = new StudyParticipant([
-                'study_id'=>$study,
-                'participant_id'=> $participant->id
-            ]);
-            $study_participant->save();
+        // For bulk uploads without studies
+        if(count($request->studies)>0){
+            foreach ($request->studies as $study){
+                if(!is_null($study)){
+                    $study_participant = new StudyParticipant([
+                        'study_id'=>$study,
+                        'participant_id'=> $participant->id
+                    ]);
+                    $study_participant->save();
+                }
+            }
         }
+
+
         return $participant->with('studies')->where('id',$participant->id)->first();
     }
 

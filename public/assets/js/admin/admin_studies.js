@@ -3,7 +3,7 @@ ajax.get('/api/studies',function(data) {
     gdg = new GrapheneDataGrid(
         {el:'#adminDataGrid',
             name:'studies',
-            search:false,columns:false,upload:false,download:false,title:'studies',
+            search:false,columns:false,upload:false,title:'studies',
             entries:[],
             sortBy:'order',
             actions:actions,
@@ -101,7 +101,7 @@ ajax.get('/api/studies',function(data) {
                 {
                     name:"data_types",
                     label:"Data Types",
-                    type:"text", // search is inefficient - look into other methods
+                    type:"text",
                     template:`
                     {{#each attributes.data_types}}
                         <div style="margin-bottom:10px">{{type}}<br>

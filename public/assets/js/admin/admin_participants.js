@@ -183,8 +183,13 @@ ajax.get('/api/participants',function(data) {
                         "label": "{{title}}",
                         "value": "{{id}}",
                         "display": "{{title}}"
-                    },
-
+                    }
+                },
+                {
+                    name:"created_at",
+                    label:"Created At",
+                    show:false,
+                    type:"date"
                 }
             ],
             data:data

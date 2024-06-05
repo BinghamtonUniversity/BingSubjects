@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +18,7 @@ class Study extends Model
     public function pi() {
         return $this->belongsTo(User::class,'pi_user_id');
     }
-    
+
     public function study_users() {
         return $this->hasMany(StudyUser::class,'study_id');
     }
@@ -45,5 +46,10 @@ class Study extends Model
     public function getParticipantCountAttribute() {
         $participants = $this->participants;
         return $participants->count();
+    }
+
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }
