@@ -23,6 +23,7 @@ class UserPolicy
        return Permission::where('user_id',$user->id)->whereIn('permission',[
             'view_users',
             'manage_users',
+           'manage_permissions'
         ])->first();
     }
     public function list_search_users(User $user) {
@@ -42,6 +43,6 @@ class UserPolicy
     }
 
     public function manage_permissions(User $user) {
-        return Permission::where('user_id',1)->where('permission','manage_permissions')->first();
+        return Permission::where('user_id',$user->id)->where('permission','manage_permissions')->first();
     }
 }

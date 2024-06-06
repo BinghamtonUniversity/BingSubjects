@@ -61,7 +61,7 @@ class AdminController extends Controller
             $user_actions[] = [];
         }
         if($user->can('manage_permissions','App\User')) {
-            $user_actions[] = ["name"=>"user_permissions","label"=>"User Permissions","min"=>1,"max"=>1];
+            $user_actions[] = ["name"=>"user_permissions","label"=>"Update User Permissions","min"=>1,"max"=>1];
         }
 
         return view('default.admin',[
