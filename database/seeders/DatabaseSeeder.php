@@ -18,14 +18,16 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Ali Kemal',
             'last_name' => 'Tanriverdi',
             'email' => 'atanrive@binghamton.edu',
-            'bnumber' => 'B00450942'
+            'bnumber' => 'B00450942',
+            'active' => 1,
         ]);
 
         \App\Models\User::create([
             'first_name' => 'Tim',
             'last_name' => 'Cortesi',
             'email' => 'tcortesi@binghamton.edu',
-            'bnumber' => 'B00505893'
+            'bnumber' => 'B00505893',
+            'active' => 1,
         ]);
 
 

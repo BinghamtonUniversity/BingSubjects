@@ -156,29 +156,49 @@ class StudiesController extends Controller
     }
 
     public function add_study_user(Request $request, Study $study, User $user) {
-        $study_user = new StudyUser($request->all());
-        $study_user->study_id = $study->id;
-        $study_user->user_id = $user->id;
-        $study_user->save();
-        $found_user= User::select('id','first_name','last_name','email')->whereHas('user_studies',function($q) use ($study) {
-            $q->where('study_id',$study->id);
-        })->where('id',$user->id)->first()->toArray();
-        $found_user['pivot']['type'] = $user->user_study_type($study->id);
+        try{
+            $study_user = new StudyUser($request->all());
+            $study_user->study_id = $study->id;
+            $study_user->user_id = $user->id;
+            $study_user->save();
+            $found_user = User::select('id', 'first_name', 'last_name', 'email')->whereHas('user_studies', function ($q) use ($study) {
+                $q->where('study_id', $study->id);
+            })->where('id', $user->id)->first()->toArray();
+            $found_user['pivot']['type'] = $user->user_study_type($study->id);
 
-        return $found_user;
+            return $found_user;
+        }catch (\Exception $e){
+            $error_code = $e->errorInfo[1];
+            // Track for the duplicate entry errors
+            if($error_code == 1062){
+                return response()->json(['message'=>'User can only have one permission in a study.'],500);
+            }else{
+                return response()->json(['message'=>$e->getMessage()],500);
+            }
+        }
     }
 
     public function update_study_user(Request $request, Study $study, User $user) {
-        StudyUser::where('study_id',$study->id)
-                        ->where('user_id',$user->id)
-                        ->update($request->all());
+        try{
+            StudyUser::where('study_id', $study->id)
+                ->where('user_id', $user->id)
+                ->update($request->all());
 
-        $found_user= User::select('id','first_name','last_name','email')->whereHas('user_studies',function($q) use ($study) {
-            $q->where('study_id',$study->id);
-        })->where('id',$user->id)->first()->toArray();
-        $found_user['pivot']['type'] = $user->user_study_type($study->id);
+            $found_user = User::select('id', 'first_name', 'last_name', 'email')->whereHas('user_studies', function ($q) use ($study) {
+                $q->where('study_id', $study->id);
+            })->where('id', $user->id)->first()->toArray();
+            $found_user['pivot']['type'] = $user->user_study_type($study->id);
 
-        return $found_user;
+            return $found_user;
+        }catch (\Exception $e){
+            $error_code = $e->errorInfo[1];
+            // Track for the duplicate entry errors
+            if($error_code == 1062){
+                return response()->json(['message'=>'User can only have one permission in a study.'],500);
+            }else{
+                return response()->json(['message'=>$e->getMessage()],500);
+            }
+        }
     }
 
     public function remove_study_user(Study $study, User $user) {

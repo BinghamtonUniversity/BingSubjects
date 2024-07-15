@@ -15,7 +15,9 @@ ajax.get('/api/data_types',function(data) {
                     name:"category",
                     label:"Category",
                     type:"select",
+                    required: true,
                     options: [
+                        {label: "Please select"},
                         {
                             label:"Assessment",
                             value:"Assessment",
@@ -38,6 +40,7 @@ ajax.get('/api/data_types',function(data) {
                     name:"type",
                     label:"Type",
                     type:"text",
+                    required: true
                 }
             ],
             data:data

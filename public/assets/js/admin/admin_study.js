@@ -521,97 +521,24 @@ var load_study = function() {
                 },
                 {
                     name:"user_id",
-                    type:"text",
+                    type:"user",
                     label:"User",
                     template:"{{attributes.first_name}} {{attributes.last_name}} - {{attributes.email}}",
                 }
             ],
             data:data.users
-        }).on("edit",function(e) {
-            e.preventDefault();
-        }).on("model:edit",function(grid_event) {
-            new gform({
-                "legend":"Update "+grid_event.model.attributes.first_name+" "+grid_event.model.attributes.last_name+"'s Permission Type For This Study",
-                "name":"update_study_user_type",
-                "fields": [
-                    {name:'id',type:'hidden'},
-                    {
-                        name:'type',
-                        type:'select',
-                        label:'Type',
-                        options: [
-                            {
-                                label:"Manager",
-                                value:"manager",
-                            },
-                            {
-                                label:"Viewer",
-                                value:"viewer",
-                            },
-                        ]
-                    }
-                ]
-            }).on('save',function(form_event) {
-                if(form_event.form.validate()) {
-                    form_event.form.trigger('close');
-                    grid_event.model.attributes = form_event.form.get();
-                    ajax.put('/api/studies/'+id+'/users/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
-                        grid_event.model.update(data);
-                    },function(data) {
-                        grid_event.model.undo();
-                    });
-                }
-            }).on('cancel',function(form_event) {
-                form_event.form.trigger('close');
-            }).modal().set(grid_event.model.attributes);
-        }).on("add_user",function(grid_event) {
-            // grid_event.preventDefault();
-            new gform({
-                "legend" : "Add User to Study",
-                "fields": [
-                    {name:'id',type:'hidden'},
-                    {
-                        name:'type',
-                        type:'select',
-                        label:'Type',
-                        options: [
-                            {
-                                label:"Manager",
-                                value:"manager",
-                            },
-                            {
-                                label:"Viewer",
-                                value:"viewer",
-                            },
-                        ]
-                    },
-                    {
-                        name:"user_id",
-                        type:"user",
-                        label:"User",
-                        template:"{{attributes.first_name}} {{attributes.last_name}} - {{attributes.email}}",
-                        options:"/api/users",
-                        format: {
-                            label:"{{first_name}} {{last_name}}",
-                            value:"{{id}}",
-                            display:"{{first_name}} {{last_name}}" +
-                                '<div style="color:#aaa">{{email}}</div>'
-                        }
-                    }
-                ]
-            }).on('save',function(form_event) {
-                if(form_event.form.validate()) {
-                    form_data = form_event.form.get();
-                    form_event.form.trigger('close');
-                    ajax.post('/api/studies/'+id+'/users/'+form_data.user_id,form_data,function(datus) {
-                        //refresh page
-                        console.log(datus)
-                        grid_event.grid.add(datus);
-                    });
-                }
-            }).on('cancel',function(form_event) {
-                form_event.form.trigger('close');
-            }).modal();
+        }).on('model:created',function(e){
+            ajax.post('/api/studies/'+id+'/users/'+e.model.attributes.user_id,e.model.attributes,function(datus) {
+                e.model.update(datus);
+            },function(data) {
+                e.model.undo();
+            });
+        }).on("model:edited",function(e) {
+            ajax.put('/api/studies/'+id+'/users/'+e.model.attributes.id,e.model.attributes,function(data) {
+                e.model.update(data);
+            },function(data) {
+                e.model.undo();
+            });
         }).on("model:deleted",function(grid_event) {
             ajax.delete('/api/studies/'+id+'/users/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
                 grid_event.model.undo();

@@ -31,12 +31,23 @@ class ParticipantsController extends Controller
     }
 
     public function create_participant(Request $request) {
-        $participant = new Participant($request->all());
 
+        try{
+            $participant = new Participant($request->all());
 
-        $participant->created_by = Auth::user()->id;
-        $participant->updated_by = Auth::user()->id;
-        $participant->save();
+            $participant->created_by = Auth::user()->id;
+            $participant->updated_by = Auth::user()->id;
+            $participant->save();
+        }
+        catch (\Exception $e){
+            $error_code = $e->errorInfo[1];
+            // Track for the duplicate entry errors
+            if($error_code == 1062){
+                return response()->json(['message'=>'This participant already exists.'],500);
+            }else{
+                return response()->json(['message'=>$e->getMessage()],500);
+            }
+        }
 
         // For bulk uploads without studies
         if(count($request->studies)>0){
@@ -51,14 +62,23 @@ class ParticipantsController extends Controller
             }
         }
 
-
         return $participant->with('studies')->where('id',$participant->id)->first();
     }
 
     public function update_participant(Request $request, Participant $participant) {
-        $participant->updated_by = Auth::user()->id;
-        $participant->update($request->all());
-        return $participant->with('studies')->where('id',$participant->id)->first();
+        try{
+            $participant->updated_by = Auth::user()->id;
+            $participant->update($request->all());
+            return $participant->with('studies')->where('id',$participant->id)->first();
+        }catch (\Exception $e){
+            $error_code = $e->errorInfo[1];
+            // Track for the duplicate entry errors
+            if($error_code == 1062){
+                return response()->json(['message'=>'This participant already exists.'],500);
+            }else{
+                return response()->json(['message'=>$e->getMessage()],500);
+            }
+        }
     }
 
     public function delete_participant(Request $request, Participant $participant) {
