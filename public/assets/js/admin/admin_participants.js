@@ -10,13 +10,25 @@ ajax.get('/api/participants',function(data) {
 
     validate_participants = function(e){
         form_values = e.form.get()
-        if (data.filter(d=>{
-            return form_values.first_name === d.first_name &&
+        if (e.form.get('_method')==="create"){
+            if (data.filter(d=>{
+                return form_values.first_name === d.first_name &&
                     form_values.date_of_birth === d.date_of_birth &&
                     form_values.email === d.email
-        }).length > 0){
-            return "The participant already exists! Please check the existing participants."
+            }).length > 0){
+                return "The participant already exists! Please check the existing participants."
+            }
+        }else{
+            if (data.filter(d=>{
+                return form_values.first_name === d.first_name &&
+                    form_values.date_of_birth === d.date_of_birth &&
+                    form_values.email === d.email &&
+                    form_values.id != d.id
+            }).length > 0){
+                return "The participant already exists! Please check the existing participants."
+            }
         }
+
     }
 
     gdg = new GrapheneDataGrid(
