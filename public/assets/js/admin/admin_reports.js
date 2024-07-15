@@ -11,20 +11,18 @@ ajax.get('/api/reports',function(data) {
         {type:"textarea", name:"description", label:"Description"},
         {type:"user", name:"owner_user_id", label:"Owner",required:true, template:"{{attributes.owner.first_name}} {{attributes.owner.last_name}}"},
         {type:"output", label:"",name:"out_txt", format:{value:"<div class='alert alert-info'>Use the fields below to specify additional users who will have read only access to this report</div>"},showColumn:false},
-        {type:"user", name:"permissions", label:"User",required:false, array: {min:0,max:50}, showColumn:false},
+        {type:"user", name:"permissions", label:"User", array: {min:1,max:50}, showColumn:false},
 
     ], data: data
     }).on("model:created",function(grid_event) {
         ajax.post('/api/reports',grid_event.model.attributes,function(data) {
-            grid_event.model.attributes = data;
-            grid_event.model.draw();
+            grid_event.model.update(data)
         },function(data) {
             grid_event.model.undo();
         });
     }).on("model:edited",function(grid_event) {
         ajax.put('/api/reports/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
             grid_event.model.update(data);
-            // grid_event.model.draw();
         },function(data) {
             grid_event.model.undo();
         });
@@ -86,7 +84,7 @@ ajax.get('/api/reports',function(data) {
                         "label": false,
                         "name": "block",
                         "array": {
-                            "min": 0,
+                            "min": 1,
                             "max": 10
                         },
                         "fields": [
@@ -117,7 +115,7 @@ ajax.get('/api/reports',function(data) {
                         "label": false,
                         "name": "check",
                         "array": {
-                            "min": 0,
+                            "min": 1,
                             "max": 10
                         },
                         "fields": [
@@ -178,8 +176,3 @@ ajax.get('/api/reports',function(data) {
         });
     })
 });
-
-// Built-In Events:
-//'edit','model:edit','model:edited','model:create','model:created','model:delete','model:deleted'
-
-

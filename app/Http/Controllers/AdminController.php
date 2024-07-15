@@ -132,7 +132,7 @@ class AdminController extends Controller
         /* Actions for Studies Page */
         $user_actions = [];
         if($user->is_study_user() || $user->can('list_search_studies','App\Study')) {
-            $user_actions[] = ["name"=>"edit","label"=>"View Study","type"=>"warning","min"=>1,"max"=>1];
+            $user_actions[] = ["name"=>"view_study","label"=>"View Study","type"=>"warning","min"=>1,"max"=>1];
         }
 
         $user_actions[] = [];
@@ -177,7 +177,7 @@ class AdminController extends Controller
             $user_actions_participants[] = ["name"=>"add_participant","label"=>"Add Participant"];
             $user_actions_participants[] = ["name"=>"delete","label"=>"Remove Participant"];
             // Users Actions
-            $user_actions_users[] = ["name"=>"add_user","label"=>"Add User"];
+            $user_actions_users[] = ["name"=>"create","label"=>"Add User"];
             $user_actions_users[] = ["name"=>"edit","label"=>"Update User Permissions", "min"=>1, "max"=>1];
             $user_actions_users[] = ["name"=>"delete","label"=>"Remove User"];
         }

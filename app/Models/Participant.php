@@ -10,7 +10,12 @@ class Participant extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['first_name','last_name','date_of_birth','sex','race','city_of_birth','email','phone_number', 'participant_comments'];
+    protected $fillable = ['first_name','last_name',
+        'date_of_birth',
+        'sex',
+        'gender',
+        'ethnicity',
+        'race','city_of_birth','email','phone_number', 'participant_comments'];
     protected $casts = ['date_of_birth'=>'date:Y-m-d',
 //        'studies'=>'object'
     ];

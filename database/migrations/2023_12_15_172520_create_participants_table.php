@@ -38,13 +38,14 @@ return new class extends Migration
                 'not_hispanic'
             ])->nullable()->default(null);
             $table->string('city_of_birth')->nullable()->default(null);
-            $table->string('email')->nullable()->default(null);
+            $table->string('email');
             $table->string('phone_number')->nullable()->default(null);
             $table->text('participant_comments')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->unique(['email','date_of_birth','first_name']);
             $table->timestamps();
         });
     }

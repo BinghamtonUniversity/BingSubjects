@@ -1,3 +1,4 @@
+
 ajax.get('/api/participants',function(data) {
     data = data.reverse();
      data.forEach(e=>{
@@ -7,9 +8,22 @@ ajax.get('/api/participants',function(data) {
         return e
     })
 
+    validate_participants = function(e){
+        form_values = e.form.get()
+        if (data.filter(d=>{
+            return form_values.first_name === d.first_name &&
+                    form_values.date_of_birth === d.date_of_birth &&
+                    form_values.email === d.email
+        }).length > 0){
+            return "The participant already exists! Please check the existing participants."
+        }
+    }
+
     gdg = new GrapheneDataGrid(
-        {el:'#adminDataGrid',
+        {
+            el:'#adminDataGrid',
             name:'participants',
+            data:data,
             upload:true,download:true,title:'participants',
             entries:[],
             sortBy:'order',
@@ -135,12 +149,13 @@ ajax.get('/api/participants',function(data) {
                 {
                     name:"email",
                     label:"Email",
-                    type:"text"
+                    type:"email",
+                    required: true
                 },
                 {
                     name:"phone_number",
                     label:"Phone Number",
-                    type:"text"
+                    type:"tel"
                 },
                 {
                     name:"participant_comments",
@@ -190,9 +205,22 @@ ajax.get('/api/participants',function(data) {
                     label:"Created At",
                     show:false,
                     type:"date"
+                },
+                {
+                    name:"is_valid",
+                    label:"Please type 'confirm' to create",
+                    type: 'input',
+                    required: true,
+                    show: true,
+                    validate: [
+                        {
+                            "type": "custom",
+                            "test": validate_participants
+                        }
+                    ],
                 }
-            ],
-            data:data
+            ]
+
     }).on("model:edited",function(grid_event) {
         ajax.put('/api/participants/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
             data.studies = data.studies.map(d=>{
@@ -200,6 +228,7 @@ ajax.get('/api/participants',function(data) {
             })
             grid_event.model.update(data)
         },function(data) {
+            toastr.error(data.message)
             grid_event.model.undo();
         });
     }).on("model:created",function(grid_event) {
@@ -209,6 +238,7 @@ ajax.get('/api/participants',function(data) {
             })
             grid_event.model.update(data)
         },function(data) {
+            toastr.error(data.message)
             grid_event.model.undo();
         });
     }).on("model:deleted",function(grid_event) {

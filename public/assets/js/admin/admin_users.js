@@ -12,8 +12,8 @@ ajax.get('/api/users',function(data) {
                 {name:'id',type:'hidden'},
                 {name:'first_name',type:'text',label:'First Name'},
                 {name:'last_name',type:'text',label:'Last Name'},
-                {name:'email',type:'email',label:'Email'},
-                {name:'bnumber',type:'text',label:'B-Number',length:10}, // Return to
+                {name:'email',type:'email',label:'Email', required: true},
+                {name:'bnumber',type:'text',label:'B-Number',length:10, required: true}, // Return to
                 {name:'active',type:'checkbox',label:'Active',
                     "options": [
                         {

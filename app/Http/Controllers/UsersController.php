@@ -21,7 +21,15 @@ class UsersController extends Controller
 
     public function create_user(Request $request) {
         $user = new User($request->all());
-        $user->save();
+
+        // On successful creation of a user, create a new permission for the user
+        if($user->save()) {
+            $permission = new Permission([
+                'user_id' => $user->id,
+                'permission' => 'view_users'
+            ]);
+            $permission->save();
+        }
         return $user;
     }
 
@@ -34,7 +42,7 @@ class UsersController extends Controller
 
         //remove user permissions if the user is deactive
         if($request['active']===0){
-            $request['will_expire']===0;
+            $request['will_expire'] = 0;
             $request['expiration_date'] = null;
             Permission::where('user_id',$user->id)->delete();
         }
