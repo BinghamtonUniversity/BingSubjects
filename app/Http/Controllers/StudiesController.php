@@ -53,6 +53,7 @@ class StudiesController extends Controller
 
     public function update_study(Request $request, Study $study) {
         $study->updated_by = Auth::user()->id;
+
         $study->update($request->all());
         return $study;
     }
@@ -72,76 +73,43 @@ class StudiesController extends Controller
         $study_participant->participant_id = $participant->id;
         $study_participant->study_id = $study->id;
         $study_participant->save();
-        return Participant::where('id',$participant->id)->first();
-//            StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->with('study')->first();
+
+        return $study_participant;
     }
 
     public function remove_study_participant(Request $request, Study $study, Participant $participant) {
-        $study_participant = StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->first();
-        $study_participant->delete();
-        return 1;
+        return StudyParticipant::where('study_id',$study->id)->where('participant_id',$participant->id)->delete();
     }
     /* END Study Participant Methods */
-
-
-    /* START Study Data Type Methods */
-    public function get_study_data_types(Request $request, Study $study) {
-        $data_types = DataType::select('id','category','type')->whereHas('data_type_studies',function($q) use ($study) {
-            $q->where('study_id',$study->id);
-        })->get();
-        foreach($data_types as $data_type) {
-            $data_type->description = $data_type->data_type_study_description($study->id);
-        }
-        return $data_types;
-    }
 
     public function add_study_data_type(Request $request, Study $study, DataType $data_type) {
         $study_data_type = new StudyDataType($request->all());
         $study_data_type->study_id = $study->id;
         $study_data_type->data_type_id = $data_type->id;
         $study_data_type->save();
-        $found_data_type = DB::table('study_data_types as b')
-            ->select('b.id','a.category','a.type','b.description')
-            ->leftJoin('data_types as a', 'b.data_type_id','=','a.id')
-        ->where('b.id',$study_data_type->id)->first();
-//       dd( gettype($found_data_type));
-//        dd($found_data_type);
-        $found_data_type->pivot = [];
-        $found_data_type->pivot['description'] = $found_data_type->description;
 
-        return $found_data_type;
+        $study_data_type->data_type;
+
+        return $study_data_type;
     }
 
-    public function update_study_data_type(Request $request, Study $study, DataType $data_type) {
-        $study_data_type = StudyDataType::where('study_id',$study->id)->where('data_type_id',$data_type->id)->first();
-
+    public function update_study_data_type(Request $request, Study $study, StudyDataType $study_data_type) {
         $study_data_type->update($request->all());
 
-        $found_data_type = DB::table('study_data_types as b')
-            ->select('b.id','a.category','a.type','b.description')
-            ->leftJoin('data_types as a', 'b.data_type_id','=','a.id')
-            ->where('b.id',$study_data_type->id)->first();
-
-        $found_data_type->pivot = [];
-        $found_data_type->pivot['description'] = $found_data_type->description;
-
-        return $found_data_type;
+        return $study_data_type;
     }
 
-    public function remove_study_data_type(Study $study, DataType $data_type) {
-        $study_data_type = StudyDataType::where('study_id',$study->id)->where('data_type_id',$data_type->id)->first();
-        $study_data_type->delete();
-        return 1;
+    public function remove_study_data_type(Request $request, Study $study, StudyDataType $study_data_type) {
+        return $study_data_type->delete();
+
     }
     /* END Study Data Type Methods */
 
     /* START Study User Methods */
-    public function get_study(Request $request, Study $study) {
-        $study = Study::where('id',$study->id)
-            ->with('users')
-            ->with('data_types')
-            ->with('participants')
-            ->first();
+    public function get_study(Request $request, Study $study) {;
+        $study->users;
+        $study->study_data_types;
+
         return $study;
     }
 
@@ -180,9 +148,12 @@ class StudiesController extends Controller
 
     public function update_study_user(Request $request, Study $study, User $user) {
         try{
-            StudyUser::where('study_id', $study->id)
-                ->where('user_id', $user->id)
-                ->update($request->all());
+
+            DB::table('study_users')->upsert([
+                'study_id'=>$study->id,
+                'user_id'=>$user->id,
+                'type'=>$request->type
+            ],['study_id','user_id']);
 
             $found_user = User::select('id', 'first_name', 'last_name', 'email')->whereHas('user_studies', function ($q) use ($study) {
                 $q->where('study_id', $study->id);

@@ -112,17 +112,17 @@ ajax.get('/api/studies',function(data) {
                 },
                 {
                     name:"data_types",
-                    label:"Data Types",
+                    label:`Data Types`,
                     type:"text",
                     show:false,
                     template:`
-                    {{#each attributes.data_types}}
-                        <div style="margin-bottom:10px">{{type}}<br>
-                            {{#if pivot.description}}
-                                <span style="color:#aaa;font-size:12px;display:inline-block;line-height:15px;">{{pivot.description}}</span>
-                            {{/pivot.description}}
+                    {{#each attributes.study_data_types}}
+                        <div style="margin-bottom:10px">{{data_type.category}} - {{data_type.type}}<br>
+                            {{#if data_type.description}}
+                                <span style="color:#aaa;font-size:12px;display:inline-block;line-height:15px;">{{description}}</span>
+                            {{/description}}
                         </div>
-                    {{/attributes.data_types}}
+                    {{/attributes.study_data_types}}
                     </div>
                     `
                 }

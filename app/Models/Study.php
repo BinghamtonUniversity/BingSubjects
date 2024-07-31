@@ -12,7 +12,7 @@ class Study extends Model
 
     protected $fillable = ['pi_user_id','title','description','start_date','end_date','location','design','sample_type','created_by','updated_by'];
     protected $casts = ['created_at'=>'date:Y-m-d','updated_at'=>'date:Y-m-d','start_date'=> 'date:Y-m-d','end_date'=>'date:Y-m-d'];
-    protected $with = ['pi','data_types'];
+    protected $with = ['pi','study_data_types'];
     protected $appends = ['participantCount'];
 
     public function pi() {
@@ -40,7 +40,7 @@ class Study extends Model
     }
 
     public function data_types() {
-        return $this->belongsToMany(DataType::class,'study_data_types')->withPivot('description');
+        return $this->belongsToMany(DataType::class,'study_data_types')->withPivot('id','description');
     }
 
     public function getParticipantCountAttribute() {

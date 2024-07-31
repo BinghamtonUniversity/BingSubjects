@@ -215,6 +215,7 @@ var load_study = function() {
                     name:"category",
                     type:"select",
                     label:"Category",
+                    template: "{{attributes.data_type.category}}",
                     options:[
                         {
                             label:"Assessment",
@@ -239,19 +240,20 @@ var load_study = function() {
                     type:"select",
                     label:"Type",
                     options:"/api/data_types",
+                    template: "{{attributes.data_type.type}}",
                     format: {
                         label:"{{type}}",
-                        value:"{{type}}"
+                        value:"{{id}}"
                     }
                 },
                 {
                     name:"description",
                     type:"text",
                     label:"Description",
-                    template:"{{attributes.pivot.description}}"
+                    template:"{{attributes.description}}"
                 }
             ],
-            data:data.data_types
+            data:data.study_data_types
         }).on("add_data_type",function(grid_event) {
             grid_event.preventDefault();
             new gform({
@@ -280,10 +282,11 @@ var load_study = function() {
                 if(form_event.form.validate()) {
                     form_data = form_event.form.get();
                     form_event.form.trigger('close');
-                    ajax.post('/api/studies/'+id+'/data_types/'+form_data.data_type_id,form_data,function(data) {
-                        //refresh page
+                    debugger
+                    ajax.post('/api/studies/'+id+'/data_types/'+form_data.data_type_id,form_data,function(resp) {
+                        // data.data_types.push(resp)
+                        grid_event.grid.add(resp);
 
-                        grid_event.grid.add(data);
                     });
                 }
             }).on('cancel',function(form_event) {
@@ -291,7 +294,7 @@ var load_study = function() {
             }).modal();
         }).on("model:edit_data_type",function(grid_event) {
             new gform({
-                "legend" : "Update Description for this study's "+grid_event.model.attributes.type,
+                "legend" : "Update Description for this study's "+grid_event.model.attributes.data_type.type,
                 "fields": [
                     {name:"id",type:"hidden"},
                     {
@@ -304,6 +307,8 @@ var load_study = function() {
                 if(form_event.form.validate()) {
                     form_event.form.trigger('close');
                     form_data = form_event.form.get();
+                    debugger
+
                     ajax.put('/api/studies/'+id+'/data_types/'+form_data.id,form_data,function(data) {
                         grid_event.model.update(data);
                     },function(data) {
@@ -450,14 +455,13 @@ var load_study = function() {
             ],
             data:data.participants
         }).on("add_participant",function(grid_event) {
-            // grid_event.preventDefault();
             new gform({
                 "legend" : "Add Participant to Study",
                 "fields": [
                     {name:"id",type:"hidden"},
                     {
                         name:"participant_id",
-                        type:"user",
+                        type:"combobox",
                         label:"Participant",
                         options:"/api/participants",
                         format:{
@@ -523,6 +527,21 @@ var load_study = function() {
                     name:"user_id",
                     type:"user",
                     label:"User",
+                    show: [
+                        {
+                            "op": "and",
+                            "conditions": [
+                                {
+                                    "type": "matches",
+                                    "name": "_method",
+                                    "value": [
+                                        "create"
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    parse: true,
                     template:"{{attributes.first_name}} {{attributes.last_name}} - {{attributes.email}}",
                 }
             ],

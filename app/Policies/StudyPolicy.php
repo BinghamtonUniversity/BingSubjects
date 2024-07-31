@@ -3,11 +3,8 @@
 namespace App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use App\Models\Participant;
 use App\Models\Permission;
 use App\Models\Study;
-//use App\Models\StudyDataType;
-use App\Models\StudyUser;
 use App\Models\User;
 
 class StudyPolicy

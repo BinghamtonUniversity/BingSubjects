@@ -217,20 +217,21 @@ ajax.get('/api/participants',function(data) {
                     label:"Created At",
                     show:false,
                     type:"date"
-                },
-                {
-                    name:"is_valid",
-                    label:"Please type 'confirm' to create",
-                    type: 'input',
-                    required: true,
-                    show: true,
-                    validate: [
-                        {
-                            "type": "custom",
-                            "test": validate_participants
-                        }
-                    ],
                 }
+                // {
+                //     name:"is_valid",
+                //     label:"Please type 'confirm' to create",
+                //     type: 'input',
+                //     required: true,
+                //     parse:false,
+                //     show: true,
+                //     // validate: [
+                //     //     {
+                //     //         "type": "custom",
+                //     //         "test": validate_participants
+                //     //     }
+                //     // ],
+                // }
             ]
 
     }).on("model:edited",function(grid_event) {

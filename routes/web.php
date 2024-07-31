@@ -89,8 +89,8 @@ Route::group(['middleware'=>['custom.auth']], function () {
         /* Study Data Type Routes */
         Route::get('/studies/{study}/data_types',[StudiesController::class,'get_study_data_types'])->middleware('can:view_study,study');
         Route::post('/studies/{study}/data_types/{data_type}',[StudiesController::class,'add_study_data_type'])->middleware('can:manage_study,study');
-        Route::put('/studies/{study}/data_types/{data_type}',[StudiesController::class,'update_study_data_type'])->middleware('can:manage_study,study');
-        Route::delete('/studies/{study}/data_types/{data_type}',[StudiesController::class,'remove_study_data_type'])->middleware('can:manage_study,study');
+        Route::put('/studies/{study}/data_types/{study_data_type}',[StudiesController::class,'update_study_data_type'])->middleware('can:manage_study,study');
+        Route::delete('/studies/{study}/data_types/{study_data_type}',[StudiesController::class,'remove_study_data_type'])->middleware('can:manage_study,study');
 
         /* Report Methods */
         Route::get('/reports',[ReportController::class,'get_all_reports'])->middleware('can:list_search_reports,App\Models\Report');

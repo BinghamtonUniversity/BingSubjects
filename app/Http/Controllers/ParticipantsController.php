@@ -43,7 +43,7 @@ class ParticipantsController extends Controller
             $error_code = $e->errorInfo[1];
             // Track for the duplicate entry errors
             if($error_code == 1062){
-                return response()->json(['message'=>'This participant already exists.'],500);
+                return response()->json(['message'=>$request->first_name.' '.$request->last_name.' '.$request->email.' participant already exists.'],500);
             }else{
                 return response()->json(['message'=>$e->getMessage()],500);
             }
@@ -74,7 +74,7 @@ class ParticipantsController extends Controller
             $error_code = $e->errorInfo[1];
             // Track for the duplicate entry errors
             if($error_code == 1062){
-                return response()->json(['message'=>'This participant already exists.'],500);
+                return response()->json(['message'=>$request->first_name.' '.$request->last_name.' '.$request->email.' participant already exists.'],500);
             }else{
                 return response()->json(['message'=>$e->getMessage()],500);
             }

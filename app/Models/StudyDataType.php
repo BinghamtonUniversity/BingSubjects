@@ -11,7 +11,7 @@ class StudyDataType extends Model
     use HasFactory;
 
     protected $fillable = ['study_id','data_type_id','description'];
-
+    protected $with = ['data_type'];
     public function study() {
         return $this->belongsTo(Study::class,'study_id');
     }
