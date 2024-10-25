@@ -19,7 +19,7 @@ class CASController extends Controller {
         $identity = User::where('bnumber',$identity_attributes['UDC_IDENTIFIER'])
             ->where('active',true)->where(function ($q){
           $q->where('will_expire',false)->orWhere(function($qw){
-              $qw->where('will_expire',true)->where('expiration_date','<',Carbon::today());
+              $qw->where('will_expire',true)->where('expiration_date','>=',Carbon::today());
           });
         })->first();
         if (is_null($identity)) {

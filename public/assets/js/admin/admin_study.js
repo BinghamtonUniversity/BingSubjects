@@ -198,7 +198,6 @@ var load_study = function() {
 
         /* Info Tab */
         display_study_info();
-    // debugger
 
         /* Data Types Tab */
         study_data_types_template = new GrapheneDataGrid({
@@ -282,7 +281,7 @@ var load_study = function() {
                 if(form_event.form.validate()) {
                     form_data = form_event.form.get();
                     form_event.form.trigger('close');
-                    debugger
+
                     ajax.post('/api/studies/'+id+'/data_types/'+form_data.data_type_id,form_data,function(resp) {
                         // data.data_types.push(resp)
                         grid_event.grid.add(resp);
@@ -307,7 +306,6 @@ var load_study = function() {
                 if(form_event.form.validate()) {
                     form_event.form.trigger('close');
                     form_data = form_event.form.get();
-                    debugger
 
                     ajax.put('/api/studies/'+id+'/data_types/'+form_data.id,form_data,function(data) {
                         grid_event.model.update(data);
@@ -495,7 +493,7 @@ var load_study = function() {
                 grid_event.model.undo();
             });
         });
-// debugger
+
         /* Users Tab */
         study_users_template = new GrapheneDataGrid({
             el:'#study_users',
