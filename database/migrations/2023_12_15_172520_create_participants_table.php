@@ -41,10 +41,16 @@ return new class extends Migration
             $table->string('email')->nullable()->default(null);
             $table->string('phone_number')->nullable()->default(null);
             $table->text('participant_comments')->nullable();
+            $table->date('last_contacted_date')->nullable()->default(null);
+            $table->unsignedBigInteger('last_contacted_by')->nullable();
+
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
+
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');//            $table->unique(['email','date_of_birth','first_name']);
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('last_contacted_by')->references('id')->on('users')->onDelete('set null');
+
             $table->timestamps();
         });
     }

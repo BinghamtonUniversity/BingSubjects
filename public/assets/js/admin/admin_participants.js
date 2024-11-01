@@ -211,6 +211,22 @@ ajax.get('/api/participants',function(data) {
                         "value": "{{id}}",
                         "display": "{{title}}"
                     }
+                },{
+                    name:"last_contacted_date",
+                    label:"Last Contacted Date",
+                    type: 'date',
+                    required: false
+                },
+                {
+                    name:"last_contacted_by",
+                    label:"Last Contacted By",
+                    type: 'user',
+                    options:"/api/users",
+                    format: {
+                        label:"{{first_name}} {{last_name}}",
+                        value:"{{id}}",
+                        display:"{{first_name}} {{last_name}}"
+                    }
                 },
                 {
                     name:"created_at",
@@ -218,20 +234,6 @@ ajax.get('/api/participants',function(data) {
                     show:false,
                     type:"date"
                 }
-                // {
-                //     name:"is_valid",
-                //     label:"Please type 'confirm' to create",
-                //     type: 'input',
-                //     required: true,
-                //     parse:false,
-                //     show: true,
-                //     // validate: [
-                //     //     {
-                //     //         "type": "custom",
-                //     //         "test": validate_participants
-                //     //     }
-                //     // ],
-                // }
             ]
 
     }).on("model:edited",function(grid_event) {
@@ -260,5 +262,47 @@ ajax.get('/api/participants',function(data) {
         });
     }).on('model:participant_studies',function(grid_event){
         window.location = '/participants/'+grid_event.model.attributes.id+'/studies';
+    }).on('mark_contacted',function(grid_event) {
+        grid_event.preventDefault();
+        selected_grids = grid_event.grid.getSelected()
+        selected_ids = grid_event.grid.getSelected().map(e=>e.attributes.id)
+
+        new gform({
+            "legend" : "Updating last contacted date and person",
+            "fields": [
+                {
+                    name:"last_contacted_date",
+                    type:"date",
+                    label:"Last Contacted Date",
+                    required:true
+                },
+                {
+                    name:"last_contacted_by",
+                    type:"user",
+                    label:"Contacted By",
+                    required:true
+                }
+            ]
+        }).on('save',function(form_event) {
+            if(form_event.form.validate())
+            {
+                form_event.form.trigger('close');
+                form_data = {
+                    last_contacted_by: form_event.form.get().last_contacted_by,
+                    last_contacted_date: form_event.form.get().last_contacted_date,
+                }
+
+                selected_ids.forEach(e => {
+                    ajax.put('/api/participants/' + e, form_data, function (res) {
+                        model = selected_grids.filter(sg => sg.attributes.id === e)[0]
+                        if(model){
+                            model.update(res)
+                        }
+                    })
+                })
+            }
+        }).on('cancel',function(form_event) {
+            form_event.form.trigger('close');
+        }).modal()
     });
 });

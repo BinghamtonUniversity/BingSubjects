@@ -15,8 +15,12 @@ class Participant extends Model
         'sex',
         'gender',
         'ethnicity',
-        'race','city_of_birth','email','phone_number', 'participant_comments'];
-    protected $casts = ['date_of_birth'=>'date:Y-m-d',
+        'race','city_of_birth','email','phone_number', 'participant_comments',
+        'last_contacted_date','last_contacted_by'
+    ];
+    protected $casts = [
+        'date_of_birth'=>'date:Y-m-d',
+        'last_contacted_date'=>'date:Y-m-d',
 //        'studies'=>'object'
     ];
 

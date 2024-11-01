@@ -88,6 +88,8 @@ class AdminController extends Controller
         }
         if (($user->can('update_participants','App\Participant') || $user->can('manage_participants','App\Participant')) && ($user->is_study_user() || $user->can('view_studies','App\Study'))) {
             $user_actions[] = [];
+            $user_actions[] = [];
+            $user_actions[] = ["name"=>"mark_contacted", "type"=>"primary", "label"=>"Update Contacted Date","min"=>1 ];
         }
         // Update to only be clickable depending on if the user can view any studies of the participant checked
         if ($user->is_study_user() || $user->can('view_studies','App\Study')) {
