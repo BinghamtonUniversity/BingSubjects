@@ -73,31 +73,13 @@ class ReportController extends Controller
         ];
         $columns = array_merge($default_columns, $report->report->columns);
 
-//        $subq_user_groups = DB::table('participants')
-//            ->leftJoin('study_participants', function($join) {
-//                $join->on('participants.id','=','study_participants.participant_id');
-//            })->groupBy('participants.id')
-//            ->select('group_memberships.user_id', DB::raw('group_concat(`groups`.`name`) as `groups`'));
         $q = DB::table('participants')
             ->leftJoin('study_participants', function ($join) {
                 $join->on('participants.id', '=', 'study_participants.participant_id');
-            // })->leftJoin('study_data_types', function ($join) {
-            //     $join->on('study_participants.study_id', '=', 'study_data_types.study_id');
+
             })->leftJoin('studies', function ($join) {
                 $join->on('study_participants.study_id', '=', 'studies.id');
             })
-            // ->leftJoin('data_types', function ($join) {
-            //     $join->on('study_data_types.data_type_id', '=', 'data_types.id');
-            // })
-//            ->leftJoin('group_memberships', function ($join) {
-//                $join->on('users.id', '=', 'group_memberships.user_id');
-//            })->leftJoin('groups', function ($join) {
-//                $join->on('group_memberships.group_id', '=', 'groups.id');
-//            })
-            // Join with list of user groups
-//            ->leftJoinSub($subq_user_groups, 'user_groups', function ($join) {
-//                $join->on('users.id', '=', 'user_groups.user_id');
-//            })
             ->distinct();
         QueryBuilder::build_where($q, $report->report);
 

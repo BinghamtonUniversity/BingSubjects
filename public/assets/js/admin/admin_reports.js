@@ -46,6 +46,7 @@ ajax.get('/api/reports',function(data) {
                         "multiple": true,
                         "options": [
                             {"label": "participant_id", "value": "participants.id as participant_id"},
+                            {"label": "participant_phone", "value": "participants.phone_number as participant_phone"},
                             {"label": "study_title", "value": "studies.title as study_title"},
                             {"label": "participant_first_name", "value": "participants.first_name as participant_first_name"},
                             {"label": "participant_last_name", "value": "participants.last_name as participant_last_name"},
