@@ -31,7 +31,8 @@ return new class extends Migration
                 'asian',
                 'black',
                 'pacific_islander',
-                'white'
+                'white',
+                'multiracial'
             ])->nullable()->default(null);
             $table->enum('ethnicity',[
                 'hispanic',

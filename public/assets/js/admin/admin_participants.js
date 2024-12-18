@@ -132,6 +132,10 @@ ajax.get('/api/participants',function(data) {
                         {
                             label:"White",
                             value:"white"
+                        },
+                        {
+                            label:"Multiracial",
+                            value:"multiracial"
                         }
                     ],
                 },
