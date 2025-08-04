@@ -24,7 +24,9 @@ class ParticipantPolicy
             Permission::where('user_id',$user->id)->whereIn('permission',[
                 'view_participants',
                 'manage_participants'
-            ])->first();
+            ])->first() ||
+            StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
+                ->select('participant_id')->first();
     }
     public function list_participants(User $user) {
         return $user->is_study_user() ||

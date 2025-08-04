@@ -18,12 +18,12 @@ class ParticipantsController extends Controller
         $user = Auth::user();
 
         if($user->can('view_participants','App\Participant')) {
-            return Participant::with('studies')->get();
+            return Participant::with('study_participants')->get();
         }
         //If User doesn't have permission to view all participants, then only return participants from studies they can view
         $study_participants = StudyParticipant::whereIn('study_id',$user->user_studies->pluck('study_id'))
             ->select('participant_id')->get()->pluck('participant_id')->toArray();
-        return Participant::whereIn('id',$study_participants)->with('studies')->orderBy('studies')->get();
+        return Participant::whereIn('id',$study_participants)->with('study_participants')->get();
     }
 
     public function get_participant(Request $request, Participant $participant) {

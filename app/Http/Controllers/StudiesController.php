@@ -29,8 +29,8 @@ class StudiesController extends Controller
 
         // Check for the study permissions
         if ($user->is_study_user()){
-            $user_studies = StudyUser::where('user_id',$user->id)->get()->toArray();
-            return Study::whereIn('id',array_values(array_column($user_studies,'study_id')))->get();
+            $user_studies = $user->user_studies->pluck('study_id');
+            return Study::whereIn('id',$user_studies)->get();
         }
     }
 
@@ -74,7 +74,8 @@ class StudiesController extends Controller
         $study_participant->study_id = $study->id;
         $study_participant->save();
 
-        return $study_participant;
+        // 08/04/2025, AKT - Fixed the code below to return the participant information as it was causing empty rows when a new participant was added in the grid
+        return Participant::where('id',$study_participant->participant_id)->first();
     }
 
     public function remove_study_participant(Request $request, Study $study, Participant $participant) {

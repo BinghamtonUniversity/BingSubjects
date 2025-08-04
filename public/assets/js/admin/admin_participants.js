@@ -2,8 +2,8 @@
 ajax.get('/api/participants',function(data) {
     data = data.reverse();
      data.forEach(e=>{
-          e.studies = e.studies.map(d=>{
-            return (String)(d.id)
+          e.studies = e.study_participants.map(d=>{
+            return (String)(d.study_id)
         })
         return e
     })
